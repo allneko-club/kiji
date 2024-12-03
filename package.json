@@ -7,22 +7,45 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "prepare": "husky"
+    "prepare": "husky",
+    "mock-server": "tsx ./mock-server.ts"
   },
   "dependencies": {
+    "@ngneat/falso": "^7.2.0",
+    "express": "^4.21.1",
     "next": "15.0.3",
     "react": "^18.3.1",
-    "react-dom": "^18.3.1"
+    "react-dom": "^18.3.1",
+    "zod": "^3.23.8"
   },
   "devDependencies": {
+    "@mswjs/data": "^0.16.2",
+    "@mswjs/http-middleware": "^0.10.2",
+    "@sveltejs/vite-plugin-svelte": "^5.0.1",
+    "@testing-library/dom": "^10.4.0",
+    "@testing-library/jest-dom": "^6.6.3",
+    "@testing-library/react": "^16.0.1",
+    "@testing-library/svelte": "^5.2.6",
+    "@types/cors": "^2.8.17",
+    "@types/dotenv": "^6.1.1",
+    "@types/express": "^5.0.0",
     "@types/node": "^20",
-    "@types/react": "^18",
-    "@types/react-dom": "^18",
+    "@types/react": "^18.3.12",
+    "@types/react-dom": "^18.3.1",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
     "eslint": "^8",
     "eslint-config-next": "15.0.3",
     "eslint-config-prettier": "^9.1.0",
     "husky": "^9.1.7",
+    "js-cookie": "^3.0.5",
+    "jsdom": "^25.0.1",
     "lint-staged": "^15.2.10",
-    "typescript": "^5"
+    "msw": "^2.6.6",
+    "pino-http": "^10.3.0",
+    "pino-pretty": "^13.0.0",
+    "tsx": "^4.19.2",
+    "typescript": "^5",
+    "vitest": "^2.1.7"
   }
 }
