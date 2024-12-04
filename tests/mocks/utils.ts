@@ -68,11 +68,10 @@ export function authenticate({
   if (user?.password === hash(password)) {
     const sanitizedUser = sanitizeUser(user);
     const encodedToken = encode(sanitizedUser);
-    return { user: sanitizedUser, jwt: encodedToken };
+    return { ...sanitizedUser, jwt: encodedToken };
   }
 
-  const error = new Error('Invalid username or password');
-  throw error;
+  throw new Error('Invalid username or password');
 }
 
 export const AUTH_COOKIE = `bulletproof_react_app_token`;

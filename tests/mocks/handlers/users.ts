@@ -11,10 +11,10 @@ import {
 import { env } from '../env';
 
 type ProfileBody = {
+  id: string;
+  name: string;
   email: string;
-  firstName: string;
-  lastName: string;
-  bio: string;
+  password: string;
 };
 
 type EmptyObject = {[key: string]: never}
@@ -39,18 +39,12 @@ export const usersHandlers = [
     await networkDelay();
 
     try {
-      const { user, error } = requireAuth(cookies);
+      const { error } = requireAuth(cookies);
       if (error) {
         return HttpResponse.json({ message: error }, { status: 401 });
       }
       const result = db.user
-        .findMany({
-          where: {
-            teamId: {
-              equals: user?.teamId,
-            },
-          },
-        })
+        .findMany({})
         .map(sanitizeUser);
 
       return HttpResponse.json({ data: result });
@@ -103,9 +97,6 @@ export const usersHandlers = [
         where: {
           id: {
             equals: userId,
-          },
-          teamId: {
-            equals: user?.teamId,
           },
         },
       });

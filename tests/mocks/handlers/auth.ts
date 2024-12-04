@@ -17,8 +17,6 @@ type RegisterBody = {
   lastName: string;
   email: string;
   password: string;
-  teamId?: string;
-  teamName?: string;
 };
 
 type LoginBody = {
@@ -28,7 +26,7 @@ type LoginBody = {
 
 // todo responseのtype
 function handleRegisterRequest(resolver: HttpResponseResolver<never, RegisterBody, any>) {
-  return http.post(`${env.API_URL}/auth/regisger`, resolver)
+  return http.post(`${env.API_URL}/auth/register`, resolver)
 }
 
 // todo responseのtype
@@ -56,47 +54,17 @@ export const authHandlers = [
 
       if (existingUser) {
         return HttpResponse.json(
-          { message: 'The user already exists' },
+          { message: 'The email is already in use.' },
           { status: 400 },
         );
       }
 
-      let teamId;
-      let role;
-
-      if (!userObject.teamId) {
-        const team = db.team.create({
-          name: userObject.teamName ?? `${userObject.firstName} Team`,
-        });
-        await persistDb('team');
-        teamId = team.id;
-        role = 'ADMIN';
-      } else {
-        const existingTeam = db.team.findFirst({
-          where: {
-            id: {
-              equals: userObject.teamId,
-            },
-          },
-        });
-
-        if (!existingTeam) {
-          return HttpResponse.json(
-            {
-              message: 'The team you are trying to join does not exist!',
-            },
-            { status: 400 },
-          );
-        }
-        teamId = userObject.teamId;
-        role = 'USER';
-      }
+      const role = 'ADMIN';
 
       db.user.create({
         ...userObject,
         role,
         password: hash(userObject.password),
-        teamId,
       });
 
       await persistDb('user');
@@ -105,9 +73,6 @@ export const authHandlers = [
         email: userObject.email,
         password: userObject.password,
       });
-
-      // todo: remove once tests in Github Actions are fixed
-      Cookies.set(AUTH_COOKIE, result.jwt, { path: '/' });
 
       return HttpResponse.json(result, {
         headers: {
@@ -129,9 +94,6 @@ export const authHandlers = [
     try {
       const credentials = await request.json();
       const result = authenticate(credentials);
-
-      // todo: remove once tests in Github Actions are fixed
-      Cookies.set(AUTH_COOKIE, result.jwt, { path: '/' });
 
       return HttpResponse.json(result, {
         headers: {

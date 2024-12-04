@@ -1,18 +1,16 @@
 import {
-  randCompanyName,
   randUserName,
   randEmail,
   randParagraph,
   randUuid,
-  randPassword,
 } from '@ngneat/falso';
+import { hash } from './mocks/utils';
 
 const generateUser = () => ({
   id: randUuid() + Math.random(),
-  firstName: randUserName({ withAccents: false }),
-  lastName: randUserName({ withAccents: false }),
+  name: randUserName({ withAccents: false }),
   email: randEmail(),
-  password: randPassword(),
+  password: hash("password"),
   role: 'ADMIN',
   bio: randParagraph(),
   createdAt: Date.now(),
