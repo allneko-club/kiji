@@ -1,3 +1,5 @@
+import { paths } from '@/config/paths';
+import Link from 'next/link';
 
 export default async function Footer() {
 
@@ -5,13 +7,19 @@ export default async function Footer() {
     <footer className="w-full mx-auto p-4 bg-gray-900 place-items-center">
       <ul className="flex flex-wrap text-gray-400">
         <li>
-          <a href="#" className="hover:text-white transition-colors me-4 md:me-6">About</a>
+          <Link href={paths.misc.about.getHref()} className="hover:text-white transition-colors me-4 md:me-6">
+            About
+          </Link>
         </li>
         <li>
-          <a href="#" className="hover:text-white transition-colors me-4 md:me-6">Privacy Policy</a>
+          <Link href={paths.misc.privacyPolicy.getHref()} className="hover:text-white transition-colors me-4 md:me-6">
+            Privacy Policy
+          </Link>
         </li>
         <li>
-          <a href="#" className="hover:text-white transition-colors">Contact</a>
+          <Link href={paths.misc.contact.getHref()} className="hover:text-white transition-colors">
+            Contact
+          </Link>
         </li>
       </ul>
       <p className="text-sm mt-4 text-gray-400">© 2025 Footer. All Rights Reserved.</p>

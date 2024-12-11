@@ -39,4 +39,21 @@ export const paths = {
       getHref: (id: string) => `/public/discussions/${id}`,
     },
   },
+  misc: {
+    about: {
+      getHref: () => '/misc/about',
+    },
+    privacyPolicy: {
+      getHref: () => '/misc/privacy-policy',
+    },
+    contact: {
+      getHref: () => '/misc/contact',
+    },
+    contactDone: {
+      getHref: () => '/misc/contact-done',
+    },
+    resetPassword: {
+      getHref: () => '/misc/reset-password',
+    },
+  },
 } as const;
