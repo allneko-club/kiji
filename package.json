@@ -8,7 +8,7 @@
     "start": "next start",
     "lint": "next lint",
     "prepare": "husky",
-    "mock-server": "tsx ./mock-server.ts"
+    "mock-server": "tsx watch ./mock-server.ts"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.9.1",
