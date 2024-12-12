@@ -8,7 +8,6 @@ import { queryConfig } from '@/lib/react-query';
 import { MainErrorFallback } from '@/components/errors/main';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { ThemeProvider } from '@/components/layouts/theme-provider';
 
 type AppProviderProps = {
   children: React.ReactNode;
@@ -26,14 +25,7 @@ export const AppProvider = ({ children }: AppProviderProps) => {
     <ErrorBoundary FallbackComponent={MainErrorFallback}>
       <QueryClientProvider client={queryClient}>
         {process.env.DEV && <ReactQueryDevtools />}
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="system"
-          enableSystem
-          disableTransitionOnChange
-        >
         {children}
-        </ThemeProvider>
         <ToastContainer autoClose={3000}/>
       </QueryClientProvider>
     </ErrorBoundary>

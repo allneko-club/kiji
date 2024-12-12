@@ -10,6 +10,7 @@ import { getUserQueryOptions } from '@/lib/auth';
 import Header from '@/components/layouts/header';
 import Footer from '@/components/layouts/footer';
 import "@/styles/globals.css";
+import { ThemeProvider } from 'next-themes';
 
 
 export const metadata: Metadata = {
@@ -27,15 +28,22 @@ const RootLayout = async ({ children }: { children: ReactNode }) => {
     <html lang="ja" suppressHydrationWarning>
       <body>
       <AppProvider>
-        <HydrationBoundary state={dehydratedState}>
-          <div className="flex h-full min-h-screen w-full flex-col justify-between">
-            <Header />
-            <main className="w-full flex-auto px-4 py-4 sm:px-6 md:py-6">
-              {children}
-            </main>
-            <Footer />
-          </div>
-        </HydrationBoundary>
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
+          disableTransitionOnChange
+        >
+          <HydrationBoundary state={dehydratedState}>
+            <div className="flex h-full min-h-screen w-full flex-col justify-between">
+              <Header />
+              <main className="w-full flex-auto px-4 py-4 sm:px-6 md:py-6">
+                {children}
+              </main>
+              <Footer />
+            </div>
+          </HydrationBoundary>
+        </ThemeProvider>
       </AppProvider>
       </body>
     </html>

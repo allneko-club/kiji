@@ -8,6 +8,7 @@
     "start": "next start",
     "lint": "next lint",
     "prepare": "husky",
+    "test": "vitest",
     "mock-server": "tsx watch ./mock-server.ts",
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build"
@@ -53,7 +54,7 @@
     "@sveltejs/vite-plugin-svelte": "^5.0.1",
     "@testing-library/dom": "^10.4.0",
     "@testing-library/jest-dom": "^6.6.3",
-    "@testing-library/react": "^16.0.1",
+    "@testing-library/react": "^16.1.0",
     "@testing-library/svelte": "^5.2.6",
     "@types/cors": "^2.8.17",
     "@types/dotenv": "^6.1.1",
@@ -61,6 +62,7 @@
     "@types/node": "^20",
     "@types/react": "^18.3.12",
     "@types/react-dom": "^18.3.1",
+    "@vitejs/plugin-react": "^4.3.4",
     "autoprefixer": "^10.4.20",
     "cors": "^2.8.5",
     "dotenv": "^16.4.7",
@@ -80,6 +82,7 @@
     "tailwindcss": "^3.4.16",
     "tsx": "^4.19.2",
     "typescript": "^5",
-    "vitest": "^2.1.7"
+    "vite-tsconfig-paths": "^5.1.4",
+    "vitest": "^2.1.8"
   }
 }
