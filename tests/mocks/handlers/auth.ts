@@ -1,8 +1,6 @@
 import Cookies from 'js-cookie';
 import { HttpResponse, http, HttpResponseResolver } from 'msw';
-
 import { env } from '../env';
-
 import { db, persistDb } from '../db';
 import {
   authenticate,
@@ -24,16 +22,13 @@ type LoginBody = {
   password: string;
 };
 
-// todo responseのtype
 function handleRegisterRequest(resolver: HttpResponseResolver<never, RegisterBody, any>) {
   return http.post(`${env.API_URL}/auth/register`, resolver)
 }
 
-// todo responseのtype
 function handleLoginRequest(resolver: HttpResponseResolver<never, LoginBody, any>) {
   return http.post(`${env.API_URL}/auth/login`, resolver)
 }
-// todo request, responseのtype
 function handleMeRequest(resolver: HttpResponseResolver<never, any, any>) {
   return http.get(`${env.API_URL}/auth/me`, resolver)
 }
@@ -60,7 +55,6 @@ export const authHandlers = [
       }
 
       const role = 'ADMIN';
-
       db.user.create({
         ...userObject,
         role,
@@ -69,17 +63,7 @@ export const authHandlers = [
 
       await persistDb('user');
 
-      const result = authenticate({
-        email: userObject.email,
-        password: userObject.password,
-      });
-
-      return HttpResponse.json(result, {
-        headers: {
-          // with a real API servier, the token cookie should also be Secure and HttpOnly
-          'Set-Cookie': `${AUTH_COOKIE}=${result.jwt}; Path=/;`,
-        },
-      });
+      return HttpResponse.json({});
     } catch (error: any) {
       return HttpResponse.json(
         { message: error?.message || 'Server Error' },
