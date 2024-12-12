@@ -5,7 +5,12 @@ import { api } from '@/lib/api-client';
 import { User } from '@/types/api';
 import { ZodError } from 'zod';
 import GitHub from 'next-auth/providers/github';
-import { loginInputSchema } from '@/hooks/auth/login';
+import { z } from 'zod';
+
+export const loginInputSchema = z.object({
+  email: z.string().min(1).email(),
+  password: z.string().min(1),
+});
 
 async function loginUser(email: string, password:string): Promise<User|null> {
   try{

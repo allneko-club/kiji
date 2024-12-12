@@ -12,7 +12,7 @@ export async function authenticate(
   } catch (error) {
     if (error instanceof AuthError) {
       if (error.type === 'CredentialsSignin') {
-          return 'Invalid credentials.';
+          return 'メールアドレスまたはパスワードが間違っています。';
       }else {
             return 'Something went wrong.';
       }

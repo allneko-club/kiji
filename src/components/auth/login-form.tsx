@@ -14,18 +14,11 @@ import {
 import { Input } from "@/components/ui/input"
 import Link from 'next/link';
 import { paths } from '@/config/paths';
-import { useForm } from 'react-hook-form';
-import { LoginInput, loginInputSchema } from '@/hooks/auth/login';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
+import { Label } from '@/components/ui/label';
 
 export default function LoginForm() {
   const searchParams = useSearchParams();
-  const redirectTo = searchParams?.get('callbackUrl');
-  const form = useForm<LoginInput>(
-    { resolver: zodResolver(loginInputSchema),
-      defaultValues: { email: "", password: "" }
-    })
+  const redirectTo = decodeURIComponent(searchParams?.get('callbackUrl') || '/');
   const [errorMessage, formAction, isPending] = useActionState(
     authenticate,
     undefined,
@@ -43,63 +36,32 @@ export default function LoginForm() {
         <div className="grid gap-6">
           {errorMessage && (<p className="text-orange-500">{errorMessage}</p>)}
 
-          <Form {...form}>
-            {/* todo action と onSubmitを同時に使えない。onSubmitを指定しないとバリデーションが実行されない */}
-            <form action={formAction} className="grid gap-4">
-              <FormField
-                control={form.control}
-                name="email"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>メールアドレス</FormLabel>
-                    <FormControl>
-                      <Input {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="password"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>パスワード</FormLabel>
-                    <FormControl>
-                      <Input type="password" {...field} />
-                    </FormControl>
-                    <FormDescription>
-                      <Link href="#" className="ml-auto inline-block text-sm underline">
-                        パスワードを忘れましたか？
-                      </Link>
-                    </FormDescription>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+          <form action={formAction} className="grid gap-4">
+            <Label htmlFor="email">メールアドレス</Label>
+            <Input id="email" name="email" type="email" />
 
-              {/* Auth.jsでログイン後のリダイレクト先を設定するために必要 */}
-              <input
-                id="redirectTo"
-                name="redirectTo"
-                hidden
-                defaultValue={redirectTo ? decodeURIComponent(redirectTo) : '/'}
-              />
+            <Label htmlFor="password">パスワード</Label>
+            <Input id="password" name="password" type="password" />
+            <Link href="#" className="ml-auto inline-block text-sm underline text-muted-foreground">
+              パスワードを忘れましたか？
+            </Link>
 
-              <Button type="submit" className="w-full" aria-disabled={isPending}>
-                ログイン
-              </Button>
-            </form>
-          </Form>
+            {/* Auth.jsでログイン後のリダイレクト先を設定するために必要 */}
+            <input id="redirectTo" name="redirectTo" hidden defaultValue={redirectTo} />
+
+            <Button type="submit" className="w-full" aria-disabled={isPending}>
+              ログイン
+            </Button>
+          </form>
 
           <div className="relative">
             <div className="absolute inset-0 flex items-center">
               <span className="w-full border-t" />
             </div>
             <div className="relative flex justify-center text-xs uppercase">
-            <span className="bg-background px-2 text-muted-foreground">
-              または、他のアカウントでログイン
-            </span>
+              <span className="bg-background px-2 text-muted-foreground">
+                または、他のアカウントでログイン
+              </span>
             </div>
           </div>
 
@@ -115,5 +77,5 @@ export default function LoginForm() {
         </div>
       </CardContent>
     </Card>
-  )
+)
 }
