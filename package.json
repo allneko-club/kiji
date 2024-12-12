@@ -8,7 +8,9 @@
     "start": "next start",
     "lint": "next lint",
     "prepare": "husky",
-    "mock-server": "tsx watch ./mock-server.ts"
+    "mock-server": "tsx watch ./mock-server.ts",
+    "storybook": "storybook dev -p 6006",
+    "build-storybook": "storybook build"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.9.1",
@@ -36,8 +38,18 @@
     "zod": "^3.23.8"
   },
   "devDependencies": {
+    "@chromatic-com/storybook": "^3.2.2",
     "@mswjs/data": "^0.16.2",
     "@mswjs/http-middleware": "^0.10.2",
+    "@storybook/addon-essentials": "^8.4.7",
+    "@storybook/addon-interactions": "^8.4.7",
+    "@storybook/addon-mdx-gfm": "^8.4.7",
+    "@storybook/addon-onboarding": "^8.4.7",
+    "@storybook/addon-themes": "^8.4.7",
+    "@storybook/blocks": "^8.4.7",
+    "@storybook/nextjs": "^8.4.7",
+    "@storybook/react": "^8.4.7",
+    "@storybook/test": "^8.4.7",
     "@sveltejs/vite-plugin-svelte": "^5.0.1",
     "@testing-library/dom": "^10.4.0",
     "@testing-library/jest-dom": "^6.6.3",
@@ -55,6 +67,7 @@
     "eslint": "^8",
     "eslint-config-next": "15.0.3",
     "eslint-config-prettier": "^9.1.0",
+    "eslint-plugin-storybook": "^0.11.1",
     "husky": "^9.1.7",
     "js-cookie": "^3.0.5",
     "jsdom": "^25.0.1",
@@ -63,6 +76,7 @@
     "pino-http": "^10.3.0",
     "pino-pretty": "^13.0.0",
     "postcss": "^8.4.49",
+    "storybook": "^8.4.7",
     "tailwindcss": "^3.4.16",
     "tsx": "^4.19.2",
     "typescript": "^5",
