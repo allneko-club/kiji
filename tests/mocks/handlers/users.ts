@@ -15,6 +15,7 @@ type ProfileBody = {
   name: string;
   email: string;
   password: string;
+  image: string;
 };
 
 type EmptyObject = {[key: string]: never}

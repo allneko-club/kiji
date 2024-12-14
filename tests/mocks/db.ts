@@ -8,6 +8,7 @@ const models = {
     email: String,
     password: String,
     role: String,
+    image: String,
     bio: String,
     createdAt: Date.now,
   },
