@@ -1,29 +1,25 @@
 "use client"
-import { paths } from '@/config/paths';
 import Link from 'next/link';
 import { cn } from '@/lib/utils';
 import { usePathname } from 'next/navigation';
+import { mainMenu } from '@/config/menu';
 
 export default function MainNav()  {
-  const links = [
-    { href: paths.home.getHref(), label: 'home' },
-    { href: "#", label: 'contact' },
-  ]
   const pathname = usePathname();
 
   return (
-    <nav className={cn("flex items-center space-x-4 lg:space-x-6 mx-6")}>
-    {links.map((link) => (
-      <Link key={link.href} href={link.href}
-        className={cn(
-          "text-white font-medium transition-colors",
-          pathname !== link.href && "text-muted-foreground hover:text-white"
-        )}
-      >
-        {link.label}
-      </Link>
-    ))}
-    </nav>
+    <div className={cn("hidden sm:flex items-center space-x-4 lg:space-x-6 mx-6")}>
+      {mainMenu.map((item) => (
+        <Link key={item.href} href={item.href}
+          className={cn(
+            "text-white font-medium transition-colors",
+            pathname !== item.href && "text-muted-foreground hover:text-white"
+          )}
+        >
+          {item.label}
+        </Link>
+      ))}
+    </div>
   );
 };
 
