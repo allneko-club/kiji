@@ -6,7 +6,7 @@ import {
   QueryClient,
 } from '@tanstack/react-query';
 import { AppProvider } from '@/app/provider';
-import { getUserQueryOptions } from '@/lib/auth';
+import { getMeQueryOptions } from '@/hooks/auth/me';
 import Header from '@/components/layouts/header';
 import Footer from '@/components/layouts/footer';
 import "@/styles/globals.css";
@@ -21,7 +21,7 @@ export const metadata: Metadata = {
 const RootLayout = async ({ children }: { children: ReactNode }) => {
   const queryClient = new QueryClient();
 
-  await queryClient.prefetchQuery(getUserQueryOptions());
+  await queryClient.prefetchQuery(getMeQueryOptions());
 
   const dehydratedState = dehydrate(queryClient);
   return (

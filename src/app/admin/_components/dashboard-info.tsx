@@ -1,8 +1,8 @@
 'use client';
-import { useUser } from '@/lib/auth';
+import { useMe } from '@/hooks/auth/me';
 
 export const DashboardInfo = () => {
-  const user = useUser();
+  const user = useMe();
 
   if(!user?.data){
     return null;
