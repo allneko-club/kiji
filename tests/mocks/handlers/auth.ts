@@ -20,6 +20,10 @@ type LoginBody = {
   password: string;
 };
 
+type ResetPasswordBody = {
+  email: string;
+};
+
 function handleRegisterRequest(resolver: HttpResponseResolver<never, RegisterBody, any>) {
   return http.post(`${env.API_URL}/auth/register`, resolver)
 }
@@ -27,8 +31,13 @@ function handleRegisterRequest(resolver: HttpResponseResolver<never, RegisterBod
 function handleLoginRequest(resolver: HttpResponseResolver<never, LoginBody, any>) {
   return http.post(`${env.API_URL}/auth/login`, resolver)
 }
+
 function handleMeRequest(resolver: HttpResponseResolver<never, any, any>) {
   return http.get(`${env.API_URL}/auth/me`, resolver)
+}
+
+function handleResetPasswordRequest(resolver: HttpResponseResolver<never, ResetPasswordBody, any>) {
+  return http.post(`${env.API_URL}/auth/reset-password`, resolver)
 }
 
 export const authHandlers = [
@@ -91,6 +100,20 @@ export const authHandlers = [
     try {
       const { user } = await requireAuth(cookies);
       return HttpResponse.json({ data: user });
+    } catch (error: any) {
+      return HttpResponse.json(
+        { message: error?.message || 'Server Error' },
+        { status: 500 },
+      );
+    }
+  }),
+
+  handleResetPasswordRequest(async () => {
+    await networkDelay();
+
+    try {
+      return HttpResponse.json({});
+
     } catch (error: any) {
       return HttpResponse.json(
         { message: error?.message || 'Server Error' },

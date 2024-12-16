@@ -42,7 +42,10 @@ export default function LoginForm() {
 
             <Label htmlFor="password">パスワード</Label>
             <Input id="password" name="password" type="password" />
-            <Link href="#" className="ml-auto inline-block text-sm underline text-muted-foreground">
+            <Link
+              href={paths.auth.resetPassword.getHref()}
+              className="ml-auto inline-block text-sm underline text-muted-foreground"
+            >
               パスワードを忘れましたか？
             </Link>
 

@@ -11,6 +11,12 @@ export const paths = {
       getHref: (redirectTo?: string | null | undefined) =>
         `/auth/login${redirectTo ? `?redirectTo=${encodeURIComponent(redirectTo)}` : ''}`,
     },
+    resetPassword: {
+      getHref: () => '/auth/reset-password',
+    },
+    resetPasswordDone: {
+      getHref: () => '/auth/reset-password-done',
+    },
   },
   admin: {
     root: {
@@ -49,9 +55,6 @@ export const paths = {
     },
     contactDone: {
       getHref: () => '/misc/contact-done',
-    },
-    resetPassword: {
-      getHref: () => '/misc/reset-password',
     },
   },
 } as const;
