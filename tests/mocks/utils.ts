@@ -1,23 +1,11 @@
-import Cookies from 'js-cookie';
 import { delay } from 'msw';
-
+import { decode,  type JWT } from '@auth/core/jwt'
 import { db } from './db';
 
-export const encode = (obj: any) => {
-  const btoa =
-    typeof window === 'undefined'
-      ? (str: string) => Buffer.from(str, 'binary').toString('base64')
-      : window.btoa;
-  return btoa(JSON.stringify(obj));
-};
-
-export const decode = (str: string) => {
-  const atob =
-    typeof window === 'undefined'
-      ? (str: string) => Buffer.from(str, 'base64').toString('binary')
-      : window.atob;
-  return JSON.parse(atob(str));
-};
+interface MyJWT extends JWT {
+  id: string,
+  role: 'ADMIN' | 'USER'
+}
 
 export const hash = (str: string) => {
   let hash = 5381,
@@ -30,9 +18,7 @@ export const hash = (str: string) => {
 };
 
 export const networkDelay = () => {
-  const delayTime = process.env.TEST
-    ? 200
-    : Math.floor(Math.random() * 700) + 300;
+  const delayTime = process.env.TEST ? 200 : 800;
   return delay(delayTime);
 };
 
@@ -50,13 +36,7 @@ const omit = <T extends object>(obj: T, keys: string[]): T => {
 export const sanitizeUser = <O extends object>(user: O) =>
   omit<O>(user, ['password', 'iat']);
 
-export function authenticate({
-  email,
-  password,
-}: {
-  email: string;
-  password: string;
-}) {
+export function authenticate({ email, password }: { email: string; password: string; }) {
   const user = db.user.findFirst({
     where: {
       email: {
@@ -66,23 +46,29 @@ export function authenticate({
   });
 
   if (user?.password === hash(password)) {
-    const sanitizedUser = sanitizeUser(user);
-    const encodedToken = encode(sanitizedUser);
-    return { ...sanitizedUser, jwt: encodedToken };
+    return  sanitizeUser(user);
   }
 
   throw new Error('Invalid username or password');
 }
 
-export const AUTH_COOKIE = `bulletproof_react_app_token`;
-
-export function requireAuth(cookies: Record<string, string>) {
+export async function requireAuth(cookies: Record<string, string>) {
   try {
-    const encodedToken = cookies[AUTH_COOKIE] || Cookies.get(AUTH_COOKIE);
-    if (!encodedToken) {
+    const token = cookies['authjs.session-token'];
+    // Auth.js の仕様により salt は固定値。変更方法不明
+    const salt = process.env.NODE_ENV === "production"
+        ? "__Secure-authjs.session-token"
+        : "authjs.session-token";
+    const decodedToken = await decode(
+      {
+        token: token,
+        secret: process.env.AUTH_SECRET,
+        salt: salt,
+      }) as MyJWT;
+
+    if (!decodedToken) {
       return { error: 'Unauthorized', user: null };
     }
-    const decodedToken = decode(encodedToken) as { id: string };
 
     const user = db.user.findFirst({
       where: {

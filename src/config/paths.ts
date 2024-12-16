@@ -2,7 +2,6 @@ export const paths = {
   home: {
     getHref: () => '/',
   },
-
   auth: {
     register: {
       getHref: (redirectTo?: string | null | undefined) =>
@@ -13,25 +12,24 @@ export const paths = {
         `/auth/login${redirectTo ? `?redirectTo=${encodeURIComponent(redirectTo)}` : ''}`,
     },
   },
-
-  app: {
+  admin: {
     root: {
-      getHref: () => '/app',
+      getHref: () => '/admin',
     },
     dashboard: {
-      getHref: () => '/app',
+      getHref: () => '/admin',
     },
     discussions: {
-      getHref: () => '/app/discussions',
+      getHref: () => '/admin/discussions',
     },
     discussion: {
-      getHref: (id: string) => `/app/discussions/${id}`,
+      getHref: (id: string) => `/admin/discussions/${id}`,
     },
     users: {
-      getHref: () => '/app/users',
+      getHref: () => '/admin/users',
     },
     profile: {
-      getHref: () => '/app/profile',
+      getHref: () => '/admin/profile',
     },
   },
   public: {

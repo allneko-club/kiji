@@ -17,8 +17,3 @@ export type User = Entity<{
   email: string;
   role: 'ADMIN' | 'USER';
 }>;
-
-export type AuthResponse = {
-  jwt: string;
-  user: User;
-};

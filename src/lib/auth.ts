@@ -1,6 +1,4 @@
-import {
-  queryOptions,
-} from '@tanstack/react-query';
+import { queryOptions, useQuery } from '@tanstack/react-query';
 import { User } from '@/types/api';
 import { api } from './api-client';
 
@@ -20,3 +18,5 @@ export const getUserQueryOptions = () => {
     queryFn: getUser,
   });
 };
+
+export const useUser = () => useQuery(getUserQueryOptions());

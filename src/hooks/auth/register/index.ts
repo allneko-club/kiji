@@ -1,6 +1,6 @@
 import { useMutation } from '@tanstack/react-query';
 import { z } from 'zod';
-import { AuthResponse } from '@/types/api';
+import { User } from '@/types/api';
 import { api } from '@/lib/api-client';
 import { useRouter } from 'next/navigation';
 import { toast } from 'react-toastify';
@@ -25,7 +25,7 @@ const registerInputSchema = z
 
 type RegisterInput = z.infer<typeof registerInputSchema>;
 
-const register = (data: RegisterInput): Promise<AuthResponse> => {
+const register = (data: RegisterInput): Promise<User> => {
   return api.post('/auth/register', data);
 };
 

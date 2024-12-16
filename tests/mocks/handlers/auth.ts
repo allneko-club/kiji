@@ -1,4 +1,3 @@
-import Cookies from 'js-cookie';
 import { HttpResponse, http, HttpResponseResolver } from 'msw';
 import { env } from '../env';
 import { db, persistDb } from '../db';
@@ -6,7 +5,6 @@ import {
   authenticate,
   hash,
   requireAuth,
-  AUTH_COOKIE,
   networkDelay,
 } from '../utils';
 
@@ -63,7 +61,7 @@ export const authHandlers = [
 
       await persistDb('user');
 
-      return HttpResponse.json({});
+      return HttpResponse.json({ ...userObject, role });
     } catch (error: any) {
       return HttpResponse.json(
         { message: error?.message || 'Server Error' },
@@ -77,14 +75,8 @@ export const authHandlers = [
 
     try {
       const credentials = await request.json();
-      const result = authenticate(credentials);
+      return HttpResponse.json(authenticate(credentials));
 
-      return HttpResponse.json(result, {
-        headers: {
-          // with a real API servier, the token cookie should also be Secure and HttpOnly
-          'Set-Cookie': `${AUTH_COOKIE}=${result.jwt}; Path=/;`,
-        },
-      });
     } catch (error: any) {
       return HttpResponse.json(
         { message: error?.message || 'Server Error' },
@@ -93,27 +85,11 @@ export const authHandlers = [
     }
   }),
 
-  http.post(`${env.API_URL}/auth/logout`, async () => {
-    await networkDelay();
-
-    // todo: remove once tests in Github Actions are fixed
-    Cookies.remove(AUTH_COOKIE);
-
-    return HttpResponse.json(
-      { message: 'Logged out' },
-      {
-        headers: {
-          'Set-Cookie': `${AUTH_COOKIE}=; Path=/;`,
-        },
-      },
-    );
-  }),
-
   handleMeRequest(async ({ cookies }) => {
     await networkDelay();
 
     try {
-      const { user } = requireAuth(cookies);
+      const { user } = await requireAuth(cookies);
       return HttpResponse.json({ data: user });
     } catch (error: any) {
       return HttpResponse.json(
