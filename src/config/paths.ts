@@ -2,6 +2,18 @@ export const paths = {
   home: {
     getHref: () => '/',
   },
+  about: {
+    getHref: () => '/about',
+  },
+  privacyPolicy: {
+    getHref: () => '/privacy-policy',
+  },
+  contact: {
+    getHref: () => '/contact',
+  },
+  contactDone: {
+    getHref: () => '/contact-done',
+  },
   auth: {
     register: {
       getHref: (redirectTo?: string | null | undefined) =>
@@ -41,20 +53,6 @@ export const paths = {
   public: {
     discussion: {
       getHref: (id: string) => `/public/discussions/${id}`,
-    },
-  },
-  misc: {
-    about: {
-      getHref: () => '/misc/about',
-    },
-    privacyPolicy: {
-      getHref: () => '/misc/privacy-policy',
-    },
-    contact: {
-      getHref: () => '/misc/contact',
-    },
-    contactDone: {
-      getHref: () => '/misc/contact-done',
     },
   },
 } as const;
