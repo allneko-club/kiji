@@ -20,17 +20,17 @@ type ProfileBody = {
 
 type EmptyObject = {[key: string]: never}
 
-// todo responseのtype
 function handleUsersRequest(resolver: HttpResponseResolver<never, EmptyObject, any>) {
   return http.post(`${env.API_URL}/users`, resolver)
 }
 
-// todo responseのtype
+function handleUserRequest(resolver: HttpResponseResolver<never, any, any>) {
+  return http.get(`${env.API_URL}/users/:name`, resolver)
+}
 function handleProfileRequest(resolver: HttpResponseResolver<never, ProfileBody, any>) {
   return http.get(`${env.API_URL}/users/profile`, resolver)
 }
 
-// todo request, responseのtype
 function handleDeleteUserRequest(resolver: HttpResponseResolver<never, any, any>) {
   return http.delete(`${env.API_URL}/users/:userId`, resolver)
 }
@@ -38,7 +38,6 @@ function handleDeleteUserRequest(resolver: HttpResponseResolver<never, any, any>
 export const usersHandlers = [
   handleUsersRequest(async ({ cookies }) => {
     await networkDelay();
-
     try {
       const { error } = requireAuth(cookies);
       if (error) {
@@ -57,24 +56,18 @@ export const usersHandlers = [
     }
   }),
 
-  handleProfileRequest(async ({ request, cookies }) => {
+  handleUserRequest(async ({ params }) => {
     await networkDelay();
-
     try {
-      const { user, error } = requireAuth(cookies);
-      if (error) {
-        return HttpResponse.json({ message: error }, { status: 401 });
-      }
-      const data = (await request.json()) as ProfileBody;
-      const result = db.user.update({
+      const name = params.name as string;
+      const result = db.user.findFirst({
         where: {
-          id: {
-            equals: user?.id,
+          name: {
+            equals: name,
           },
         },
-        data,
       });
-      await persistDb('user');
+
       return HttpResponse.json(result);
     } catch (error: any) {
       return HttpResponse.json(
@@ -100,6 +93,33 @@ export const usersHandlers = [
             equals: userId,
           },
         },
+      });
+      await persistDb('user');
+      return HttpResponse.json(result);
+    } catch (error: any) {
+      return HttpResponse.json(
+        { message: error?.message || 'Server Error' },
+        { status: 500 },
+      );
+    }
+  }),
+
+  handleProfileRequest(async ({ request, cookies }) => {
+    await networkDelay();
+
+    try {
+      const { user, error } = requireAuth(cookies);
+      if (error) {
+        return HttpResponse.json({ message: error }, { status: 401 });
+      }
+      const data = (await request.json()) as ProfileBody;
+      const result = db.user.update({
+        where: {
+          id: {
+            equals: user?.id,
+          },
+        },
+        data,
       });
       await persistDb('user');
       return HttpResponse.json(result);
