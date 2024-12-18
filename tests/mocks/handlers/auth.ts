@@ -5,7 +5,7 @@ import {
   authenticate,
   hash,
   requireAuth,
-  networkDelay,
+  networkDelay, sanitizeUser,
 } from '../utils';
 
 type RegisterBody = {
@@ -81,10 +81,21 @@ export const authHandlers = [
 
   handleLoginRequest(async ({ request }) => {
     await networkDelay();
-
     try {
       const credentials = await request.json();
-      return HttpResponse.json(authenticate(credentials));
+      const user = db.user.findFirst({
+        where: {
+          email: {
+            equals: credentials.email,
+          },
+        },
+      });
+
+      if (user?.password === hash(credentials.password)) {
+        return HttpResponse.json(sanitizeUser(user));
+      }else{
+        return HttpResponse.json();
+      }
 
     } catch (error: any) {
       return HttpResponse.json(

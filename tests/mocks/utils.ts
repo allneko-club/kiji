@@ -36,22 +36,6 @@ const omit = <T extends object>(obj: T, keys: string[]): T => {
 export const sanitizeUser = <O extends object>(user: O) =>
   omit<O>(user, ['password', 'iat']);
 
-export function authenticate({ email, password }: { email: string; password: string; }) {
-  const user = db.user.findFirst({
-    where: {
-      email: {
-        equals: email,
-      },
-    },
-  });
-
-  if (user?.password === hash(password)) {
-    return  sanitizeUser(user);
-  }
-
-  throw new Error('Invalid username or password');
-}
-
 export async function requireAuth(cookies: Record<string, string>) {
   try {
     const token = cookies['authjs.session-token'];
