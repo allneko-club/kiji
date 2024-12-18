@@ -28,7 +28,7 @@ function handleUserRequest(resolver: HttpResponseResolver<never, any, any>) {
   return http.get(`${env.API_URL}/users/:name`, resolver)
 }
 function handleProfileRequest(resolver: HttpResponseResolver<never, ProfileBody, any>) {
-  return http.get(`${env.API_URL}/users/profile`, resolver)
+  return http.patch(`${env.API_URL}/users/profile`, resolver)
 }
 
 function handleDeleteUserRequest(resolver: HttpResponseResolver<never, any, any>) {

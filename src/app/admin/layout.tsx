@@ -1,11 +1,12 @@
 import React from 'react';
 import { auth } from '@/auth';
+import { notFound } from 'next/navigation';
 
-export default async function DashboardLayout({ children }: { children: React.ReactNode }) {
+export default async function AdminLayout({ children }: { children: React.ReactNode }) {
   const session = await auth()
 
   if (session?.user?.role !== "ADMIN") {
-    return <p>You are not authorized to view this page!</p>;
+    return notFound();
   }
 
   return (

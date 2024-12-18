@@ -1,25 +1,16 @@
-'use client';
-import { useMe } from '@/hooks/auth/me';
+import { auth } from '@/auth';
 
-export const DashboardInfo = () => {
-  const user = useMe();
+export const DashboardInfo = async () => {
+  const session = await auth()
 
-  if(!user?.data){
-    return null;
-  }
+  if (!session?.user) return null
 
   return (
     <>
       <h1 className="text-xl">Dashboard</h1>
-      <h4 className="my-3">
-        Name : {user.data.name}
-      </h4>
-      <h4 className="my-3">
-        Email : {user.data.email}
-      </h4>
-      <h4 className="my-3">
-        Role : {user.data.role}
-      </h4>
+      <p>{session.user.email}</p>
+      <p>{session.user.image}</p>
+      <p>{session.user.role}</p>
     </>
   );
 };

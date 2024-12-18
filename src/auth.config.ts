@@ -26,10 +26,12 @@ export const authConfig = {
     authorized: async ({ auth, request: { nextUrl } }) => {
       const isLoggedIn = !!auth?.user;
       const isOnAdmin = nextUrl.pathname.startsWith('/admin');
-      if (isOnAdmin) {
+      const isOnSettings = nextUrl.pathname.startsWith('/settings');
+      if (isOnAdmin || isOnSettings) {
          // 未認証のユーザーはログインページにリダイレクトされる
         return isLoggedIn;
       }
+
       return true;
     },
     jwt({ token, user }) {

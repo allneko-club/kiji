@@ -55,4 +55,12 @@ export const paths = {
       getHref: (id: string) => `/public/discussions/${id}`,
     },
   },
+  settings: {
+    root: {
+      getHref: () => '/settings',
+    },
+    profile: {
+      getHref: () => '/settings/profile',
+    },
+  },
 } as const;

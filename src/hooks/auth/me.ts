@@ -3,8 +3,7 @@ import { User } from '@/types/api';
 import { api } from '@/lib/api-client';
 
 export const getMe = async (): Promise<User> => {
-  const response = (await api.get('/auth/me')) as { data: User };
-  return response.data;
+  return  api.get('/auth/me');
 };
 
 const userQueryKey = ['me'];

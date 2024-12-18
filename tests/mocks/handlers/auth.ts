@@ -99,7 +99,7 @@ export const authHandlers = [
 
     try {
       const { user } = await requireAuth(cookies);
-      return HttpResponse.json({ data: user });
+      return HttpResponse.json(user);
     } catch (error: any) {
       return HttpResponse.json(
         { message: error?.message || 'Server Error' },

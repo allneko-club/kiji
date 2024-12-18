@@ -39,7 +39,7 @@ export async function UserNav() {
         <DropdownMenuSeparator />
         <DropdownMenuGroup>
           {/* todo DropdownMenuItem の中に Link を入れられる？ */}
-          <Link href={paths.admin.root.getHref()}>
+          <Link href={paths.settings.root.getHref()}>
             <DropdownMenuItem>
               <User />マイページ
             </DropdownMenuItem>
