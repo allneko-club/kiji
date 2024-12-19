@@ -1,16 +1,16 @@
 import { HttpResponse, http, HttpResponseResolver } from 'msw';
-
-
 import { db, persistDb } from '../db';
 import {
   requireAuth,
   requireAdmin,
   sanitizeUser,
-  networkDelay,
+  networkDelay, getServerErrorResponse, hash,
 } from '../utils';
 import { env } from '../env';
+import { IdParams, ListParams } from '@tests/mocks/types';
+import { UserRole } from '@/config/consts';
 
-type ProfileBody = {
+export type ProfileBody = {
   id: string;
   name: string;
   email: string;
@@ -18,93 +18,100 @@ type ProfileBody = {
   image: string;
 };
 
-type EmptyObject = {[key: string]: never}
+type RegisterBody = {
+  firstName: string;
+  lastName: string;
+  email: string;
+  password: string;
+};
 
-function handleUsersRequest(resolver: HttpResponseResolver<never, EmptyObject, any>) {
+
+function handleGetUsersRequest(resolver: HttpResponseResolver<never, ListParams, any>) {
+  return http.get(`${env.API_URL}/users`, resolver)
+}
+
+function handleGetUserRequest(resolver: HttpResponseResolver<IdParams, any, any>) {
+  return http.get(`${env.API_URL}/users/:id`, resolver)
+}
+
+function handleCreateUserRequest(resolver: HttpResponseResolver<never, RegisterBody, any>) {
   return http.post(`${env.API_URL}/users`, resolver)
 }
 
-function handleUserRequest(resolver: HttpResponseResolver<never, any, any>) {
-  return http.get(`${env.API_URL}/users/:name`, resolver)
-}
-function handleProfileRequest(resolver: HttpResponseResolver<never, ProfileBody, any>) {
-  return http.patch(`${env.API_URL}/users/profile`, resolver)
+function handleUpdateUserRequest(resolver: HttpResponseResolver<IdParams, ProfileBody, any>) {
+  return http.patch(`${env.API_URL}/users/:id`, resolver)
 }
 
-function handleDeleteUserRequest(resolver: HttpResponseResolver<never, any, any>) {
-  return http.delete(`${env.API_URL}/users/:userId`, resolver)
+function handleDeleteUserRequest(resolver: HttpResponseResolver<IdParams, any, any>) {
+  return http.delete(`${env.API_URL}/users/:id`, resolver)
 }
+
 
 export const usersHandlers = [
-  handleUsersRequest(async ({ cookies }) => {
+  handleGetUsersRequest(async ({ cookies }) => {
     await networkDelay();
     try {
-      const { error } = requireAuth(cookies);
-      if (error) {
-        return HttpResponse.json({ message: error }, { status: 401 });
-      }
-      const result = db.user
-        .findMany({})
-        .map(sanitizeUser);
+      const result = db.user.findMany({}).map(sanitizeUser);
+      return HttpResponse.json({ users: result, total: result.length });
 
-      return HttpResponse.json({ data: result });
     } catch (error: any) {
-      return HttpResponse.json(
-        { message: error?.message || 'Server Error' },
-        { status: 500 },
-      );
+      return getServerErrorResponse();
     }
   }),
 
-  handleUserRequest(async ({ params }) => {
+  handleCreateUserRequest(async ({ request }) => {
     await networkDelay();
     try {
-      const name = params.name as string;
+      const userObject = await request.json();
+      const existingUser = db.user.findFirst({
+        where: {
+          email: {
+            equals: userObject.email,
+          },
+        },
+      });
+
+      if (existingUser) {
+        return HttpResponse.json(
+          { message: 'The email is already in use.' },
+          { status: 400 },
+        );
+      }
+
+      const role = UserRole.ADMIN;
+      db.user.create({
+        ...userObject,
+        role,
+        password: hash(userObject.password),
+      });
+
+      await persistDb('user');
+
+      return HttpResponse.json({ ...userObject, role });
+    } catch (error: any) {
+      return getServerErrorResponse();
+    }
+  }),
+
+  handleGetUserRequest(async ({ params }) => {
+    await networkDelay();
+    try {
+      const id = params.id as string;
       const result = db.user.findFirst({
         where: {
-          name: {
-            equals: name,
-          },
-        },
-      });
-
-      return HttpResponse.json(result);
-    } catch (error: any) {
-      return HttpResponse.json(
-        { message: error?.message || 'Server Error' },
-        { status: 500 },
-      );
-    }
-  }),
-
-  handleDeleteUserRequest(async ({ cookies, params }) => {
-    await networkDelay();
-
-    try {
-      const { user, error } = requireAuth(cookies);
-      if (error) {
-        return HttpResponse.json({ message: error }, { status: 401 });
-      }
-      const userId = params.userId as string;
-      requireAdmin(user);
-      const result = db.user.delete({
-        where: {
           id: {
-            equals: userId,
+            equals: id,
           },
         },
       });
-      await persistDb('user');
+
       return HttpResponse.json(result);
     } catch (error: any) {
-      return HttpResponse.json(
-        { message: error?.message || 'Server Error' },
-        { status: 500 },
-      );
+      return getServerErrorResponse();
     }
   }),
 
-  handleProfileRequest(async ({ request, cookies }) => {
+  handleUpdateUserRequest(async ({ request, cookies }) => {
     await networkDelay();
 
     try {
@@ -112,6 +119,8 @@ export const usersHandlers = [
       if (error) {
         return HttpResponse.json({ message: error }, { status: 401 });
       }
+      requireAdmin(user);
+
       const data = (await request.json()) as ProfileBody;
       const result = db.user.update({
         where: {
@@ -124,10 +133,31 @@ export const usersHandlers = [
       await persistDb('user');
       return HttpResponse.json(result);
     } catch (error: any) {
-      return HttpResponse.json(
-        { message: error?.message || 'Server Error' },
-        { status: 500 },
-      );
+      return getServerErrorResponse();
+    }
+  }),
+  
+  handleDeleteUserRequest(async ({ cookies, params }) => {
+    await networkDelay();
+
+    try {
+      const { user, error } = requireAuth(cookies);
+      if (error) {
+        return HttpResponse.json({ message: error }, { status: 401 });
+      }
+      requireAdmin(user);
+
+      const result = db.user.delete({
+        where: {
+          id: {
+            equals: params.id,
+          },
+        },
+      });
+      await persistDb('user');
+      return HttpResponse.json(result);
+    } catch (error: any) {
+      return getServerErrorResponse();
     }
   }),
 ];

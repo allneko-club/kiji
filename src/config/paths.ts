@@ -46,6 +46,9 @@ export const paths = {
     users: {
       getHref: () => '/admin/users',
     },
+    user: {
+      getHref: (id: string) => `/admin/users/${id}`,
+    },
     profile: {
       getHref: () => '/admin/profile',
     },

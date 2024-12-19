@@ -2,18 +2,11 @@ import { HttpResponse, http, HttpResponseResolver } from 'msw';
 import { env } from '../env';
 import { db, persistDb } from '../db';
 import {
-  authenticate,
   hash,
   requireAuth,
-  networkDelay, sanitizeUser,
+  networkDelay, sanitizeUser, getServerErrorResponse,
 } from '../utils';
-
-type RegisterBody = {
-  firstName: string;
-  lastName: string;
-  email: string;
-  password: string;
-};
+import { ProfileBody } from '@tests/mocks/handlers/users';
 
 type LoginBody = {
   email: string;
@@ -24,10 +17,6 @@ type ResetPasswordBody = {
   email: string;
 };
 
-function handleRegisterRequest(resolver: HttpResponseResolver<never, RegisterBody, any>) {
-  return http.post(`${env.API_URL}/auth/register`, resolver)
-}
-
 function handleLoginRequest(resolver: HttpResponseResolver<never, LoginBody, any>) {
   return http.post(`${env.API_URL}/auth/login`, resolver)
 }
@@ -36,49 +25,15 @@ function handleMeRequest(resolver: HttpResponseResolver<never, any, any>) {
   return http.get(`${env.API_URL}/auth/me`, resolver)
 }
 
+function handleUpdateProfileRequest(resolver: HttpResponseResolver<never, ProfileBody, any>) {
+  return http.patch(`${env.API_URL}/auth/me`, resolver)
+}
+
 function handleResetPasswordRequest(resolver: HttpResponseResolver<never, ResetPasswordBody, any>) {
   return http.post(`${env.API_URL}/auth/reset-password`, resolver)
 }
 
 export const authHandlers = [
-  handleRegisterRequest(async ({ request }) => {
-    await networkDelay();
-    try {
-      const userObject = await request.json();
-
-      const existingUser = db.user.findFirst({
-        where: {
-          email: {
-            equals: userObject.email,
-          },
-        },
-      });
-
-      if (existingUser) {
-        return HttpResponse.json(
-          { message: 'The email is already in use.' },
-          { status: 400 },
-        );
-      }
-
-      const role = 'ADMIN';
-      db.user.create({
-        ...userObject,
-        role,
-        password: hash(userObject.password),
-      });
-
-      await persistDb('user');
-
-      return HttpResponse.json({ ...userObject, role });
-    } catch (error: any) {
-      return HttpResponse.json(
-        { message: error?.message || 'Server Error' },
-        { status: 500 },
-      );
-    }
-  }),
-
   handleLoginRequest(async ({ request }) => {
     await networkDelay();
     try {
@@ -98,10 +53,7 @@ export const authHandlers = [
       }
 
     } catch (error: any) {
-      return HttpResponse.json(
-        { message: error?.message || 'Server Error' },
-        { status: 500 },
-      );
+      return getServerErrorResponse();
     }
   }),
 
@@ -109,13 +61,37 @@ export const authHandlers = [
     await networkDelay();
 
     try {
-      const { user } = await requireAuth(cookies);
+      const { user, error } = requireAuth(cookies);
+      if (error) {
+        return HttpResponse.json({ message: error }, { status: 401 });
+      }
       return HttpResponse.json(user);
     } catch (error: any) {
-      return HttpResponse.json(
-        { message: error?.message || 'Server Error' },
-        { status: 500 },
-      );
+      return getServerErrorResponse();
+    }
+  }),
+
+  handleUpdateProfileRequest(async ({ request, cookies }) => {
+    await networkDelay();
+
+    try {
+      const { user, error } = requireAuth(cookies);
+      if (error) {
+        return HttpResponse.json({ message: error }, { status: 401 });
+      }
+      const data = (await request.json()) as ProfileBody;
+      const result = db.user.update({
+        where: {
+          id: {
+            equals: user?.id,
+          },
+        },
+        data,
+      });
+      await persistDb('user');
+      return HttpResponse.json(result);
+    } catch (error: any) {
+      return getServerErrorResponse();
     }
   }),
 
@@ -126,10 +102,7 @@ export const authHandlers = [
       return HttpResponse.json({});
 
     } catch (error: any) {
-      return HttpResponse.json(
-        { message: error?.message || 'Server Error' },
-        { status: 500 },
-      );
+      return getServerErrorResponse();
     }
   }),
 ];

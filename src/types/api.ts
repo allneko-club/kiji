@@ -2,6 +2,8 @@
 // ideally, we want to keep these api related types in sync
 // with the backend instead of manually writing them out
 
+import { UserRole } from '@/config/consts';
+
 export type BaseEntity = {
   id: string;
   createdAt: number;
@@ -15,5 +17,5 @@ export type User = Entity<{
   id: string;
   name: string;
   email: string;
-  role: 'ADMIN' | 'USER';
+  role: UserRole;
 }>;

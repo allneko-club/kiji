@@ -1,4 +1,4 @@
-import { delay } from 'msw';
+import { delay, HttpResponse } from 'msw';
 import { decode,  type JWT } from '@auth/core/jwt'
 import { db } from './db';
 
@@ -77,3 +77,8 @@ export function requireAdmin(user: any) {
     throw Error('Unauthorized');
   }
 }
+
+export const getServerErrorResponse = (message = 'Server Error', status = 500) => HttpResponse.json(
+  { message: message },
+  { status: status },
+);

@@ -26,7 +26,7 @@ const registerInputSchema = z
 type RegisterInput = z.infer<typeof registerInputSchema>;
 
 const register = (data: RegisterInput): Promise<User> => {
-  return api.post('/auth/register', data);
+  return api.post('/users', data);
 };
 
 const useRegister = () => {
