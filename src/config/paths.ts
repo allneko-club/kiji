@@ -14,6 +14,12 @@ export const paths = {
   contactDone: {
     getHref: () => '/contact-done',
   },
+  post: {
+    getHref: (id: string) => `/posts/${id}`,
+  },
+  posts: {
+    getHref: () => '/posts',
+  },
   auth: {
     register: {
       getHref: (redirectTo?: string | null | undefined) =>
@@ -37,12 +43,6 @@ export const paths = {
     dashboard: {
       getHref: () => '/admin',
     },
-    discussions: {
-      getHref: () => '/admin/discussions',
-    },
-    discussion: {
-      getHref: (id: string) => `/admin/discussions/${id}`,
-    },
     users: {
       getHref: () => '/admin/users',
     },
@@ -53,17 +53,26 @@ export const paths = {
       getHref: () => '/admin/profile',
     },
   },
-  public: {
-    discussion: {
-      getHref: (id: string) => `/public/discussions/${id}`,
+  my:{
+    post: {
+      getHref: (id: string) => `/my/posts/${id}`,
     },
-  },
-  settings: {
-    root: {
-      getHref: () => '/settings',
+    posts: {
+      getHref: () => '/my/posts',
     },
-    profile: {
-      getHref: () => '/settings/profile',
+    createPost: {
+      getHref: () => '/my/posts/create',
+    },
+    editPost: {
+      getHref: (id: string) => `/my/posts/${id}`,
+    },
+    settings: {
+      root: {
+        getHref: () => '/my/settings',
+      },
+      profile: {
+        getHref: () => '/my/settings/profile',
+      },
     },
   },
 } as const;

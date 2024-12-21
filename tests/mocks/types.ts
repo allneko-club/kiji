@@ -1,4 +1,4 @@
-import { Order } from '@/config/consts';
+import { OrderBy } from '@/config/consts';
 
 export type IdParams = {
   id: string
@@ -7,7 +7,7 @@ export type IdParams = {
 export type ListParams = {
   page?: number;
   perPage?: number;
-  order?: Order;
+  order?: OrderBy;
   orderBy?: string;
 };
 

@@ -1,18 +1,14 @@
 'use client'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import dayjs from 'dayjs';
 import { PaginationBasic } from '@/components/pagination-basic';
 import { paths } from '@/config/paths';
 import { useRouter } from 'next/navigation';
-import { User } from '@/types/api';
+import { useUsers } from '@/hooks/user';
+import { BaseSearch } from '@/types/api';
+import { getFormattedDateTime } from '@/lib/datetime';
 
-interface UsersTableProps {
-  users: User[];
-  perPage: number;
-  total?: number;
-}
-
-export const UsersTable = ({users, perPage, total }: UsersTableProps) => {
+export const UsersTable = ({params}: {params: BaseSearch}) => {
+  const { data } = useUsers(params);
   const router = useRouter()
 
   return (<>
@@ -27,18 +23,18 @@ export const UsersTable = ({users, perPage, total }: UsersTableProps) => {
         </TableRow>
       </TableHeader>
       <TableBody>
-        {users.map(user => (
+        {data.users.map(user => (
           <TableRow key={user.id} className="hover:cursor-pointer" onClick={() => router.push(paths.admin.user.getHref(user.id))}>
             <TableCell className="font-medium">{user.id}</TableCell>
             <TableCell>{user.name}</TableCell>
             <TableCell>{user.email}</TableCell>
             <TableCell>{user.role}</TableCell>
-            <TableCell className="text-right">{dayjs(user.createdAt).format()}</TableCell>
+            <TableCell className="text-right">{getFormattedDateTime(user.createdAt)}</TableCell>
           </TableRow>
         ))}
       </TableBody>
     </Table>
 
-    <PaginationBasic perPage={perPage} totalPages={total} />
+    <PaginationBasic perPage={params.perPage} totalPages={data.total} />
   </>);
 };

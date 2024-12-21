@@ -55,7 +55,7 @@ export const usersHandlers = [
       return HttpResponse.json({ users: result, total: result.length });
 
     } catch (error: any) {
-      return getServerErrorResponse();
+      return getServerErrorResponse(error.message);
     }
   }),
 
@@ -89,7 +89,7 @@ export const usersHandlers = [
 
       return HttpResponse.json({ ...userObject, role });
     } catch (error: any) {
-      return getServerErrorResponse();
+      return getServerErrorResponse(error.message);
     }
   }),
 
@@ -107,7 +107,7 @@ export const usersHandlers = [
 
       return HttpResponse.json(result);
     } catch (error: any) {
-      return getServerErrorResponse();
+      return getServerErrorResponse(error.message);
     }
   }),
 
@@ -115,7 +115,7 @@ export const usersHandlers = [
     await networkDelay();
 
     try {
-      const { user, error } = requireAuth(cookies);
+      const { user, error } = await requireAuth(cookies);
       if (error) {
         return HttpResponse.json({ message: error }, { status: 401 });
       }
@@ -133,7 +133,7 @@ export const usersHandlers = [
       await persistDb('user');
       return HttpResponse.json(result);
     } catch (error: any) {
-      return getServerErrorResponse();
+      return getServerErrorResponse(error.message);
     }
   }),
   
@@ -141,7 +141,7 @@ export const usersHandlers = [
     await networkDelay();
 
     try {
-      const { user, error } = requireAuth(cookies);
+      const { user, error } = await requireAuth(cookies);
       if (error) {
         return HttpResponse.json({ message: error }, { status: 401 });
       }
@@ -157,7 +157,7 @@ export const usersHandlers = [
       await persistDb('user');
       return HttpResponse.json(result);
     } catch (error: any) {
-      return getServerErrorResponse();
+      return getServerErrorResponse(error.message);
     }
   }),
 ];

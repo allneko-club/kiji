@@ -1,6 +1,6 @@
 import { env } from '@/config/env';
 
-type RequestOptions = {
+export type RequestOptions = {
   method?: string;
   headers?: Record<string, string>;
   body?: any;

@@ -1,32 +1,33 @@
-import { api } from '@/lib/api-client';
-import { notFound } from 'next/navigation';
-import dayjs from 'dayjs';
-import type { Metadata } from 'next';
+import { Metadata } from 'next';
+import { getQueryClient } from '@/lib/react-query';
+import { userOptions } from '@/hooks/user';
+import { dehydrate, HydrationBoundary } from '@tanstack/react-query';
+import { UserInfo } from '@/app/admin/users/[id]/_components/user-info';
 
 type Props = {
   params: Promise<{ id: string }>
 }
 
+// 参考 https://github.com/TanStack/query/discussions/7313
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const id = (await params).id
-  const user = await api.get(`/users/${id}`);
-  return { title: user.name }
+  const queryClient = getQueryClient()
+  try {
+    const user = await queryClient.fetchQuery(userOptions(id))
+    return { title: user.name }
+  } catch {
+    return { title: "Not Found" };
+  }
 }
 
 export default async function Page({ params }: Props) {
+  const queryClient = getQueryClient()
   const id = (await params).id
-  const user = await api.get(`/users/${id}`);
-
-  if (!user) {
-    notFound()
-  }
+  void queryClient.prefetchQuery(userOptions(id))
 
   return (
-    <div>
-      <h1 className="text-xl font-bold tracking-tight">{user.name}</h1>
-      <p>メールアドレス：{user.email}</p>
-      <p>権限：{user.role}</p>
-      <p>登録日時：{dayjs(user.createdAt).format()}</p>
-    </div>
+    <HydrationBoundary state={dehydrate(queryClient)}>
+      <UserInfo id={id} />
+    </HydrationBoundary>
   );
 };

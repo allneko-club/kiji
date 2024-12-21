@@ -18,7 +18,7 @@ const models = {
     description: String,
     createdAt: Date.now,
   },
-  discussion: {
+  post: {
     id: primaryKey(nanoid),
     title: String,
     body: String,
@@ -26,13 +26,6 @@ const models = {
     teamId: String,
     createdAt: Date.now,
     public: Boolean,
-  },
-  comment: {
-    id: primaryKey(nanoid),
-    body: String,
-    authorId: String,
-    discussionId: String,
-    createdAt: Date.now,
   },
 };
 

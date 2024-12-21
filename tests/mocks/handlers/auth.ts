@@ -53,7 +53,7 @@ export const authHandlers = [
       }
 
     } catch (error: any) {
-      return getServerErrorResponse();
+      return getServerErrorResponse(error.message);
     }
   }),
 
@@ -61,13 +61,13 @@ export const authHandlers = [
     await networkDelay();
 
     try {
-      const { user, error } = requireAuth(cookies);
+      const { user, error } = await requireAuth(cookies);
       if (error) {
         return HttpResponse.json({ message: error }, { status: 401 });
       }
       return HttpResponse.json(user);
     } catch (error: any) {
-      return getServerErrorResponse();
+      return getServerErrorResponse(error.message);
     }
   }),
 
@@ -75,7 +75,7 @@ export const authHandlers = [
     await networkDelay();
 
     try {
-      const { user, error } = requireAuth(cookies);
+      const { user, error } = await requireAuth(cookies);
       if (error) {
         return HttpResponse.json({ message: error }, { status: 401 });
       }
@@ -91,7 +91,7 @@ export const authHandlers = [
       await persistDb('user');
       return HttpResponse.json(result);
     } catch (error: any) {
-      return getServerErrorResponse();
+      return getServerErrorResponse(error.message);
     }
   }),
 
@@ -102,7 +102,7 @@ export const authHandlers = [
       return HttpResponse.json({});
 
     } catch (error: any) {
-      return getServerErrorResponse();
+      return getServerErrorResponse(error.message);
     }
   }),
 ];

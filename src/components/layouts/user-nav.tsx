@@ -46,7 +46,7 @@ export async function UserNav() {
               </DropdownMenuItem>
             </Link>
           )}
-          <Link href={paths.settings.root.getHref()}>
+          <Link href={paths.my.settings.root.getHref()}>
             <DropdownMenuItem>
               <User />マイページ
             </DropdownMenuItem>

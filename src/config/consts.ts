@@ -4,7 +4,7 @@ export enum UserRole {
   USER = 'USER',
 }
 
-export enum Order {
+export enum OrderBy {
   ASC = 'asc',
   DESC = 'desc',
 }

@@ -2,7 +2,7 @@
 // ideally, we want to keep these api related types in sync
 // with the backend instead of manually writing them out
 
-import { UserRole } from '@/config/consts';
+import { OrderBy, UserRole } from '@/config/consts';
 
 export type BaseEntity = {
   id: string;
@@ -13,9 +13,22 @@ export type Entity<T> = {
   [K in keyof T]: T[K];
 } & BaseEntity;
 
+export type BaseSearch = {
+  perPage: number,
+  order: string,
+  orderBy: OrderBy,
+};
+
 export type User = Entity<{
   id: string;
   name: string;
   email: string;
   role: UserRole;
+}>;
+
+export type Post = Entity<{
+  title: string;
+  body: string;
+  author: User;
+  public: boolean;
 }>;
