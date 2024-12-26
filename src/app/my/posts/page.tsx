@@ -7,6 +7,7 @@ import { dehydrate, HydrationBoundary } from '@tanstack/react-query';
 import { getQueryClient } from '@/lib/react-query';
 import { OrderBy } from '@/config/consts';
 import { postsOptions, PostsSearchParams } from '@/hooks/posts/post';
+import { H1 } from '@/components/ui/header';
 
 export default async function Page() {
   const session = await auth()
@@ -18,7 +19,7 @@ export default async function Page() {
 
   return (<>
     <div className="flex items-center space-x-3">
-      <h1 className="text-xl">投稿</h1>
+      <H1>投稿</H1>
       <Link href={paths.my.createPost.getHref()}>
         <Button>Add</Button>
       </Link>

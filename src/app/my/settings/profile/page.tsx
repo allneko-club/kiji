@@ -1,5 +1,6 @@
 import { api } from '@/lib/api-client';
 import { signOut } from "@/auth"
+import { H1 } from '@/components/ui/header';
 
 export default async function Page() {
   const user = await api.get('/auth/me');
@@ -10,7 +11,7 @@ export default async function Page() {
 
   return (
     <div>
-      <h1 className="text-xl font-bold tracking-tight">{user.name}</h1>
+      <H1>{user.name}</H1>
       <p>{user.email}</p>
       <p>{user.image}</p>
       <p>{user.role}</p>

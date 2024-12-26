@@ -1,8 +1,9 @@
+import { H1 } from '@/components/ui/header';
 
 export default function Page() {
   return (
     <div>
-      <h1 className="text-3xl font-bold tracking-tight">このサイトについて</h1>
+      <H1>このサイトについて</H1>
       <p>Kiji は Next.js で作成した CMS アプリケーションです。</p>
     </div>
   );

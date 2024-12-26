@@ -4,6 +4,7 @@ import { getQueryClient } from '@/lib/react-query';
 import { usersOptions } from '@/hooks/user';
 import { OrderBy } from '@/config/consts';
 import { BaseSearch } from '@/types/api';
+import { H1 } from '@/components/ui/header';
 
 export default async function Page() {
 
@@ -12,7 +13,7 @@ export default async function Page() {
   void queryClient.prefetchQuery(usersOptions(params))
 
   return (<>
-    <h1 className="text-xl">ユーザー</h1>
+    <H1>ユーザー</H1>
     <HydrationBoundary state={dehydrate(queryClient)}>
       <UsersTable params={params} />
     </HydrationBoundary>

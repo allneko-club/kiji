@@ -7,6 +7,7 @@ import { Button } from '@/components/ui/button';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Textarea } from '@/components/ui/textarea';
 import { contactInput, contactInputSchema, useConfirm } from '@/hooks/misc/contact';
+import { H1 } from '@/components/ui/header';
 
 export default function Page() {
   const form = useForm<contactInput>(
@@ -18,7 +19,7 @@ export default function Page() {
 
   return (
     <div className="mx-auto max-w-sm">
-      <h1 className="text-3xl tracking-tight">お問い合わせ</h1>
+      <H1>お問い合わせ</H1>
       <p className="my-4">以下のフォームに入力してください。</p>
 
       <Form {...form}>

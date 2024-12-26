@@ -1,8 +1,10 @@
+import { H1 } from '@/components/ui/header';
+
 export default async function Page() {
 
   return (
     <div>
-      <h1 className="text-xl font-bold tracking-tight">マイページ</h1>
+      <H1>マイページ</H1>
     </div>
   );
 };

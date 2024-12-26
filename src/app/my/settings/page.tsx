@@ -1,9 +1,10 @@
+import { H1 } from '@/components/ui/header';
 
 export default async function Page() {
 
   return (
     <div>
-      <h1 className="text-xl font-bold tracking-tight">Settings</h1>
+      <H1>Settings</H1>
     </div>
   );
 };

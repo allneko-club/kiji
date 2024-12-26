@@ -6,6 +6,7 @@ import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { resetPasswordInput, resetPasswordInputSchema, useResetPassword } from '@/hooks/auth/reset-password';
+import { H1 } from '@/components/ui/header';
 
 export default function Page() {
   const form = useForm<resetPasswordInput>(
@@ -15,7 +16,7 @@ export default function Page() {
 
   return (
     <div className="mx-auto max-w-sm">
-      <h1 className="text-3xl tracking-tight">パスワードリセット</h1>
+      <H1>パスワードリセット</H1>
       <p className="my-4">メールアドレスを入力してください。</p>
 
       <Form {...form}>
