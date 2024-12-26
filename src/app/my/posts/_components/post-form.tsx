@@ -71,7 +71,7 @@ export const PostForm = <
           )}
         />
 
-        <Button type="submit">保存</Button>
+        <Button type="submit" disabled={form.formState.isSubmitting}>保存</Button>
       </form>
     </Form>
   );

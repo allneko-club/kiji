@@ -53,8 +53,7 @@ export default function Page() {
               </FormItem>
             )}
           />
-
-          <Button type="submit">送信</Button>
+          <Button type="submit" disabled={confirm.isPending}>送信</Button>
         </form>
       </Form>
     </div>

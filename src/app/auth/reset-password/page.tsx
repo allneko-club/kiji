@@ -11,8 +11,8 @@ import { H1 } from '@/components/ui/header';
 export default function Page() {
   const form = useForm<resetPasswordInput>(
     { resolver: zodResolver(resetPasswordInputSchema), defaultValues: { email: "" }})
-  const confirm = useResetPassword();
-  const onSubmit = (data: resetPasswordInput) => confirm.mutate(data);
+  const reset = useResetPassword();
+  const onSubmit = (data: resetPasswordInput) => reset.mutate(data);
 
   return (
     <div className="mx-auto max-w-sm">
@@ -22,7 +22,7 @@ export default function Page() {
       <Form {...form}>
         <form className="grid gap-4" onSubmit={form.handleSubmit(onSubmit)}>
 
-          {confirm.isError && <p className="text-orange-500">{confirm.error.message}</p>}
+          {reset.isError && <p className="text-orange-500">{reset.error.message}</p>}
 
           <FormField
             control={form.control}
@@ -37,7 +37,7 @@ export default function Page() {
               </FormItem>
             )}
           />
-          <Button type="submit">送信</Button>
+          <Button type="submit" disabled={reset.isPending}>送信</Button>
         </form>
       </Form>
     </div>

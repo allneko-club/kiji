@@ -84,7 +84,9 @@ export default function RegisterForm() {
               )}
             />
 
-            <Button type="submit" className="w-full">登録</Button>
+            <Button type="submit" className="w-full" disabled={register.isPending}>
+              登録
+            </Button>
           </form>
         </Form>
       </CardContent>

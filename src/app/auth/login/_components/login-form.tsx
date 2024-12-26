@@ -52,7 +52,7 @@ export default function LoginForm() {
             {/* Auth.jsでログイン後のリダイレクト先を設定するために必要 */}
             <input id="redirectTo" name="redirectTo" hidden defaultValue={redirectTo} />
 
-            <Button type="submit" className="w-full" aria-disabled={isPending}>
+            <Button type="submit" className="w-full" disabled={isPending}>
               ログイン
             </Button>
           </form>

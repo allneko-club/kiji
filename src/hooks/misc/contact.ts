@@ -20,7 +20,7 @@ const useConfirm = () => {
   const router = useRouter();
   return useMutation({
     mutationFn: postContact,
-    onSuccess: () => router.replace(`${paths.contactDone.getHref()}`),
+    onSuccess: () => router.push(`${paths.contactDone.getHref()}`),
   });
 };
 
