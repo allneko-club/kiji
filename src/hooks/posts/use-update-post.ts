@@ -34,7 +34,7 @@ export const useUpdatePost = ({
   return useMutation({
     onSuccess: (...args) => {
       toast('投稿を更新しました');
-      router.replace(`${paths.my.posts.getHref()}`)
+      router.push(`${paths.my.posts.getHref()}`)
       onSuccess?.(...args);
     },
     ...restConfig,

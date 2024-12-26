@@ -4,31 +4,28 @@ import { useForm } from "react-hook-form"
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
-import { Textarea } from '@/components/ui/textarea';
-import { contactInput, contactInputSchema, useConfirm } from '@/hooks/misc/contact';
+import { resetPasswordInput, resetPasswordInputSchema, useResetPassword } from '@/hooks/auth/reset-password';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 
-export default function Page() {
-  const form = useForm<contactInput>(
-  { resolver: zodResolver(contactInputSchema),
-    defaultValues: { email: "", content: "" }
-  })
-  const confirm = useConfirm();
-  const onSubmit = (data: contactInput) => confirm.mutate(data);
+export default function ResetPasswordForm() {
+  const form = useForm<resetPasswordInput>(
+    { resolver: zodResolver(resetPasswordInputSchema), defaultValues: { email: "" }})
+  const reset = useResetPassword();
+  const onSubmit = (data: resetPasswordInput) => reset.mutate(data);
 
   return (
     <Card className="mx-auto max-w-sm">
       <CardHeader>
-        <CardTitle className="text-2xl">お問い合わせ</CardTitle>
+        <CardTitle className="text-2xl">パスワードリセット</CardTitle>
         <CardDescription>
-          以下のフォームに入力してください。
+          メールアドレスを入力してください。
         </CardDescription>
       </CardHeader>
       <CardContent>
         <Form {...form}>
           <form className="grid gap-4" onSubmit={form.handleSubmit(onSubmit)}>
 
-            {confirm.isError && <p className="text-orange-500">{confirm.error.message}</p>}
+            {reset.isError && <p className="text-orange-500">{reset.error.message}</p>}
 
             <FormField
               control={form.control}
@@ -43,20 +40,7 @@ export default function Page() {
                 </FormItem>
               )}
             />
-            <FormField
-              control={form.control}
-              name="content"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>内容</FormLabel>
-                  <FormControl>
-                    <Textarea {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <Button type="submit" disabled={confirm.isPending}>送信</Button>
+            <Button type="submit" disabled={reset.isPending}>送信</Button>
           </form>
         </Form>
       </CardContent>

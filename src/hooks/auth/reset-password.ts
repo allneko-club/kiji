@@ -19,7 +19,7 @@ const useResetPassword = () => {
   const router = useRouter();
   return useMutation({
     mutationFn: postResetPassword,
-    onSuccess: () => router.replace(`${paths.auth.resetPasswordDone.getHref()}`),
+    onSuccess: () => router.push(`${paths.auth.resetPasswordDone.getHref()}`),
   });
 };
 

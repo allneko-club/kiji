@@ -35,7 +35,7 @@ const useRegister = () => {
     mutationFn: register,
     onSuccess:() => {
       toast('アカウントを登録しました');
-      router.replace(`${paths.auth.login.getHref()}`)
+      router.push(`${paths.auth.login.getHref()}`)
     },
   });
 };

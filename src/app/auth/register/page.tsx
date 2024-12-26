@@ -1,10 +1,8 @@
-"use client"
 import RegisterForm from '@/app/auth/register/_components/register-form';
+import type { Metadata } from 'next';
+
+export const metadata: Metadata = { title: "アカウント登録" };
 
 export default function Page() {
-  return (
-    <div className="flex h-screen w-full items-center justify-center px-4">
-      <RegisterForm />
-    </div>
-  );
+  return <RegisterForm />;
 };

@@ -14,7 +14,7 @@ export const useDeletePost = () => {
   return useMutation({
     onSuccess: () => {
       toast('投稿を削除しました');
-      router.replace(`${paths.my.posts.getHref()}`)
+      router.push(`${paths.my.posts.getHref()}`)
     },
     mutationFn: deletePost,
   });
