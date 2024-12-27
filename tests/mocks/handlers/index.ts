@@ -3,9 +3,11 @@ import { networkDelay } from '../utils';
 import { authHandlers } from './auth';
 import { contactHandlers } from './contact';
 import { usersHandlers } from './users';
-import { postsHandlers } from '@tests/mocks/handlers/posts';
+import { postsHandlers } from './posts';
+import { adminUsersHandlers } from './admin/users';
 
 export const handlers = [
+  ...adminUsersHandlers,
   ...authHandlers,
   ...contactHandlers,
   ...postsHandlers,

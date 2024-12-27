@@ -1,6 +1,6 @@
 import { Metadata } from 'next';
 import { getQueryClient } from '@/lib/react-query';
-import { userOptions } from '@/hooks/user';
+import { adminUserOptions } from '@/hooks/admin/user';
 import { dehydrate, HydrationBoundary } from '@tanstack/react-query';
 import { UserInfo } from '@/app/admin/users/[id]/_components/user-info';
 
@@ -13,7 +13,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const id = (await params).id
   const queryClient = getQueryClient()
   try {
-    const user = await queryClient.fetchQuery(userOptions(id))
+    const user = await queryClient.fetchQuery(adminUserOptions(id))
     return { title: user.name }
   } catch {
     return { title: "Not Found" };
@@ -23,7 +23,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 export default async function Page({ params }: Props) {
   const queryClient = getQueryClient()
   const id = (await params).id
-  void queryClient.prefetchQuery(userOptions(id))
+  void queryClient.prefetchQuery(adminUserOptions(id))
 
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>

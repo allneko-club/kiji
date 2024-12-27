@@ -3,12 +3,12 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import { PaginationBasic } from '@/components/pagination-basic';
 import { paths } from '@/config/paths';
 import { useRouter } from 'next/navigation';
-import { useUsers } from '@/hooks/user';
+import { useAdminUsers } from '@/hooks/admin/user';
 import { BaseSearch } from '@/types/api';
 import { getFormattedDateTime } from '@/lib/datetime';
 
 export const UsersTable = ({params}: {params: BaseSearch}) => {
-  const { data } = useUsers(params);
+  const { data } = useAdminUsers(params);
   const router = useRouter()
 
   return (<>

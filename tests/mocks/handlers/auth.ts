@@ -1,12 +1,7 @@
 import { HttpResponse, http, HttpResponseResolver } from 'msw';
-import { env } from '../env';
-import { db, persistDb } from '../db';
-import {
-  hash,
-  requireAuth,
-  networkDelay, sanitizeUser, getServerErrorResponse,
-} from '../utils';
-import { ProfileBody } from '@tests/mocks/handlers/users';
+import { env } from '@tests/mocks/env';
+import { db, persistDb } from '@tests/mocks/db';
+import { hash, requireAuth, networkDelay, sanitizeUser, getServerErrorResponse } from '@tests/mocks/utils';
 
 type LoginBody = {
   email: string;
@@ -15,6 +10,14 @@ type LoginBody = {
 
 type ResetPasswordBody = {
   email: string;
+};
+
+export type ProfileBody = {
+  id: string;
+  name: string;
+  email: string;
+  password: string;
+  image: string;
 };
 
 function handleLoginRequest(resolver: HttpResponseResolver<never, LoginBody, any>) {
