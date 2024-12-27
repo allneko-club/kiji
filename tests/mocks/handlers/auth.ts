@@ -1,7 +1,7 @@
 import { HttpResponse, http, HttpResponseResolver } from 'msw';
-import { env } from '@tests/mocks/env';
-import { db, persistDb } from '@tests/mocks/db';
-import { hash, requireAuth, networkDelay, sanitizeUser, getServerErrorResponse } from '@tests/mocks/utils';
+import { env } from '@/tests/mocks/env';
+import { db, persistDb } from '@/tests/mocks/db';
+import { hash, requireAuth, networkDelay, sanitizeUser, getServerErrorResponse } from '@/tests/mocks/utils';
 
 type LoginBody = {
   email: string;

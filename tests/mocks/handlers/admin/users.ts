@@ -1,13 +1,13 @@
 import { HttpResponse, http, HttpResponseResolver } from 'msw';
-import { db, persistDb } from '@tests/mocks/db';
+import { db, persistDb } from '@/tests/mocks/db';
 import {
   requireAuth,
   requireAdmin,
   sanitizeUser,
   networkDelay, getServerErrorResponse, hash,
-} from '@tests/mocks/utils';
-import { env } from '@tests/mocks/env';
-import { IdParams, ListParams } from '@tests/mocks/types';
+} from '@/tests/mocks/utils';
+import { env } from '@/tests/mocks/env';
+import { IdParams, ListParams } from '@/tests/mocks/types';
 import { UserRole } from '@/config/consts';
 
 export type ProfileBody = {

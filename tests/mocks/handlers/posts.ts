@@ -8,7 +8,7 @@ import {
   requireAdmin,
   networkDelay, getServerErrorResponse, sanitizeUser,
 } from '../utils';
-import { IdParams, ListParams } from '@tests/mocks/types';
+import { IdParams, ListParams } from '@/tests/mocks/types';
 
 type PostBody = {
   title: string;
