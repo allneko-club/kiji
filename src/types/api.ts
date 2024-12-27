@@ -15,6 +15,7 @@ export type Entity<T> = {
 
 export type BaseSearch = {
   perPage: number,
+  currentPage: number,
   order: string,
   orderBy: OrderBy,
 };

@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import { DashboardInfo } from '@/app/admin/_components/dashboard-info';
+import { Dashboard } from '@/app/admin/_components/dashboard';
 
 export const metadata: Metadata = {
   title: "ダッシュボード",
@@ -7,5 +7,5 @@ export const metadata: Metadata = {
 };
 
 export default function Page() {
-  return <DashboardInfo />;
+  return <Dashboard />;
 };

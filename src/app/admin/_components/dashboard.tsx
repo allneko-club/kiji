@@ -1,7 +1,7 @@
 import { auth } from '@/auth';
 import { H1 } from '@/components/ui/header';
 
-export const DashboardInfo = async () => {
+export const Dashboard = async () => {
   const session = await auth()
 
   if (!session?.user) return null
