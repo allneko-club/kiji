@@ -9,3 +9,8 @@ export const mainMenu = [
 export const adminMenu = [
   { href: paths.admin.users.getHref(), label: 'users' },
 ];
+
+export const myPageMenu = [
+  { href: paths.my.posts.getHref(), label: 'posts' },
+  { href: paths.my.settings.root.getHref(), label: 'settings' },
+];

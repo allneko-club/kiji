@@ -225,7 +225,7 @@ export const postsHandlers = [
         }
         const data = (await request.json()) as PostBody;
         const id = params.id as string;
-        requireAdmin(user);
+
         const result = db.post.update({
           where: {
             id: {

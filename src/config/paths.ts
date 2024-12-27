@@ -54,6 +54,9 @@ export const paths = {
     },
   },
   my:{
+    root: {
+      getHref: () => '/my',
+    },
     post: {
       getHref: (id: string) => `/my/posts/${id}`,
     },

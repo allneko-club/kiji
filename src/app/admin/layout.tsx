@@ -1,7 +1,7 @@
 import React from 'react';
 import { auth } from '@/auth';
 import { notFound } from 'next/navigation';
-import AdminNav from '@/components/layouts/admin-nav';
+import AdminNav from '@/app/admin/_components/admin-nav';
 import { UserRole } from '@/config/consts';
 
 export default async function AdminLayout({ children }: { children: React.ReactNode }) {

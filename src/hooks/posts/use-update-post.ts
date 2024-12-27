@@ -18,7 +18,7 @@ export const updatePostInputSchema = z.object({
 export type UpdatePostInput = z.infer<typeof updatePostInputSchema>;
 
 const updatePost = ({id, data}: {id:string, data: UpdatePostInput}): Promise<Post> => {
-  return api.post(`/posts/${id}`, data);
+  return api.patch(`/posts/${id}`, data);
 };
 
 type UseUpdatePostOptions = {
