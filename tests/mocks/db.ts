@@ -23,7 +23,6 @@ const models = {
     title: String,
     body: String,
     authorId: String,
-    teamId: String,
     createdAt: Date.now,
     public: Boolean,
   },

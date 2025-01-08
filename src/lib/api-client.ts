@@ -1,11 +1,13 @@
 import { env } from '@/config/env';
 
+export  type RequestParams = Record<string, string | number | boolean | undefined | null>;
+
 export type RequestOptions = {
   method?: string;
   headers?: Record<string, string>;
   body?: any;
   cookie?: string;
-  params?: Record<string, string | number | boolean | undefined | null>;
+  params?: RequestParams;
   cache?: RequestCache;
   next?: NextFetchRequestConfig;
 };

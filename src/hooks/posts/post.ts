@@ -1,6 +1,7 @@
 import { queryOptions, useSuspenseQuery } from '@tanstack/react-query';
-import { api, RequestOptions } from '@/lib/api-client';
+import { api } from '@/lib/api-client';
 import { BaseSearch, Post } from '@/types/api';
+import { GetPostsResponseBody } from '@/tests/mocks/handlers/posts';
 
 export interface PostsSearchParams extends BaseSearch{
   myPosts?: boolean,
@@ -8,12 +9,10 @@ export interface PostsSearchParams extends BaseSearch{
 }
 
 export const postsOptions = (params: PostsSearchParams) => {
-
-  const options = {params} as RequestOptions;
   return  queryOptions({
     queryKey: ['posts', params],
     queryFn: async () => {
-      return await api.get('/posts', options);
+      return await api.get<GetPostsResponseBody>('/posts', {params});
     },
   })
 }
@@ -22,7 +21,7 @@ export const usePosts = (params: PostsSearchParams) => {
   return useSuspenseQuery(postsOptions(params))
 }
 
-const getPostById = async (id: string, isPublic=null): Promise<Post> => {
+const getPostById = async (id: string, isPublic: boolean | undefined): Promise<Post> => {
   let url = `/posts/${id}`
   if(typeof isPublic === "boolean"){
     url = isPublic ? `/posts/${id}?isPublic=true` : `/posts/${id}?isPublic=false`
@@ -31,14 +30,14 @@ const getPostById = async (id: string, isPublic=null): Promise<Post> => {
 
 }
 
-export const postOptions = (id: string) => {
+export const postOptions = (id: string, isPublic: boolean | undefined) => {
   return queryOptions({
-    queryKey: ['post', id],
-    queryFn: () => getPostById(id),
+    queryKey: ['post', id, isPublic],
+    queryFn: () => getPostById(id, isPublic),
   })
 }
 
-export const usePost = (id: string) => useSuspenseQuery(postOptions(id))
+export const usePost = (id: string, isPublic: boolean | undefined) => useSuspenseQuery(postOptions(id, isPublic))
 
 export const publicPostOptions = (id: string) => {
   return queryOptions({

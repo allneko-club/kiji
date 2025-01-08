@@ -7,7 +7,7 @@ import {
   networkDelay, getServerErrorResponse, hash,
 } from '@/tests/mocks/utils';
 import { env } from '@/tests/mocks/env';
-import { IdParams, ListParams } from '@/tests/mocks/types';
+import { IdParams, BaseListRequestBody } from '@/tests/mocks/types';
 import { UserRole } from '@/config/consts';
 
 export type ProfileBody = {
@@ -26,7 +26,7 @@ type CreateParams = {
 };
 
 
-function handleGetUsersRequest(resolver: HttpResponseResolver<never, ListParams, any>) {
+function handleGetUsersRequest(resolver: HttpResponseResolver<never, BaseListRequestBody, any>) {
   return http.get(`${env.API_URL}/admin/users`, resolver)
 }
 

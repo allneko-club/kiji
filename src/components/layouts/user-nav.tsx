@@ -21,7 +21,7 @@ export async function UserNav() {
   return session?.user ? (<>
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="ghost" className="relative h-8 w-8 rounded-full">
+        <Button data-testid="user-nav" variant="ghost" className="relative h-8 w-8 rounded-full">
           <Avatar className="h-8 w-8">
             <AvatarImage src={session.user.image ?? ""} alt="@shadcn" />
             <AvatarFallback>KI</AvatarFallback>

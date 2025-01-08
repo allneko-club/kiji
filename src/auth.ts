@@ -21,15 +21,24 @@ async function loginUser(email: string, password:string): Promise<User|null> {
   }
 }
 
-export const { handlers, auth, signIn, signOut } = NextAuth({
-  ...authConfig,
-  // You can specify which fields should be submitted, by adding keys to the `credentials` object.
-  // e.g. domain, username, password, 2FA token, etc.
-  credentials: {
-    email: {},
-    password: {},
-  },
-  providers: [
+const providers: any[] = [GitHub]
+
+if (process.env.NODE_ENV === "development") {
+  providers.push(
+    Credentials({
+      authorize: (credentials) => {
+        if (credentials.password === "password") {
+          return {
+            email: "bob@alice.com",
+            name: "Bob Alice",
+            image: "https://avatars.githubusercontent.com/u/67470890?s=200&v=4",
+          }
+        }
+      },
+    })
+  )
+}else if(process.env.NODE_ENV === "production") {
+  providers.push(
     Credentials({
       async authorize(credentials) {
         try {
@@ -46,7 +55,17 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
           }
         }
       },
-    }),
-    GitHub,
-  ]
+    })
+  )
+}
+
+export const { handlers, auth, signIn, signOut } = NextAuth({
+  ...authConfig,
+  // You can specify which fields should be submitted, by adding keys to the `credentials` object.
+  // e.g. domain, username, password, 2FA token, etc.
+  credentials: {
+    email: {},
+    password: {},
+  },
+  providers
 });

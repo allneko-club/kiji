@@ -5,6 +5,7 @@ import { contactHandlers } from './contact';
 import { usersHandlers } from './users';
 import { postsHandlers } from './posts';
 import { adminUsersHandlers } from './admin/users';
+import { ErrorResponseBody } from '@/tests/mocks/types';
 
 export const handlers = [
   ...adminUsersHandlers,
@@ -17,3 +18,8 @@ export const handlers = [
     return HttpResponse.json({ ok: true });
   }),
 ];
+
+export const getNotFoundResponse = (message = 'not found') => HttpResponse.json<ErrorResponseBody>(
+  { message },
+  { status: 404 },
+);

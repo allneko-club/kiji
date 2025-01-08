@@ -3,6 +3,7 @@
 // with the backend instead of manually writing them out
 
 import { OrderBy, UserRole } from '@/config/consts';
+import { RequestParams } from '@/lib/api-client';
 
 export type BaseEntity = {
   id: string;
@@ -13,7 +14,7 @@ export type Entity<T> = {
   [K in keyof T]: T[K];
 } & BaseEntity;
 
-export type BaseSearch = {
+export interface BaseSearch extends RequestParams {
   perPage: number,
   currentPage: number,
   order: string,
@@ -25,11 +26,14 @@ export type User = Entity<{
   name: string;
   email: string;
   role: UserRole;
+  image: string;
 }>;
 
 export type Post = Entity<{
+  id?: string;
   title: string;
   body: string;
-  author: User;
+  authorId: string;
+  author?: User;
   public: boolean;
 }>;

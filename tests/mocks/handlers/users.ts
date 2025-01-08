@@ -2,7 +2,7 @@ import { HttpResponse, http, HttpResponseResolver } from 'msw';
 import { db, persistDb } from '@/tests/mocks/db';
 import { sanitizeUser, networkDelay, getServerErrorResponse, hash } from '@/tests/mocks/utils';
 import { env } from '@/tests/mocks/env';
-import { IdParams, ListParams } from '@/tests/mocks/types';
+import { IdParams, BaseListRequestBody } from '@/tests/mocks/types';
 import { UserRole } from '@/config/consts';
 
 type RegisterBody = {
@@ -13,7 +13,7 @@ type RegisterBody = {
 };
 
 
-function handleGetUsersRequest(resolver: HttpResponseResolver<never, ListParams, any>) {
+function handleGetUsersRequest(resolver: HttpResponseResolver<never, BaseListRequestBody, any>) {
   return http.get(`${env.API_URL}/users`, resolver)
 }
 
@@ -27,7 +27,7 @@ function handleCreateUserRequest(resolver: HttpResponseResolver<never, RegisterB
 
 
 export const usersHandlers = [
-  handleGetUsersRequest(async ({ cookies }) => {
+  handleGetUsersRequest(async () => {
     await networkDelay();
     try {
       const result = db.user.findMany({}).map(sanitizeUser);

@@ -12,6 +12,6 @@ export const PostList = ({params}: { params: PostsSearchParams; }) => {
       ))}
     </div>
 
-    <PaginationBasic perPage={data.perPage} totalPages={data.total} />
+    <PaginationBasic perPage={params.perPage} totalPages={data.total} />
   </>);
 };

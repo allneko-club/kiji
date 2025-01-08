@@ -23,7 +23,7 @@ export const createUser = <T extends Partial<ReturnType<typeof generateUser>>>(
   return { ...generateUser(), ...overrides };
 };
 
-const generatePost = () => ({
+export const generatePost = () => ({
   id: randUuid(),
   title: randCatchPhrase(),
   body: randParagraph(),

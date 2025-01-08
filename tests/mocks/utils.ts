@@ -67,7 +67,8 @@ export async function requireAuth(cookies: Record<string, string>) {
     }
 
     return { user: sanitizeUser(user) };
-  } catch (err: any) {
+  } catch (error) {
+    console.log(error)
     return { error: 'Unauthorized', user: null };
   }
 }
@@ -79,6 +80,6 @@ export function requireAdmin(user: any) {
 }
 
 export const getServerErrorResponse = (message = 'Server Error', status = 500) => HttpResponse.json(
-  { message: message },
+  message,
   { status: status },
 );
