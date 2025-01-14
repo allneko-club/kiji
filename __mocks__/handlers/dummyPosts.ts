@@ -1,4 +1,4 @@
-import { admin, user } from '@/tests/mocks/handlers/dummyUsers';
+import { admin, user } from '@/__mocks__/handlers/dummyUsers';
 
 
 export const getDummyPosts  = (params: Record<string, string | number | boolean | null | undefined>) => {

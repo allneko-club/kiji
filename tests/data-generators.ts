@@ -5,7 +5,7 @@ import {
   randUuid,
   randCatchPhrase,
 } from '@ngneat/falso';
-import { hash } from './mocks/utils';
+import { hash } from '@/__mocks__/utils';
 import { UserRole } from '@/config/consts';
 
 const generateUser = () => ({

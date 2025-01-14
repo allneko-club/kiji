@@ -8,5 +8,3 @@ export const enableMocking = async () => {
     return worker.start();
   }
 };
-
-export { getNotFoundResponse } from '@/tests/mocks/handlers';

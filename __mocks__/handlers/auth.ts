@@ -1,9 +1,9 @@
 import { HttpResponse, http, HttpResponseResolver } from 'msw';
-import { env } from '@/tests/mocks/env';
-import { db, persistDb } from '@/tests/mocks/db';
-import { hash, networkDelay, sanitizeUser } from '@/tests/mocks/utils';
-import { getServerErrorResponse } from '@/tests/mocks/handlers/index';
-import { requireAuth } from '@/tests/mocks/handlers/utils';
+import { env } from '@/__mocks__/env';
+import { db, persistDb } from '@/__mocks__/db';
+import { hash, networkDelay, sanitizeUser } from '@/__mocks__/utils';
+import { getServerErrorResponse } from '@/__mocks__/handlers/index';
+import { requireAuth } from '@/__mocks__/handlers/utils';
 
 type LoginBody = {
   email: string;
@@ -58,7 +58,8 @@ export const authHandlers = [
       }
 
     } catch (error) {
-      return getServerErrorResponse(error.message);
+      console.error(error);
+      return getServerErrorResponse();
     }
   }),
 
@@ -72,7 +73,8 @@ export const authHandlers = [
       }
       return HttpResponse.json(user);
     } catch (error) {
-      return getServerErrorResponse(error.message);
+      console.error(error);
+      return getServerErrorResponse();
     }
   }),
 
@@ -96,7 +98,8 @@ export const authHandlers = [
       await persistDb('user');
       return HttpResponse.json(result);
     } catch (error) {
-      return getServerErrorResponse(error.message);
+      console.error(error);
+      return getServerErrorResponse();
     }
   }),
 
@@ -107,7 +110,8 @@ export const authHandlers = [
       return HttpResponse.json({});
 
     } catch (error) {
-      return getServerErrorResponse(error.message);
+      console.error(error);
+      return getServerErrorResponse();
     }
   }),
 ];

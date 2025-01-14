@@ -1,17 +1,16 @@
 import { HttpResponse, http, HttpResponseResolver } from 'msw';
-import { db, persistDb } from '@/tests/mocks/db';
-import { networkDelay, sanitizeUser } from '@/tests/mocks/utils';
-import { env } from '@/tests/mocks/env';
+import { db, persistDb } from '@/__mocks__/db';
+import { networkDelay, sanitizeUser } from '@/__mocks__/utils';
+import { env } from '@/__mocks__/env';
 import {
   IdParams,
   BaseListRequestBody,
   DeleteResponseBody,
   ErrorResponseBody,
   BaseListResponseBody,
-} from '@/tests/mocks/types';
+} from '@/__mocks__/types';
 import { POSTS_LIMIT, UserRole } from '@/config/consts';
-import { getNotFoundResponse } from '@/tests/mocks';
-import { getServerErrorResponse } from '@/tests/mocks/handlers';
+import { getNotFoundResponse, getServerErrorResponse } from '@/__mocks__/handlers';
 
 export type UpdateUserRequestBody = {
   id: string;
@@ -63,7 +62,7 @@ export const adminUsersHandlers = [
       });
 
     } catch (error) {
-      console.log(error)
+      console.error(error);
       return getServerErrorResponse();
     }
   }),
@@ -82,7 +81,7 @@ export const adminUsersHandlers = [
 
       return HttpResponse.json(result);
     } catch (error) {
-      console.log(error)
+      console.error(error);
       return getServerErrorResponse();
     }
   }),
@@ -108,7 +107,7 @@ export const adminUsersHandlers = [
       await persistDb('user');
       return HttpResponse.json(user);
     } catch (error) {
-      console.log(error)
+      console.error(error);
       return getServerErrorResponse();
     }
   }),
@@ -127,7 +126,7 @@ export const adminUsersHandlers = [
       await persistDb('user');
       return HttpResponse.json({message: 'Success'});
     } catch (error) {
-      console.log(error)
+      console.error(error);
       return getServerErrorResponse();
     }
   }),

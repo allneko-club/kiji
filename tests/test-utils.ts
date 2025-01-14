@@ -2,8 +2,8 @@ import { render, RenderOptions } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { AppProvider } from '@/app/provider';
 import { createUser as generateUser } from './data-generators';
-import { db } from './mocks/db';
-import { hash } from './mocks/utils';
+import { db } from '@/__mocks__/db';
+import { hash } from '@/__mocks__/utils';
 
 export const createUser = async (userProperties?: any) => {
   const user = generateUser(userProperties) as any;

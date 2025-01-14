@@ -1,7 +1,7 @@
 import { decode, JWT } from '@auth/core/jwt';
 import { UserRole } from '@/config/consts';
-import { db } from '@/tests/mocks/db';
-import { sanitizeUser } from '@/tests/mocks/utils';
+import { db } from '@/__mocks__/db';
+import { sanitizeUser } from '@/__mocks__/utils';
 
 interface MyJWT extends JWT {
   id: string,
@@ -18,7 +18,7 @@ export async function requireAuth(cookies: Record<string, string>) {
     const decodedToken = await decode(
       {
         token: token,
-        secret: process.env.AUTH_SECRET,
+        secret: process.env.AUTH_SECRET || '',
         salt: salt,
       }) as MyJWT;
 
@@ -40,7 +40,7 @@ export async function requireAuth(cookies: Record<string, string>) {
 
     return { user: sanitizeUser(user), error: undefined };
   } catch (error) {
-    console.log(error);
+    console.error(error);
     return { user: null, error: 'Unauthorized' };
   }
 }

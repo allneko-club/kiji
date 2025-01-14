@@ -1,10 +1,10 @@
 import { HttpResponse, http, HttpResponseResolver } from 'msw';
-import { db, persistDb } from '@/tests/mocks/db';
-import { networkDelay, hash, sanitizeUser } from '@/tests/mocks/utils';
-import { env } from '@/tests/mocks/env';
-import { IdParams, BaseListRequestBody } from '@/tests/mocks/types';
 import { UserRole } from '@/config/consts';
-import { getServerErrorResponse } from '@/tests/mocks/handlers/index';
+import { db, persistDb } from '@/__mocks__/db';
+import { networkDelay, hash, sanitizeUser } from '@/__mocks__/utils';
+import { env } from '@/__mocks__/env';
+import { IdParams, BaseListRequestBody } from '@/__mocks__/types';
+import { getServerErrorResponse } from '@/__mocks__/handlers';
 
 type RegisterBody = {
   firstName: string;
@@ -35,7 +35,7 @@ export const usersHandlers = [
       return HttpResponse.json({ users: result, total: result.length });
 
     } catch (error) {
-      console.log(error)
+      console.error(error);
       return getServerErrorResponse();
     }
   }),
@@ -54,7 +54,7 @@ export const usersHandlers = [
 
       return HttpResponse.json(result);
     } catch (error) {
-      console.log(error)
+      console.error(error);
       return getServerErrorResponse();
     }
   }),
@@ -89,7 +89,7 @@ export const usersHandlers = [
 
       return HttpResponse.json({ ...userObject, role });
     } catch (error) {
-      console.log(error)
+      console.error(error);
       return getServerErrorResponse();
     }
   }),

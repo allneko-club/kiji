@@ -3,9 +3,9 @@ import cors from 'cors';
 import express from 'express';
 import logger from 'pino-http';
 
-import { initializeDb } from '@/tests/mocks/db';
-import { env } from '@/tests/mocks/env';
-import { handlers } from '@/tests/mocks/handlers';
+import { initializeDb } from '@/__mocks__/db';
+import { env } from '@/__mocks__/env';
+import { handlers } from '@/__mocks__/handlers';
 
 const app = express();
 
