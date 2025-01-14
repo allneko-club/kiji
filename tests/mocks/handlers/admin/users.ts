@@ -1,121 +1,76 @@
 import { HttpResponse, http, HttpResponseResolver } from 'msw';
 import { db, persistDb } from '@/tests/mocks/db';
-import {
-  requireAuth,
-  requireAdmin,
-  sanitizeUser,
-  networkDelay, getServerErrorResponse, hash,
-} from '@/tests/mocks/utils';
+import { networkDelay, sanitizeUser } from '@/tests/mocks/utils';
 import { env } from '@/tests/mocks/env';
-import { IdParams, BaseListRequestBody } from '@/tests/mocks/types';
-import { UserRole } from '@/config/consts';
+import {
+  IdParams,
+  BaseListRequestBody,
+  DeleteResponseBody,
+  ErrorResponseBody,
+  BaseListResponseBody,
+} from '@/tests/mocks/types';
+import { POSTS_LIMIT, UserRole } from '@/config/consts';
+import { getNotFoundResponse } from '@/tests/mocks';
+import { getServerErrorResponse } from '@/tests/mocks/handlers';
 
-export type ProfileBody = {
+export type UpdateUserRequestBody = {
   id: string;
-  name: string;
-  email: string;
-  password: string;
-  image: string;
+  name?: string;
+  email?: string;
+  role?: UserRole;
+  password?: string;
+  image?: string;
 };
 
-type CreateParams = {
-  firstName: string;
-  lastName: string;
-  email: string;
-  password: string;
-};
+export interface GetUsersResponseBody extends BaseListResponseBody {
+  // todo User[] だと型エラーになる原因調査
+  users: any,
+}
 
-
-function handleGetUsersRequest(resolver: HttpResponseResolver<never, BaseListRequestBody, any>) {
+function handleGetUsersRequest(resolver: HttpResponseResolver<never, BaseListRequestBody, GetUsersResponseBody | ErrorResponseBody>) {
   return http.get(`${env.API_URL}/admin/users`, resolver)
 }
 
-function handleGetUserRequest(resolver: HttpResponseResolver<IdParams, any, any>) {
+function handleGetUserRequest(resolver: HttpResponseResolver<IdParams, never, any>) {
   return http.get(`${env.API_URL}/admin/users/:id`, resolver)
 }
 
-function handleCreateUserRequest(resolver: HttpResponseResolver<never, CreateParams, any>) {
-  return http.post(`${env.API_URL}/admin/users`, resolver)
-}
-
-function handleUpdateUserRequest(resolver: HttpResponseResolver<IdParams, ProfileBody, any>) {
+function handleUpdateUserRequest(resolver: HttpResponseResolver<IdParams, UpdateUserRequestBody, any>) {
   return http.patch(`${env.API_URL}/admin/users/:id`, resolver)
 }
 
-function handleDeleteUserRequest(resolver: HttpResponseResolver<IdParams, any, any>) {
+function handleDeleteUserRequest(resolver: HttpResponseResolver<IdParams, never, DeleteResponseBody | ErrorResponseBody>) {
   return http.delete(`${env.API_URL}/admin/users/:id`, resolver)
 }
 
 
 export const adminUsersHandlers = [
-  handleGetUsersRequest(async ({ cookies }) => {
+  handleGetUsersRequest(async ({ request }) => {
     await networkDelay();
+    const url = new URL(request.url);
+    const page = Number(url.searchParams.get('page') || 1);
 
     try {
-      const { user, error } = await requireAuth(cookies);
-      if (error) {
-        return HttpResponse.json({ message: error }, { status: 401 });
-      }
-      requireAdmin(user);
+      const users = db.user.findMany({}).map(sanitizeUser);
+      const total = users.length;
+      const totalPages = Math.ceil(total / POSTS_LIMIT);
 
-      const result = db.user.findMany({}).map(sanitizeUser);
-      return HttpResponse.json({ users: result, total: result.length });
+      return HttpResponse.json({
+        users,
+        page,
+        total,
+        totalPages,
+      });
 
-    } catch (error: any) {
-      return getServerErrorResponse(error.message);
+    } catch (error) {
+      console.log(error)
+      return getServerErrorResponse();
     }
   }),
 
-  handleCreateUserRequest(async ({ request, cookies }) => {
-    await networkDelay();
-
-    try {
-      const { user, error } = await requireAuth(cookies);
-      if (error) {
-        return HttpResponse.json({ message: error }, { status: 401 });
-      }
-      requireAdmin(user);
-
-      const userObject = await request.json();
-      const existingUser = db.user.findFirst({
-        where: {
-          email: {
-            equals: userObject.email,
-          },
-        },
-      });
-
-      if (existingUser) {
-        return HttpResponse.json(
-          { message: 'The email is already in use.' },
-          { status: 400 },
-        );
-      }
-
-      const role = UserRole.ADMIN;
-      db.user.create({
-        ...userObject,
-        role,
-        password: hash(userObject.password),
-      });
-
-      await persistDb('user');
-
-      return HttpResponse.json({ ...userObject, role });
-    } catch (error: any) {
-      return getServerErrorResponse(error.message);
-    }
-  }),
-
-  handleGetUserRequest(async ({ params, cookies }) => {
+  handleGetUserRequest(async ({ params }) => {
     await networkDelay();
     try {
-      const { user, error } = await requireAuth(cookies);
-      if (error) {
-        return HttpResponse.json({ message: error }, { status: 401 });
-      }
-      requireAdmin(user);
-
       const id = params.id as string;
       const result = db.user.findFirst({
         where: {
@@ -126,47 +81,43 @@ export const adminUsersHandlers = [
       });
 
       return HttpResponse.json(result);
-    } catch (error: any) {
-      return getServerErrorResponse(error.message);
+    } catch (error) {
+      console.log(error)
+      return getServerErrorResponse();
     }
   }),
 
-  handleUpdateUserRequest(async ({ request, cookies }) => {
+  handleUpdateUserRequest(async ({ request }) => {
     await networkDelay();
     try {
-      const { user, error } = await requireAuth(cookies);
-      if (error) {
-        return HttpResponse.json({ message: error }, { status: 401 });
-      }
-      requireAdmin(user);
-
-      const data = (await request.json()) as ProfileBody;
-      const result = db.user.update({
+      // todo UpdateUserRequestBody修正
+      const data = (await request.json()) as UpdateUserRequestBody;
+      const user = db.user.update({
         where: {
           id: {
-            equals: user?.id,
+            equals: data.id,
           },
         },
         data,
       });
+
+      if (!user) {
+        return getNotFoundResponse('User not found.');
+      }
+
       await persistDb('user');
-      return HttpResponse.json(result);
-    } catch (error: any) {
-      return getServerErrorResponse(error.message);
+      return HttpResponse.json(user);
+    } catch (error) {
+      console.log(error)
+      return getServerErrorResponse();
     }
   }),
   
-  handleDeleteUserRequest(async ({ cookies, params }) => {
+  handleDeleteUserRequest(async ({ params }) => {
     await networkDelay();
 
     try {
-      const { user, error } = await requireAuth(cookies);
-      if (error) {
-        return HttpResponse.json({ message: error }, { status: 401 });
-      }
-      requireAdmin(user);
-
-      const result = db.user.delete({
+      db.user.delete({
         where: {
           id: {
             equals: params.id,
@@ -174,9 +125,10 @@ export const adminUsersHandlers = [
         },
       });
       await persistDb('user');
-      return HttpResponse.json(result);
-    } catch (error: any) {
-      return getServerErrorResponse(error.message);
+      return HttpResponse.json({message: 'Success'});
+    } catch (error) {
+      console.log(error)
+      return getServerErrorResponse();
     }
   }),
 ];

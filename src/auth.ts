@@ -6,6 +6,7 @@ import { User } from '@/types/api';
 import { ZodError } from 'zod';
 import GitHub from 'next-auth/providers/github';
 import { z } from 'zod';
+import { UserRole } from '@/config/consts';
 
 export const loginInputSchema = z.object({
   email: z.string().min(1).email(),
@@ -29,9 +30,11 @@ if (process.env.NODE_ENV === "development") {
       authorize: (credentials) => {
         if (credentials.password === "password") {
           return {
-            email: "bob@alice.com",
-            name: "Bob Alice",
+            email: "admin@example.com",
+            name: "Admin",
+            role: UserRole.ADMIN,
             image: "https://avatars.githubusercontent.com/u/67470890?s=200&v=4",
+            createdAt: Date.now(),
           }
         }
       },

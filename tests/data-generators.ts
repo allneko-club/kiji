@@ -6,13 +6,14 @@ import {
   randCatchPhrase,
 } from '@ngneat/falso';
 import { hash } from './mocks/utils';
+import { UserRole } from '@/config/consts';
 
 const generateUser = () => ({
   id: randUuid() + Math.random(),
   name: randUserName({ withAccents: false }),
   email: randEmail(),
   password: hash("password"),
-  role: 'ADMIN',
+  role: UserRole.ADMIN,
   bio: randParagraph(),
   createdAt: Date.now(),
 });

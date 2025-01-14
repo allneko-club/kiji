@@ -12,12 +12,6 @@ const models = {
     bio: String,
     createdAt: Date.now,
   },
-  team: {
-    id: primaryKey(nanoid),
-    name: String,
-    description: String,
-    createdAt: Date.now,
-  },
   post: {
     id: primaryKey(nanoid),
     title: String,
@@ -39,20 +33,20 @@ export const loadDb = async () => {
   // Next.js アプリでは、mocked-db.json を db として使う
   if (typeof window === 'undefined') {
     const { readFile, writeFile } = await import('fs/promises');
-    try {
-      const data = await readFile(dbFilePath, 'utf8');
+    return readFile(dbFilePath, 'utf8').then((data) => {
       return JSON.parse(data);
-    } catch (error: any) {
+    }).catch(error => {
       if (error?.code === 'ENOENT') {
         const emptyDB = {};
-        await writeFile(dbFilePath, JSON.stringify(emptyDB, null, 2));
+        writeFile(dbFilePath, JSON.stringify(emptyDB, null, 2));
         return emptyDB;
       } else {
         console.error('Error loading mocked DB:', error);
         return null;
       }
-    }
+    });
   }
+
   // If we are running in a browser environment
   // react アプリでは、 window.localStorage を db として使う
   return Object.assign(
@@ -81,9 +75,9 @@ export const persistDb = async (model: Model) => {
 export const initializeDb = async () => {
   const database = await loadDb();
   Object.entries(db).forEach(([key, model]) => {
-    const dataEntres = database[key];
-    if (dataEntres) {
-      dataEntres?.forEach((entry: Record<string, any>) => {
+    const dataEntries = database[key];
+    if (dataEntries) {
+      dataEntries?.forEach((entry: Record<string, any>) => {
         model.create(entry);
       });
     }

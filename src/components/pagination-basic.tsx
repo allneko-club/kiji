@@ -16,7 +16,7 @@ export interface PaginationBasicProps {
 export function PaginationBasic({ perPage = 100, totalPages }:PaginationBasicProps) {
   const pathname = usePathname();
   const searchParams = useSearchParams();
-  const currentPage = Number(searchParams.get('page')) || 1;
+  const page = Number(searchParams.get('page')) || 1;
 
   const createPageURL = (pageNumber: number | string) => {
     const params = new URLSearchParams(searchParams);
@@ -24,42 +24,42 @@ export function PaginationBasic({ perPage = 100, totalPages }:PaginationBasicPro
     return `${pathname}?${params.toString()}`;
   };
 
-  const hasPrevPage = 1 < currentPage;
-  const hasNextPage = totalPages != null && currentPage * perPage < totalPages;
+  const hasPrevPage = 1 < page;
+  const hasNextPage = totalPages != null && page * perPage < totalPages;
 
   return (
     <Pagination>
       <PaginationContent>
         <PaginationItem>
           {hasPrevPage
-            ? <PaginationPrevious href={createPageURL(currentPage - 1)} />
+            ? <PaginationPrevious href={createPageURL(page - 1)} />
             : <PaginationPreviousDisabled />
           }
         </PaginationItem>
         <PaginationItem>
           {hasPrevPage && (
-            <PaginationLink href={createPageURL(currentPage - 1)}>
-              {currentPage - 1}
+            <PaginationLink href={createPageURL(page - 1)}>
+              {page - 1}
             </PaginationLink>
           )}
         </PaginationItem>
 
         <PaginationItem>
           <PaginationLink href="#" isActive>
-            {currentPage}
+            {page}
           </PaginationLink>
         </PaginationItem>
 
         <PaginationItem>
         {hasNextPage && (
-          <PaginationLink href={createPageURL(currentPage + 1)}>
-            {currentPage + 1}
+          <PaginationLink href={createPageURL(page + 1)}>
+            {page + 1}
           </PaginationLink>
         )}
         </PaginationItem>
         <PaginationItem>
           {hasNextPage
-            ? <PaginationNext href={createPageURL(currentPage + 1)} />
+            ? <PaginationNext href={createPageURL(page + 1)} />
             : <PaginationNextDisabled />
           }
         </PaginationItem>

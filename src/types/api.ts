@@ -16,13 +16,12 @@ export type Entity<T> = {
 
 export interface BaseSearch extends RequestParams {
   perPage: number,
-  currentPage: number,
+  page: number,
   order: string,
   orderBy: OrderBy,
 };
 
 export type User = Entity<{
-  id: string;
   name: string;
   email: string;
   role: UserRole;
@@ -30,7 +29,6 @@ export type User = Entity<{
 }>;
 
 export type Post = Entity<{
-  id?: string;
   title: string;
   body: string;
   authorId: string;

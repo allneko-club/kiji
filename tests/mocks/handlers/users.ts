@@ -1,9 +1,10 @@
 import { HttpResponse, http, HttpResponseResolver } from 'msw';
 import { db, persistDb } from '@/tests/mocks/db';
-import { sanitizeUser, networkDelay, getServerErrorResponse, hash } from '@/tests/mocks/utils';
+import { networkDelay, hash, sanitizeUser } from '@/tests/mocks/utils';
 import { env } from '@/tests/mocks/env';
 import { IdParams, BaseListRequestBody } from '@/tests/mocks/types';
 import { UserRole } from '@/config/consts';
+import { getServerErrorResponse } from '@/tests/mocks/handlers/index';
 
 type RegisterBody = {
   firstName: string;
@@ -33,8 +34,9 @@ export const usersHandlers = [
       const result = db.user.findMany({}).map(sanitizeUser);
       return HttpResponse.json({ users: result, total: result.length });
 
-    } catch (error: any) {
-      return getServerErrorResponse(error.message);
+    } catch (error) {
+      console.log(error)
+      return getServerErrorResponse();
     }
   }),
 
@@ -51,8 +53,9 @@ export const usersHandlers = [
       });
 
       return HttpResponse.json(result);
-    } catch (error: any) {
-      return getServerErrorResponse(error.message);
+    } catch (error) {
+      console.log(error)
+      return getServerErrorResponse();
     }
   }),
 
@@ -85,8 +88,9 @@ export const usersHandlers = [
       await persistDb('user');
 
       return HttpResponse.json({ ...userObject, role });
-    } catch (error: any) {
-      return getServerErrorResponse(error.message);
+    } catch (error) {
+      console.log(error)
+      return getServerErrorResponse();
     }
   }),
 ];

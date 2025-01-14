@@ -1,6 +1,6 @@
 import { HttpResponse, http, HttpResponseResolver } from 'msw';
 import { env } from '@/config/env';
-import { requireAuth, networkDelay, sanitizeUser, } from '../utils';
+import { networkDelay, sanitizeUser } from '../utils';
 import {
   BaseListResponseBody,
   ErrorResponseBody,
@@ -11,9 +11,10 @@ import {
 import { getDummyPosts } from '@/tests/mocks/handlers/dummyPosts';
 import { POSTS_LIMIT } from '@/config/consts';
 import { getDummyUsers } from '@/tests/mocks/handlers/dummyUsers';
-import { getNotFoundResponse } from '@/tests/mocks/handlers/index';
 import { Post, User } from '@/types/api';
 import { generatePost } from '@/tests/data-generators';
+import { getNotFoundResponse } from '@/tests/mocks';
+import { requireAuth } from '@/tests/mocks/handlers/utils';
 
 type CreatePostRequestBody = {
   title: string;

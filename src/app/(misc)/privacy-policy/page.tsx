@@ -1,10 +1,9 @@
-import { H1 } from '@/components/ui/header';
 
 export default function Page() {
 
   return (
     <div>
-      <H1>プライバシーポリシー</H1>
+      <h1>プライバシーポリシー</h1>
     </div>
   );
 };

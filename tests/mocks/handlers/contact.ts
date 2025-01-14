@@ -19,7 +19,7 @@ export const contactHandlers = [
     try {
       return HttpResponse.json({});
 
-    } catch (error: any) {
+    } catch (error) {
       return HttpResponse.json(
         { message: error?.message || 'Server Error' },
         { status: 500 },

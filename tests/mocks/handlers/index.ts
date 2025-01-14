@@ -1,4 +1,4 @@
-import { HttpResponse, http } from 'msw';
+import { http, HttpResponse } from 'msw';
 import { networkDelay } from '../utils';
 import { authHandlers } from './auth';
 import { contactHandlers } from './contact';
@@ -18,6 +18,11 @@ export const handlers = [
     return HttpResponse.json({ ok: true });
   }),
 ];
+
+export const getServerErrorResponse = (message = 'Server Error', status = 500) => HttpResponse.json<ErrorResponseBody>(
+  { message },
+  { status: status },
+);
 
 export const getNotFoundResponse = (message = 'not found') => HttpResponse.json<ErrorResponseBody>(
   { message },

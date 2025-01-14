@@ -13,9 +13,9 @@ export default async function Page(props: {
   searchParams?: Promise<SearchParams>;
 }) {
   const searchParams = await props.searchParams;
-  const currentPage = Number(searchParams?.page) || 1;
+  const page = Number(searchParams?.page) || 1;
   const orderBy = searchParams?.orderBy || OrderBy.ASC;
-  const params: PostsSearchParams = { perPage: 100, currentPage, order:'id', orderBy, isPublic: true }
+  const params: PostsSearchParams = { perPage: 100, page, order:'id', orderBy, isPublic: true }
   const queryClient = getQueryClient()
   void queryClient.prefetchQuery(postsOptions(params))
 

@@ -1,10 +1,9 @@
-import { H1 } from '@/components/ui/header';
 
 export default async function Page() {
 
   return (
     <div>
-      <H1>Settings</H1>
+      <h1>Settings</h1>
     </div>
   );
 };
