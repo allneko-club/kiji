@@ -3,12 +3,10 @@ import { authHandlers } from './auth';
 import { contactHandlers } from './contact';
 import { usersHandlers } from './users';
 import { postsHandlers } from './posts';
-import { adminUsersHandlers } from './admin/users';
 import { networkDelay } from '@/__mocks__/utils';
 import { ErrorResponseBody } from '@/__mocks__/types';
 
 export const handlers = [
-  ...adminUsersHandlers,
   ...authHandlers,
   ...contactHandlers,
   ...postsHandlers,

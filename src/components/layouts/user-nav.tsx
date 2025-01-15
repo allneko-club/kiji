@@ -9,7 +9,7 @@ import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import Link from 'next/link';
 import { paths } from '@/config/paths';
-import { Lock, LogOut, User } from 'lucide-react';
+import { LogOut, User } from 'lucide-react';
 
 export async function UserNav() {
   const session = await auth()
@@ -39,13 +39,6 @@ export async function UserNav() {
         <DropdownMenuSeparator />
         <DropdownMenuGroup>
           {/* todo DropdownMenuItem の中に Link を入れられる？ */}
-          {session.user.role === 'ADMIN' && (
-            <Link href={paths.admin.root.getHref()}>
-              <DropdownMenuItem>
-                <Lock />ADMIN
-              </DropdownMenuItem>
-            </Link>
-          )}
           <Link href={paths.my.root.getHref()}>
             <DropdownMenuItem>
               <User />マイページ

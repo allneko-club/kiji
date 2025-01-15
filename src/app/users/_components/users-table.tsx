@@ -3,12 +3,12 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import { PaginationBasic } from '@/components/pagination-basic';
 import { paths } from '@/config/paths';
 import { useRouter } from 'next/navigation';
-import { useAdminUsers } from '@/hooks/admin/user';
+import { useUsers } from '@/hooks/users/user';
 import { BaseSearch } from '@/types/api';
 import { getFormattedDateTime } from '@/lib/datetime';
 
 export const UsersTable = ({params}: {params: BaseSearch}) => {
-  const { data } = useAdminUsers(params);
+  const { data } = useUsers(params);
   const router = useRouter()
 
   return (<>
@@ -24,7 +24,7 @@ export const UsersTable = ({params}: {params: BaseSearch}) => {
       </TableHeader>
       <TableBody>
         {data.users.map(user => (
-          <TableRow key={user.id} className="hover:cursor-pointer" onClick={() => router.push(paths.admin.user.getHref(user.id))}>
+          <TableRow key={user.id} className="hover:cursor-pointer" onClick={() => router.push(paths.users.user.getHref(user.id))}>
             <TableCell className="font-medium">{user.id}</TableCell>
             <TableCell>{user.name}</TableCell>
             <TableCell>{user.email}</TableCell>

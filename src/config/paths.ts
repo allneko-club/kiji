@@ -36,23 +36,6 @@ export const paths = {
       getHref: () => '/auth/reset-password-done',
     },
   },
-  admin: {
-    root: {
-      getHref: () => '/admin',
-    },
-    dashboard: {
-      getHref: () => '/admin',
-    },
-    users: {
-      getHref: () => '/admin/users',
-    },
-    user: {
-      getHref: (id: string) => `/admin/users/${id}`,
-    },
-    profile: {
-      getHref: () => '/admin/profile',
-    },
-  },
   my:{
     root: {
       getHref: () => '/my',
@@ -70,12 +53,16 @@ export const paths = {
       getHref: (id: string) => `/my/posts/${id}`,
     },
     settings: {
-      root: {
-        getHref: () => '/my/settings',
-      },
+      getHref: () => '/my/settings',
       profile: {
         getHref: () => '/my/settings/profile',
       },
     },
   },
+  users:{
+      getHref: () => '/users',
+    user: {
+      getHref: (id: string) => `/users/${id}`,
+    },
+  }
 } as const;

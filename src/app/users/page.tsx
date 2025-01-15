@@ -1,7 +1,7 @@
-import { UsersTable } from '@/app/admin/users/_components/users-table';
+import { UsersTable } from '@/app/users/_components/users-table';
 import { dehydrate, HydrationBoundary } from '@tanstack/react-query';
 import { getQueryClient } from '@/lib/react-query';
-import { adminUsersOptions } from '@/hooks/admin/user';
+import { usersOptions } from '@/hooks/users/user';
 import { OrderBy } from '@/config/consts';
 import { BaseSearch } from '@/types/api';
 
@@ -18,7 +18,7 @@ export default async function Page(props: {
   const orderBy = searchParams?.orderBy || OrderBy.ASC;
   const params: BaseSearch = { perPage: 100, page: page, order:'id', orderBy }
   const queryClient = getQueryClient()
-  void queryClient.prefetchQuery(adminUsersOptions(params))
+  void queryClient.prefetchQuery(usersOptions(params))
 
   return (<>
     <h1>ユーザー</h1>

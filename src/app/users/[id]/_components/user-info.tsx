@@ -1,11 +1,11 @@
 'use client'
-import { useAdminUser } from '@/hooks/admin/user';
+import { useUser } from '@/hooks/users/user';
 import { notFound } from 'next/navigation';
 import { getFormattedDateTime } from '@/lib/datetime';
 import * as React from 'react';
 
 export const UserInfo = ({id}: {id: string}) => {
-  const { data } = useAdminUser(id)
+  const { data } = useUser(id)
 
   if (!data) {
     notFound()

@@ -6,7 +6,6 @@ import { User } from '@/types/api';
 import { ZodError } from 'zod';
 import GitHub from 'next-auth/providers/github';
 import { z } from 'zod';
-import { UserRole } from '@/config/consts';
 
 export const loginInputSchema = z.object({
   email: z.string().min(1).email(),
@@ -22,26 +21,15 @@ async function loginUser(email: string, password:string): Promise<User|null> {
   }
 }
 
-const providers: any[] = [GitHub]
-
-if (process.env.NODE_ENV === "development") {
-  providers.push(
-    Credentials({
-      authorize: (credentials) => {
-        if (credentials.password === "password") {
-          return {
-            email: "admin@example.com",
-            name: "Admin",
-            role: UserRole.ADMIN,
-            image: "https://avatars.githubusercontent.com/u/67470890?s=200&v=4",
-            createdAt: Date.now(),
-          }
-        }
-      },
-    })
-  )
-}else if(process.env.NODE_ENV === "production") {
-  providers.push(
+export const { handlers, auth, signIn, signOut } = NextAuth({
+  ...authConfig,
+  // You can specify which fields should be submitted, by adding keys to the `credentials` object.
+  // e.g. domain, username, password, 2FA token, etc.
+  credentials: {
+    email: {},
+    password: {},
+  },
+  providers: [
     Credentials({
       async authorize(credentials) {
         try {
@@ -58,17 +46,7 @@ if (process.env.NODE_ENV === "development") {
           }
         }
       },
-    })
-  )
-}
-
-export const { handlers, auth, signIn, signOut } = NextAuth({
-  ...authConfig,
-  // You can specify which fields should be submitted, by adding keys to the `credentials` object.
-  // e.g. domain, username, password, 2FA token, etc.
-  credentials: {
-    email: {},
-    password: {},
-  },
-  providers
+    }),
+    GitHub,
+  ]
 });

@@ -8,5 +8,5 @@ export const mainMenu = [
 
 export const myPageMenu = [
   { href: paths.my.posts.getHref(), label: 'posts' },
-  { href: paths.my.settings.root.getHref(), label: 'settings' },
+  { href: paths.my.settings.getHref(), label: 'settings' },
 ];
