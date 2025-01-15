@@ -1,6 +1,6 @@
 import { queryOptions, useQuery } from '@tanstack/react-query';
-import { User } from '@/types/api';
 import { api } from '@/lib/api-client';
+import { User } from '@/types/api/users';
 
 export const getMe = async (): Promise<User> => {
   return  api.get('/auth/me');

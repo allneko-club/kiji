@@ -3,9 +3,9 @@ import { UserRole } from '@/config/consts';
 import { db, persistDb } from '@/__mocks__/db';
 import { networkDelay, hash, sanitizeUser } from '@/__mocks__/utils';
 import { env } from '@/__mocks__/env';
-import { IdParams, BaseListRequestBody, BaseListResponseBody } from '@/__mocks__/types';
+import { IdParams, BaseListRequestBody, BaseListResponseBody } from '@/types/api';
 import { getServerErrorResponse } from '@/__mocks__/handlers';
-import { User } from '@/types/api';
+import { User } from '@/types/api/users';
 
 type RegisterBody = {
   firstName: string;

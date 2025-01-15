@@ -2,10 +2,10 @@ import NextAuth from 'next-auth';
 import { authConfig } from './auth.config';
 import Credentials from 'next-auth/providers/credentials';
 import { api } from '@/lib/api-client';
-import { User } from '@/types/api';
 import { ZodError } from 'zod';
 import GitHub from 'next-auth/providers/github';
 import { z } from 'zod';
+import { User } from '@/types/api/users';
 
 export const loginInputSchema = z.object({
   email: z.string().min(1).email(),

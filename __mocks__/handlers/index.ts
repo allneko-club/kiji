@@ -4,7 +4,7 @@ import { contactHandlers } from './contact';
 import { usersHandlers } from './users';
 import { postsHandlers } from './posts';
 import { networkDelay } from '@/__mocks__/utils';
-import { ErrorResponseBody } from '@/__mocks__/types';
+import { ErrorResponseBody } from '@/types/api';
 
 export const handlers = [
   ...authHandlers,

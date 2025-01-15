@@ -1,10 +1,21 @@
 import { queryOptions, useSuspenseQuery } from '@tanstack/react-query';
 import { api, RequestOptions } from '@/lib/api-client';
-import { BaseSearch, User } from '@/types/api';
 import { GetUsersResponseBody } from '@/__mocks__/handlers/users';
+import { UserRoleType } from '@/config/consts';
+import { User } from '@/types/api/users';
+import { BaseSearch } from '@/types/api';
 
+export interface UsersQueryParams extends BaseSearch {
+  id?: string;
+  sort?: string;
+  name?: string,
+  email?: string,
+  role?: UserRoleType,
+  registeredFrom?: string,
+  registeredTo?: string,
+}
 
-export const usersOptions = (params: BaseSearch) => {
+export const usersOptions = (params: UsersQueryParams) => {
   // todo asよりベターな変換方法あるか？
   const options = {params} as RequestOptions;
   return  queryOptions({
@@ -15,7 +26,7 @@ export const usersOptions = (params: BaseSearch) => {
   })
 }
 
-export const useUsers = (params: BaseSearch) => {
+export const useUsers = (params: UsersQueryParams) => {
   return useSuspenseQuery(usersOptions(params))
 }
 

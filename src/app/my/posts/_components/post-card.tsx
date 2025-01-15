@@ -9,9 +9,9 @@ import {
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import { paths } from '@/config/paths';
-import { Post } from '@/types/api';
 import { DeletePost } from '@/app/my/posts/_components/delete-post';
 import { getFormattedDateTime } from '@/lib/datetime';
+import { Post } from '@/types/api/posts';
 
 export function PostCard({ post }:{post: Post}) {
 

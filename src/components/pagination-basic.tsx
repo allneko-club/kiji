@@ -45,7 +45,7 @@ export function PaginationBasic({ perPage = 100, totalPages }:PaginationBasicPro
         </PaginationItem>
 
         <PaginationItem>
-          <PaginationLink href="#" isActive>
+          <PaginationLink href={createPageURL(page)} isActive>
             {page}
           </PaginationLink>
         </PaginationItem>

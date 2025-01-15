@@ -4,8 +4,9 @@ import { PaginationBasic } from '@/components/pagination-basic';
 import { paths } from '@/config/paths';
 import { useRouter } from 'next/navigation';
 import { useUsers } from '@/hooks/users/user';
-import { BaseSearch } from '@/types/api';
 import { getFormattedDateTime } from '@/lib/datetime';
+
+import { BaseSearch } from '@/types/api';
 
 export const UsersTable = ({params}: {params: BaseSearch}) => {
   const { data } = useUsers(params);

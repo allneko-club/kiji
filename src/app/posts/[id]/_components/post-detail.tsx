@@ -13,12 +13,12 @@ export function PostDetail({ id }:{id: string}) {
   }
 
   return (
-    <div>
+    <article>
       <h1>{post.title}</h1>
-      <p>{post.author.name}</p>
+      <p>{post.author?.name}</p>
       <p>{post.public ? "公開" : "非公開"}</p>
       <p>{getFormattedDateTime(post.createdAt)}</p>
       <p>{post.body}</p>
-    </div>
+    </article>
   )
 }

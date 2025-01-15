@@ -1,10 +1,10 @@
 import { useMutation } from '@tanstack/react-query';
 import { z } from 'zod';
-import { User } from '@/types/api';
 import { api } from '@/lib/api-client';
 import { useRouter } from 'next/navigation';
 import { toast } from 'react-toastify';
 import { paths } from '@/config/paths';
+import { User } from '@/types/api/users';
 
 const registerInputSchema = z
   .object({

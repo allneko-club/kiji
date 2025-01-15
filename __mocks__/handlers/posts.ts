@@ -1,8 +1,8 @@
 import { HttpResponse, http, HttpResponseResolver } from 'msw';
 import { env } from '@/config/env';
 import { POSTS_LIMIT } from '@/config/consts';
-import { Post, User } from '@/types/api';
-import { generatePost } from '@/tests/data-generators';
+import { User } from '@/types/api/users';
+import { Post } from '@/types/api/posts';
 import { networkDelay, sanitizeUser } from '@/__mocks__/utils';
 import {
   BaseListResponseBody,
@@ -10,11 +10,12 @@ import {
   IdParams,
   BaseListRequestBody,
   DeleteResponseBody,
-} from '@/__mocks__/types';
+} from '@/types/api';
 import { getDummyPosts } from '@/__mocks__/handlers/dummyPosts';
 import { getDummyUsers } from '@/__mocks__/handlers/dummyUsers';
 import { requireAuth } from '@/__mocks__/handlers/utils';
 import { getNotFoundResponse } from '@/__mocks__/handlers';
+import { db, persistDb } from '@/__mocks__/db';
 
 type CreatePostRequestBody = {
   title: string;
@@ -60,14 +61,27 @@ export const postsHandlers = [
     const url = new URL(request.url);
     const page = Number(url.searchParams.get('page') || 1);
     const isMyPosts = url.searchParams.get('myPosts') === "true";
-    const isPublic = url.searchParams.get('isPublic');
 
     if(isMyPosts){
       if (!user) {
         return HttpResponse.json({ message: error }, { status: 401 });
       }
     }
-    const posts = getDummyPosts({LIMIT: POSTS_LIMIT, page, isPublic, isMyPosts});
+    const posts = db.post
+      .findMany({ take: POSTS_LIMIT, skip: POSTS_LIMIT * (page - 1) })
+      .map((post) => {
+        const author = db.user.findFirst({
+          where: {
+            id: {
+              equals: post.authorId,
+            },
+          },
+        });
+        return {
+          ...post,
+          author: author ? sanitizeUser(author) : undefined,
+        };
+      });
     const total = posts.length;
     const totalPages = Math.ceil(total / POSTS_LIMIT);
 
@@ -82,13 +96,26 @@ export const postsHandlers = [
   handleGetPostRequest(async ({ params, cookies }) => {
     await networkDelay();
     const id = params.id as string;
-    const post = getDummyPosts({}).find((post) => post.id === id);
+    const post = db.post.findFirst({
+      where: {
+        id: {
+          equals: id,
+        },
+      },
+    });
 
     if (!post) {
       return getNotFoundResponse('Post not found.');
     }
 
     const author = getDummyUsers().find((user) => user.id === post.authorId);
+    // const author = db.user.findFirst({
+    //   where: {
+    //     id: {
+    //       equals: post.authorId,
+    //     },
+    //   },
+    // });
     if (post.public) {
       return HttpResponse.json({ ...post, author: author ? sanitizeUser(author) : undefined });
 
@@ -118,46 +145,52 @@ export const postsHandlers = [
     }
 
     const data = await request.json();
-    const dummyPost = generatePost()
-    return HttpResponse.json({ ...dummyPost, authorId: user.id, ...data });
+    const created = db.post.create(data);
+    await persistDb('post');
+    return HttpResponse.json(created);
   }),
 
   /**
    * ログインユーザー && 自分自身の投稿のみ更新可能
    */
   handleUpdatePostRequest(async ({ request, params, cookies }) => {
-      await networkDelay();
-      const { user, error } = await requireAuth(cookies);
-      if (!user) {
-        return HttpResponse.json({ message: error }, { status: 401 });
-      }
-      const data = await request.json();
-      const id = params.id as string;
-
-      return HttpResponse.json({ id: id, authorId: user.id, createdAt:1734834215543, ...data });
-    },
-  ),
+    await networkDelay();
+    const { user, error } = await requireAuth(cookies);
+    if (!user) {
+      return HttpResponse.json({ message: error }, { status: 401 });
+    }
+    const data = await request.json();
+    const id = params.id as string;
+    const updated = db.post.update({
+      where: { id: { equals: id } },
+      data,
+    });
+    await persistDb('post');
+    return HttpResponse.json(updated);
+  }),
 
   /**
    * ログインユーザー && 自分自身の投稿のみ削除可能
    */
   handleDeletePostRequest(async ({ cookies, params }) => {
-      await networkDelay();
-      const id = params.id as string;
-      const post = getDummyPosts({}).find((post) => post.id === id)
+    await networkDelay();
+    const id = params.id as string;
+    const post = getDummyPosts({}).find((post) => post.id === id)
 
-      if(!post){
-        return getNotFoundResponse('Post not found.');
-      }
+    if(!post){
+      return getNotFoundResponse('Post not found.');
+    }
 
-      const { user, error } = await requireAuth(cookies);
-      if (!user) {
-        return HttpResponse.json({ message: error }, { status: 401 });
-      }else if(user.id !== post.authorId){
-        return HttpResponse.json({ message: "Can't delete other's post." }, { status: 401 });
-      }
+    const { user, error } = await requireAuth(cookies);
+    if (!user) {
 
-      return HttpResponse.json({message: 'Success'});
-    },
-  ),
+      return HttpResponse.json({ message: error }, { status: 401 });
+    }else if(user.id !== post.authorId){
+      return HttpResponse.json({ message: "Can't delete other's post." }, { status: 401 });
+    }
+
+    db.post.delete({ where: { id: { equals: id } } });
+    await persistDb('post');
+    return HttpResponse.json({message: 'Success'});
+  }),
 ];

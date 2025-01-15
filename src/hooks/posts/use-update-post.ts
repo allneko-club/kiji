@@ -2,11 +2,11 @@
 import { useMutation } from '@tanstack/react-query';
 import { z } from 'zod';
 import { api } from '@/lib/api-client';
-import { Post } from '@/types/api';
 import { toast } from 'react-toastify';
 import { paths } from '@/config/paths';
 import { useRouter } from 'next/navigation';
 import { MutationConfig } from '@/lib/react-query';
+import { Post } from '@/types/api/posts';
 
 export const updatePostInputSchema = z.object({
   id: z.string().min(1, 'Required'),

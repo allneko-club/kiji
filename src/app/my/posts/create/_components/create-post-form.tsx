@@ -1,7 +1,7 @@
 'use client'
 import { PostForm } from '@/app/my/posts/_components/post-form';
-import { Post } from '@/types/api';
 import { CreatePostInput, createPostInputSchema, useCreatePost } from '@/hooks/posts/use-create-post';
+import { Post } from '@/types/api/posts';
 
 
 export const CreatePostForm = () => {

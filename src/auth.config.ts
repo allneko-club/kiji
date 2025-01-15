@@ -1,5 +1,5 @@
 import type { DefaultSession } from 'next-auth';
-import { UserRole } from '@/config/consts';
+import { UserRoleType } from '@/config/consts';
 
 declare module "next-auth" {
   /**
@@ -8,7 +8,7 @@ declare module "next-auth" {
    */
   interface Session {
     user: {
-      role: UserRole
+      role: UserRoleType
       /**
        * By default, TypeScript merges new interface properties and overwrites existing ones.
        * In this case, the default session user properties will be overwritten,

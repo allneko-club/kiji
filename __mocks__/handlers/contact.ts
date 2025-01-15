@@ -2,7 +2,7 @@ import { HttpResponse, http, HttpResponseResolver } from 'msw';
 import { networkDelay } from '../utils';
 import { env } from '../env';
 import { getServerErrorResponse } from '@/__mocks__/handlers/index';
-import { ErrorResponseBody } from '@/__mocks__/types';
+import { ErrorResponseBody } from '@/types/api';
 
 type ContactRequestBody = {
   email: string;

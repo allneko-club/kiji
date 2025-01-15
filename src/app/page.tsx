@@ -1,12 +1,11 @@
 import { PostList } from '@/app/_components/post-list';
 import { postsOptions, PostsSearchParams } from '@/hooks/posts/post';
-import { OrderBy } from '@/config/consts';
 import { getQueryClient } from '@/lib/react-query';
 import { dehydrate, HydrationBoundary } from '@tanstack/react-query';
 
 type SearchParams ={
   page?: string;
-  orderBy?: OrderBy;
+  sort?: string;
 }
 
 export default async function Page(props: {
@@ -14,8 +13,7 @@ export default async function Page(props: {
 }) {
   const searchParams = await props.searchParams;
   const page = Number(searchParams?.page) || 1;
-  const orderBy = searchParams?.orderBy || OrderBy.ASC;
-  const params: PostsSearchParams = { perPage: 100, page, order:'id', orderBy, isPublic: true }
+  const params: PostsSearchParams = { perPage: 100, page, sort:'id', isPublic: true }
   const queryClient = getQueryClient()
   void queryClient.prefetchQuery(postsOptions(params))
 

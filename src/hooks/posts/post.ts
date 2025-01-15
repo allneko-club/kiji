@@ -1,7 +1,8 @@
 import { queryOptions, useSuspenseQuery } from '@tanstack/react-query';
 import { api } from '@/lib/api-client';
-import { BaseSearch, Post } from '@/types/api';
 import { GetPostsResponseBody } from '@/__mocks__/handlers/posts';
+import { Post } from '@/types/api/posts';
+import { BaseSearch } from '@/types/api';
 
 export interface PostsSearchParams extends BaseSearch{
   myPosts?: boolean,

@@ -5,14 +5,13 @@ import { paths } from '@/config/paths';
 import { Button } from '@/components/ui/button';
 import { dehydrate, HydrationBoundary } from '@tanstack/react-query';
 import { getQueryClient } from '@/lib/react-query';
-import { OrderBy } from '@/config/consts';
 import { postsOptions, PostsSearchParams } from '@/hooks/posts/post';
 
 export default async function Page() {
   const session = await auth()
   if (!session?.user) return null
 
-  const params: PostsSearchParams = { perPage: 100, order:'id', orderBy: OrderBy.DESC, myPosts: true }
+  const params: PostsSearchParams = { page:1, perPage: 100, sort:'id', myPosts: true }
   const queryClient = getQueryClient()
   void queryClient.prefetchQuery(postsOptions(params))
 

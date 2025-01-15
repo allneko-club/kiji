@@ -1,12 +1,10 @@
 
-export enum UserRole {
-  ADMIN = 'ADMIN',
-  USER = 'USER',
-}
+export const UserRole = {
+  ADMIN: 'ADMIN',
+  USER: 'USER',
+} as const;
 
-export enum OrderBy {
-  ASC = 'asc',
-  DESC = 'desc',
-}
+export type UserRoleType = (typeof UserRole)[keyof typeof UserRole];
 
 export const POSTS_LIMIT = 10
+export const USERS_LIMIT = 10
