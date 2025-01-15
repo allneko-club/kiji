@@ -17,9 +17,6 @@ export const paths = {
   post: {
     getHref: (id: string) => `/posts/${id}`,
   },
-  posts: {
-    getHref: () => '/posts',
-  },
   auth: {
     register: {
       getHref: (redirectTo?: string | null | undefined) =>

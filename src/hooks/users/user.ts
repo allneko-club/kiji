@@ -1,6 +1,7 @@
 import { queryOptions, useSuspenseQuery } from '@tanstack/react-query';
 import { api, RequestOptions } from '@/lib/api-client';
 import { BaseSearch, User } from '@/types/api';
+import { GetUsersResponseBody } from '@/__mocks__/handlers/users';
 
 
 export const usersOptions = (params: BaseSearch) => {
@@ -9,7 +10,7 @@ export const usersOptions = (params: BaseSearch) => {
   return  queryOptions({
     queryKey: ['users', params],
     queryFn: async () => {
-      return await api.get('/users', options);
+      return await api.get<GetUsersResponseBody>('/users', options);
     },
   })
 }

@@ -1,6 +1,6 @@
 'use client'
 import { PaginationBasic } from '@/components/pagination-basic';
-import { PostCard } from '@/app/posts/_components/post-card';
+import { PostCard } from '@/app/_components/post-card';
 import { PostsSearchParams, usePosts } from '@/hooks/posts/post';
 
 export const PostList = ({params}: { params: PostsSearchParams; }) => {

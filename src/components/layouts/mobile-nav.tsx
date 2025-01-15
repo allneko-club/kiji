@@ -12,7 +12,7 @@ import { mainMenu } from '@/config/menu';
 export function MobileNav() {
   const [open, setOpen] = useState(false);
   const router = useRouter();
-  const onClick = (href) => {
+  const onClick = (href: string) => {
     router.push(href);
     setOpen(false);
   }

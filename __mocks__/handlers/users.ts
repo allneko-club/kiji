@@ -3,8 +3,9 @@ import { UserRole } from '@/config/consts';
 import { db, persistDb } from '@/__mocks__/db';
 import { networkDelay, hash, sanitizeUser } from '@/__mocks__/utils';
 import { env } from '@/__mocks__/env';
-import { IdParams, BaseListRequestBody } from '@/__mocks__/types';
+import { IdParams, BaseListRequestBody, BaseListResponseBody } from '@/__mocks__/types';
 import { getServerErrorResponse } from '@/__mocks__/handlers';
+import { User } from '@/types/api';
 
 type RegisterBody = {
   firstName: string;
@@ -13,6 +14,9 @@ type RegisterBody = {
   password: string;
 };
 
+export interface GetUsersResponseBody extends BaseListResponseBody {
+  users: User[],
+}
 
 function handleGetUsersRequest(resolver: HttpResponseResolver<never, BaseListRequestBody, any>) {
   return http.get(`${env.API_URL}/users`, resolver)
