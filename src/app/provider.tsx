@@ -15,7 +15,7 @@ export const AppProvider = ({ children }: AppProviderProps) => {
 
   return (
     <QueryClientProvider client={queryClient}>
-      {process.env.NODE_ENV === "development" && <ReactQueryDevtools />}
+      {process.env.NODE_ENV === "development" && <ReactQueryDevtools buttonPosition='bottom-left' />}
       {children}
       <ToastContainer autoClose={3000}/>
     </QueryClientProvider>

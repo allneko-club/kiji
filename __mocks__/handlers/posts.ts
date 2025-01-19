@@ -11,8 +11,6 @@ import {
   BaseListRequestBody,
   DeleteResponseBody,
 } from '@/types/api';
-import { getDummyPosts } from '@/__mocks__/handlers/dummyPosts';
-import { getDummyUsers } from '@/__mocks__/handlers/dummyUsers';
 import { requireAuth } from '@/__mocks__/handlers/utils';
 import { getNotFoundResponse } from '@/__mocks__/handlers';
 import { db, persistDb } from '@/__mocks__/db';
@@ -108,32 +106,24 @@ export const postsHandlers = [
       return getNotFoundResponse('Post not found.');
     }
 
-    const author = getDummyUsers().find((user) => user.id === post.authorId);
-    // const author = db.user.findFirst({
-    //   where: {
-    //     id: {
-    //       equals: post.authorId,
-    //     },
-    //   },
-    // });
+    const author = db.user.findFirst({
+      where: {
+        id: {
+          equals: post.authorId,
+        },
+      },
+    });
     if (post.public) {
       return HttpResponse.json({ ...post, author: author ? sanitizeUser(author) : undefined });
 
     } else {
       // 非公開の投稿は投稿したユーザーのみ取得可能
-      const { user, error } = await requireAuth(cookies);
-      if (!user) {
-        return HttpResponse.json({ message: error }, { status: 401 });
-      }
-
-      if (post.authorId !== user.id) {
+      const { user } = await requireAuth(cookies);
+      if (!user || post.authorId !== user.id) {
         return getNotFoundResponse('Post not found.');
       }
 
-      return HttpResponse.json({
-        ...post,
-        author: author ? sanitizeUser<User>(author) : undefined,
-      });
+      return HttpResponse.json({ ...post, author: author ? sanitizeUser<User>(author) : undefined });
     }
   }),
 
@@ -175,7 +165,13 @@ export const postsHandlers = [
   handleDeletePostRequest(async ({ cookies, params }) => {
     await networkDelay();
     const id = params.id as string;
-    const post = getDummyPosts({}).find((post) => post.id === id)
+    const post = db.post.findFirst({
+      where: {
+        id: {
+          equals: id,
+        },
+      },
+    });
 
     if(!post){
       return getNotFoundResponse('Post not found.');
@@ -183,7 +179,6 @@ export const postsHandlers = [
 
     const { user, error } = await requireAuth(cookies);
     if (!user) {
-
       return HttpResponse.json({ message: error }, { status: 401 });
     }else if(user.id !== post.authorId){
       return HttpResponse.json({ message: "Can't delete other's post." }, { status: 401 });
