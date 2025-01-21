@@ -1,11 +1,11 @@
 import { decode, JWT } from '@auth/core/jwt';
-import { UserRole } from '@/config/consts';
+import { UserRole, UserRoleType } from '@/config/consts';
 import { db } from '@/__mocks__/db';
 import { sanitizeUser } from '@/__mocks__/utils';
 
 interface MyJWT extends JWT {
   id: string,
-  role: UserRole,
+  role: UserRoleType,
 }
 
 export async function requireAuth(cookies: Record<string, string>) {

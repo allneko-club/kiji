@@ -1,5 +1,3 @@
-import { delay } from 'msw';
-
 export const hash = (str: string) => {
   let hash = 5381,
     i = str.length;
@@ -8,11 +6,6 @@ export const hash = (str: string) => {
     hash = (hash * 33) ^ str.charCodeAt(--i);
   }
   return String(hash >>> 0);
-};
-
-export const networkDelay = () => {
-  const delayTime = process.env.TEST ? 200 : 800;
-  return delay(delayTime);
 };
 
 const omit = <T extends object>(obj: T, keys: string[]): T => {

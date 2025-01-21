@@ -1,100 +1,57 @@
-import { HttpResponse, http, HttpResponseResolver } from 'msw';
+import express from 'express';
 import { UserRole } from '@/config/consts';
 import { db, persistDb } from '@/__mocks__/db';
-import { networkDelay, hash, sanitizeUser } from '@/__mocks__/utils';
-import { env } from '@/__mocks__/env';
-import { IdParams, BaseListRequestBody, BaseListResponseBody } from '@/types/api';
-import { getServerErrorResponse } from '@/__mocks__/handlers';
-import { User } from '@/types/api/users';
+import { hash, sanitizeUser } from '@/__mocks__/utils';
 
-type RegisterBody = {
-  firstName: string;
-  lastName: string;
-  email: string;
-  password: string;
-};
+const router = express.Router()
 
-export interface GetUsersResponseBody extends BaseListResponseBody {
-  users: User[],
-}
+router.get('/api/users', (req, res) => {
+  const result = db.user.findMany({}).map(sanitizeUser);
+  res.json({ users: result, total: result.length });
+})
 
-function handleGetUsersRequest(resolver: HttpResponseResolver<never, BaseListRequestBody, any>) {
-  return http.get(`${env.API_URL}/users`, resolver)
-}
+router.get('/api/users/:id', (req, res) => {
+  const id = req.params.id;
+  const user = db.user.findFirst({
+    where: {
+      id: {
+        equals: id,
+      },
+    },
+  });
 
-function handleGetUserRequest(resolver: HttpResponseResolver<IdParams, any, any>) {
-  return http.get(`${env.API_URL}/users/:id`, resolver)
-}
+  if (!user) {
+    res.status(404).json({ message: "Not found." });
+    return;
+  }
 
-function handleCreateUserRequest(resolver: HttpResponseResolver<never, RegisterBody, any>) {
-  return http.post(`${env.API_URL}/users`, resolver)
-}
+  res.json(user);
+})
 
-
-export const usersHandlers = [
-  handleGetUsersRequest(async () => {
-    await networkDelay();
-    try {
-      const result = db.user.findMany({}).map(sanitizeUser);
-      return HttpResponse.json({ users: result, total: result.length });
-
-    } catch (error) {
-      console.error(error);
-      return getServerErrorResponse();
-    }
-  }),
-
-  handleGetUserRequest(async ({ params }) => {
-    await networkDelay();
-    try {
-      const id = params.id as string;
-      const result = db.user.findFirst({
-        where: {
-          id: {
-            equals: id,
-          },
+router.post('/api/users', async (req, res) => {
+    const userObject = req.body;
+    const existingUser = db.user.findFirst({
+      where: {
+        email: {
+          equals: userObject.email,
         },
-      });
+      },
+    });
 
-      return HttpResponse.json(result);
-    } catch (error) {
-      console.error(error);
-      return getServerErrorResponse();
+    if (existingUser) {
+      res.status(400).json({ message: 'The email is already in use.' });
+      return;
     }
-  }),
 
-  handleCreateUserRequest(async ({ request }) => {
-    await networkDelay();
-    try {
-      const userObject = await request.json();
-      const existingUser = db.user.findFirst({
-        where: {
-          email: {
-            equals: userObject.email,
-          },
-        },
-      });
+    const role = UserRole.USER;
+    db.user.create({
+      ...userObject,
+      role,
+      password: hash(userObject.password),
+    });
+    await persistDb('user');
 
-      if (existingUser) {
-        return HttpResponse.json(
-          { message: 'The email is already in use.' },
-          { status: 400 },
-        );
-      }
+    res.json({ ...userObject, role });
+})
 
-      const role = UserRole.USER;
-      db.user.create({
-        ...userObject,
-        role,
-        password: hash(userObject.password),
-      });
-
-      await persistDb('user');
-
-      return HttpResponse.json({ ...userObject, role });
-    } catch (error) {
-      console.error(error);
-      return getServerErrorResponse();
-    }
-  }),
-];
+export default router

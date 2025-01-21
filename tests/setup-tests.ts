@@ -2,12 +2,11 @@ import { afterAll, afterEach, beforeAll, beforeEach, vi } from 'vitest'
 
 
 import { initializeDb, resetDb } from '@/__mocks__/db';
-import { server } from '@/__mocks__/server';
 
 vi.mock('zustand');
 
 beforeAll(() => {
-  server.listen({ onUnhandledRequest: 'error' });
+  // todo express サーバーを起動する (github action側で起動する方法も検討）
   vi.mock('next/navigation', async () => {
     const actual = await vi.importActual('next/navigation');
     return {
@@ -25,7 +24,9 @@ beforeAll(() => {
     };
   });
 });
-afterAll(() => server.close());
+afterAll(() => {
+  // todo express サーバーを停止する
+});
 beforeEach(() => {
   const ResizeObserverMock = vi.fn(() => ({
     observe: vi.fn(),
@@ -41,6 +42,5 @@ beforeEach(() => {
   initializeDb();
 });
 afterEach(() => {
-  server.resetHandlers();
   resetDb();
 });

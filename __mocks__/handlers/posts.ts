@@ -1,191 +1,150 @@
-import { HttpResponse, http, HttpResponseResolver } from 'msw';
-import { env } from '@/config/env';
-import { POSTS_LIMIT } from '@/config/consts';
-import { User } from '@/types/api/users';
-import { Post } from '@/types/api/posts';
-import { networkDelay, sanitizeUser } from '@/__mocks__/utils';
-import {
-  BaseListResponseBody,
-  ErrorResponseBody,
-  IdParams,
-  BaseListRequestBody,
-  DeleteResponseBody,
-} from '@/types/api';
+import express from 'express';
+import { POSTS_LIMIT, UserRole } from '@/config/consts';
+import { hash, sanitizeUser } from '@/__mocks__/utils';
 import { requireAuth } from '@/__mocks__/handlers/utils';
-import { getNotFoundResponse } from '@/__mocks__/handlers';
 import { db, persistDb } from '@/__mocks__/db';
 
-type CreatePostRequestBody = {
-  title: string;
-  body: string;
-  public: boolean;
-};
+const router = express.Router()
 
-type UpdatePostRequestBody = CreatePostRequestBody;
+router.get('/api/posts', async (req, res) => {
+  const page = Number(req.query.page || 1);
+  // todo isMyPosts に応じて 非公開の記事も表示するか切り分ける
+  // const isMyPosts = req.query.myPosts === "true";
 
-interface GetPostsRequestBody extends BaseListRequestBody{
-  isPublic: boolean,
-}
-
-export interface GetPostsResponseBody extends BaseListResponseBody {
-  posts: Post[],
-}
-
-function handleGetPostsRequest(resolver: HttpResponseResolver<never, GetPostsRequestBody, GetPostsResponseBody | ErrorResponseBody>) {
-  return http.get(`${env.API_URL}/posts`, resolver)
-}
-
-function handleGetPostRequest(resolver: HttpResponseResolver<IdParams, any, Post | ErrorResponseBody>) {
-  return http.get(`${env.API_URL}/posts/:id`, resolver)
-}
-
-function handleCreatePostRequest(resolver: HttpResponseResolver<never, CreatePostRequestBody, Post | ErrorResponseBody>) {
-  return http.post(`${env.API_URL}/posts`, resolver)
-}
-
-function handleUpdatePostRequest(resolver: HttpResponseResolver<IdParams, UpdatePostRequestBody, Post | ErrorResponseBody>) {
-  return http.patch(`${env.API_URL}/posts/:id`, resolver)
-}
-
-function handleDeletePostRequest(resolver: HttpResponseResolver<IdParams, never, DeleteResponseBody | ErrorResponseBody>) {
-  return http.delete(`${env.API_URL}/posts/:id`, resolver)
-}
-
-
-export const postsHandlers = [
-  handleGetPostsRequest(async ({ cookies, request }) => {
-    await networkDelay();
-    const { user, error } = await requireAuth(cookies);
-    const url = new URL(request.url);
-    const page = Number(url.searchParams.get('page') || 1);
-    const isMyPosts = url.searchParams.get('myPosts') === "true";
-
-    if(isMyPosts){
-      if (!user) {
-        return HttpResponse.json({ message: error }, { status: 401 });
-      }
-    }
-    const posts = db.post
-      .findMany({ take: POSTS_LIMIT, skip: POSTS_LIMIT * (page - 1) })
-      .map((post) => {
-        const author = db.user.findFirst({
-          where: {
-            id: {
-              equals: post.authorId,
-            },
+  const posts = db.post
+    .findMany({ take: POSTS_LIMIT, skip: POSTS_LIMIT * (page - 1) })
+    .map((post) => {
+      const author = db.user.findFirst({
+        where: {
+          id: {
+            equals: post.authorId,
           },
-        });
-        return {
-          ...post,
-          author: author ? sanitizeUser(author) : undefined,
-        };
+        },
       });
-    const total = posts.length;
-    const totalPages = Math.ceil(total / POSTS_LIMIT);
-
-    return HttpResponse.json({
-      posts,
-      page,
-      total,
-      totalPages,
+      return {
+        ...post,
+        author: author ? sanitizeUser(author) : undefined,
+      };
     });
-  }),
+  const total = posts.length;
+  const totalPages = Math.ceil(total / POSTS_LIMIT);
 
-  handleGetPostRequest(async ({ params, cookies }) => {
-    await networkDelay();
-    const id = params.id as string;
-    const post = db.post.findFirst({
-      where: {
-        id: {
-          equals: id,
-        },
+  res.json({
+    posts,
+    page,
+    total,
+    totalPages,
+  });
+})
+
+router.get('/api/posts/:id', async (req, res) => {
+  const post = db.post.findFirst({
+    where: {
+      id: {
+        equals: req.params.id,
       },
-    });
+    },
+  });
 
-    if (!post) {
-      return getNotFoundResponse('Post not found.');
-    }
+  if (!post) {
+    res.status(404).json({ message: "Not found." });
+    return;
+  }
 
-    const author = db.user.findFirst({
-      where: {
-        id: {
-          equals: post.authorId,
-        },
+  const author = db.user.findFirst({
+    where: {
+      id: {
+        equals: post.authorId,
       },
-    });
-    if (post.public) {
-      return HttpResponse.json({ ...post, author: author ? sanitizeUser(author) : undefined });
+    },
+  });
 
-    } else {
-      // 非公開の投稿は投稿したユーザーのみ取得可能
-      const { user } = await requireAuth(cookies);
-      if (!user || post.authorId !== user.id) {
-        return getNotFoundResponse('Post not found.');
-      }
+  if (post.public) {
+    res.json({ ...post, author: author ? sanitizeUser(author) : undefined });
 
-      return HttpResponse.json({ ...post, author: author ? sanitizeUser<User>(author) : undefined });
+  } else {
+    // 非公開の投稿は投稿したユーザーのみ取得可能
+    const { user } = await requireAuth(req.cookies);
+    if (!user || post.authorId !== user.id) {
+      res.status(404).json({ message: "Not found." });
+
+    }else {
+      res.json({ ...post, author: author ? sanitizeUser(author) : undefined });
     }
-  }),
+  }
+})
 
-  handleCreatePostRequest(async ({ request, cookies }) => {
-    await networkDelay();
-    const { user, error } = await requireAuth(cookies);
-    if (!user) {
-      return HttpResponse.json({ message: error }, { status: 401 });
-    }
-
-    const data = await request.json();
-    const created = db.post.create(data);
-    await persistDb('post');
-    return HttpResponse.json(created);
-  }),
-
-  /**
-   * ログインユーザー && 自分自身の投稿のみ更新可能
-   */
-  handleUpdatePostRequest(async ({ request, params, cookies }) => {
-    await networkDelay();
-    const { user, error } = await requireAuth(cookies);
-    if (!user) {
-      return HttpResponse.json({ message: error }, { status: 401 });
-    }
-    const data = await request.json();
-    const id = params.id as string;
-    const updated = db.post.update({
-      where: { id: { equals: id } },
-      data,
-    });
-    await persistDb('post');
-    return HttpResponse.json(updated);
-  }),
-
-  /**
-   * ログインユーザー && 自分自身の投稿のみ削除可能
-   */
-  handleDeletePostRequest(async ({ cookies, params }) => {
-    await networkDelay();
-    const id = params.id as string;
-    const post = db.post.findFirst({
-      where: {
-        id: {
-          equals: id,
-        },
+router.post('/api/posts', async (req, res) => {
+  const userObject = req.body;
+  const existingUser = db.user.findFirst({
+    where: {
+      email: {
+        equals: userObject.email,
       },
-    });
+    },
+  });
 
-    if(!post){
-      return getNotFoundResponse('Post not found.');
-    }
+  if (existingUser) {
+    res.status(400).json({ message: 'The email is already in use.' });
+    return;
+  }
 
-    const { user, error } = await requireAuth(cookies);
-    if (!user) {
-      return HttpResponse.json({ message: error }, { status: 401 });
-    }else if(user.id !== post.authorId){
-      return HttpResponse.json({ message: "Can't delete other's post." }, { status: 401 });
-    }
+  const role = UserRole.USER;
+  db.user.create({
+    ...userObject,
+    role,
+    password: hash(userObject.password),
+  });
+  await persistDb('user');
 
+  res.json({ ...userObject, role });
+})
+
+router.post('/api/posts/:id', async (req, res) => {
+  const { user, error } = await requireAuth(req.cookies);
+  if (!user) {
+    res.status(401).json({ message: error });
+    return;
+  }
+
+  const data = req.body;
+  const id = req.params.id as string;
+  const updated = db.post.update({
+    where: { id: { equals: id } },
+    data,
+  });
+  await persistDb('post');
+  res.json(updated);
+})
+
+router.delete('/api/posts/:id', async (req, res) => {
+  const id = req.params.id;
+  const post = db.post.findFirst({
+    where: {
+      id: {
+        equals: id,
+      },
+    },
+  });
+
+  if(!post){
+    res.status(404).json({ message: "Post not found." });
+    return;
+  }
+
+  const { user, error } = await requireAuth(req.cookies);
+  if (!user) {
+    res.status(401).json({ message: error });
+
+  }else if(user.id !== post.authorId){
+    res.status(401).json({ message: "Can't delete other's post." });
+
+  }else{
     db.post.delete({ where: { id: { equals: id } } });
     await persistDb('post');
-    return HttpResponse.json({message: 'Success'});
-  }),
-];
+    res.json({message: "Success"});
+  }
+})
+
+
+export default router

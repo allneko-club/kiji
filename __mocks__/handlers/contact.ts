@@ -1,32 +1,10 @@
-import { HttpResponse, http, HttpResponseResolver } from 'msw';
-import { networkDelay } from '../utils';
-import { env } from '../env';
-import { getServerErrorResponse } from '@/__mocks__/handlers/index';
-import { ErrorResponseBody } from '@/types/api';
+import express from 'express';
 
-type ContactRequestBody = {
-  email: string;
-  content: string;
-};
+const router = express.Router()
 
-type ContactResponseBody = {
-  message: string;
-};
+router.post('/api/contact', (req, res) => {
+  console.log(req.body)
+  res.json({message: "success"})
+})
 
-function handleContactRequest(resolver: HttpResponseResolver<never, ContactRequestBody, ContactResponseBody | ErrorResponseBody>) {
-  return http.post(`${env.API_URL}/contact`, resolver)
-}
-
-export const contactHandlers = [
-  handleContactRequest(async () => {
-    await networkDelay();
-
-    try {
-      return HttpResponse.json({message: "success"});
-
-    } catch (error) {
-      console.error(error);
-      return getServerErrorResponse();
-    }
-  }),
-];
+export default router

@@ -1,8 +1,8 @@
-import { createMiddleware } from '@mswjs/http-middleware';
 import cors from 'cors';
 import express from 'express';
 import logger from 'pino-http';
-
+import bodyParser from 'body-parser';
+import cookieParser from 'cookie-parser';
 import { initializeDb } from '@/__mocks__/db';
 import { env } from '@/__mocks__/env';
 import { handlers } from '@/__mocks__/handlers';
@@ -15,7 +15,11 @@ app.use(
     credentials: true,
   }),
 );
-
+app.use(bodyParser.urlencoded({
+  extended: true
+}));
+app.use(bodyParser.json());
+app.use(cookieParser())
 app.use(express.json());
 app.use(
   logger({
@@ -30,7 +34,8 @@ app.use(
     },
   }),
 );
-app.use(createMiddleware(...handlers));
+
+app.use(handlers);
 
 initializeDb().then(() => {
   console.log('Mock DB initialized');

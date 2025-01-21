@@ -1,8 +1,9 @@
 import { api } from '@/lib/api-client';
 import { signOut } from "@/auth"
+import { User } from '@/types/api/users';
 
 export default async function Page() {
-  const user = await api.get('/auth/me');
+  const user = await api.get<User>('/auth/me');
 
   if (!user) {
     await signOut()
