@@ -1,27 +1,25 @@
 import express from 'express';
 import { UserRole } from '@/config/consts';
-import { db, persistDb } from '@/__mocks__/db';
 import { hash, sanitizeUser } from '@/__mocks__/utils';
+import { prisma } from '@/__mocks__/prisma';
 
 const router = express.Router()
 
-router.get('/api/users', (req, res) => {
-  const result = db.user.findMany({}).map(sanitizeUser);
-  res.json({ users: result, total: result.length });
+router.get('/api/users', async (req, res) => {
+  const result = await prisma.user.findMany()
+  res.json({ users: result.map(sanitizeUser), total: result.length });
 })
 
-router.get('/api/users/:id', (req, res) => {
-  const id = req.params.id;
-  const user = db.user.findFirst({
+router.get('/api/users/:id(\\d+)', async (req, res) => {
+  const id = Number(req.params.id);
+  const user = await prisma.user.findUnique({
     where: {
-      id: {
-        equals: id,
-      },
-    },
-  });
+      id: id,
+    }
+  })
 
   if (!user) {
-    res.status(404).json({ message: "Not found." });
+    res.sendStatus(404);
     return;
   }
 
@@ -29,29 +27,28 @@ router.get('/api/users/:id', (req, res) => {
 })
 
 router.post('/api/users', async (req, res) => {
-    const userObject = req.body;
-    const existingUser = db.user.findFirst({
-      where: {
-        email: {
-          equals: userObject.email,
-        },
-      },
-    });
 
-    if (existingUser) {
-      res.status(400).json({ message: 'The email is already in use.' });
-      return;
+  const userObject = req.body;
+  const existingUser = await prisma.user.findUnique({
+    where: {
+      email: userObject.email,
     }
+  })
 
-    const role = UserRole.USER;
-    db.user.create({
+  if (existingUser) {
+    res.status(400).json({ message: 'The email is already in use.' });
+    return;
+  }
+
+  const result = await prisma.user.create({
+    data:{
       ...userObject,
-      role,
+      role: UserRole.USER,
       password: hash(userObject.password),
-    });
-    await persistDb('user');
+    }
+  });
 
-    res.json({ ...userObject, role });
+  res.json(sanitizeUser(result));
 })
 
 export default router

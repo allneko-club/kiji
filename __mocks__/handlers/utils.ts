@@ -1,7 +1,7 @@
 import { decode, JWT } from '@auth/core/jwt';
 import { UserRole, UserRoleType } from '@/config/consts';
-import { db } from '@/__mocks__/db';
 import { sanitizeUser } from '@/__mocks__/utils';
+import { prisma } from '@/__mocks__/prisma';
 
 interface MyJWT extends JWT {
   id: string,
@@ -26,11 +26,9 @@ export async function requireAuth(cookies: Record<string, string>) {
       return { user: null, error: 'Unauthorized' };
     }
 
-    const user = db.user.findFirst({
+    const user = await prisma.user.findUnique({
       where: {
-        id: {
-          equals: decodedToken.id,
-        },
+        id: Number(decodedToken.id),
       },
     });
 

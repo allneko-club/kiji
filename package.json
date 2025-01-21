@@ -17,6 +17,7 @@
   "dependencies": {
     "@hookform/resolvers": "^3.9.1",
     "@ngneat/falso": "^7.2.0",
+    "@prisma/client": "^6.2.1",
     "@radix-ui/react-avatar": "^1.1.2",
     "@radix-ui/react-collapsible": "^1.1.2",
     "@radix-ui/react-dialog": "^1.1.4",
@@ -53,8 +54,6 @@
   "devDependencies": {
     "@auth/core": "^0.37.4",
     "@chromatic-com/storybook": "^3.2.2",
-    "@mswjs/data": "^0.16.2",
-    "@mswjs/http-middleware": "^0.10.2",
     "@playwright/test": "^1.49.1",
     "@storybook/addon-essentials": "^8.4.7",
     "@storybook/addon-interactions": "^8.4.7",
@@ -90,10 +89,10 @@
     "jsdom": "^25.0.1",
     "lint-staged": "^15.2.10",
     "mini-css-extract-plugin": "^2.9.2",
-    "msw": "^2.6.6",
     "pino-http": "^10.3.0",
     "pino-pretty": "^13.0.0",
     "postcss": "^8.4.49",
+    "prisma": "^6.2.1",
     "storybook": "^8.4.7",
     "tailwindcss": "^3.4.16",
     "tsx": "^4.19.2",
