@@ -1,7 +1,7 @@
 import express from 'express';
-import { hash, sanitizeUser } from '@/__mocks__/utils';
-import { requireAuth } from '@/__mocks__/handlers/utils';
-import { prisma } from '@/__mocks__/prisma';
+import { hash, sanitizeUser } from '@/express/utils';
+import { requireAuth } from '@/express/handlers/utils';
+import { prisma } from '@/express/prisma';
 
 const router = express.Router()
 

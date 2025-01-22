@@ -1,6 +1,6 @@
 import { queryOptions, useSuspenseQuery } from '@tanstack/react-query';
 import { api } from '@/lib/api-client';
-import { GetPostsResponseBody } from '@/__mocks__/handlers/posts';
+import { GetPostsResponseBody } from '@/express/handlers/posts';
 import { Post } from '@/types/api/posts';
 import { BaseSearch } from '@/types/api';
 

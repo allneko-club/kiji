@@ -20,7 +20,7 @@
     ],
     "paths": {
       "@/tests/*": ["./tests/*"],
-      "@/__mocks__/*": ["./__mocks__/*"],
+      "@/express/*": ["./express/*"],
       "@/*": ["./src/*"]
     }
   },

@@ -3,7 +3,7 @@ import express from 'express';
 import logger from 'pino-http';
 import bodyParser from 'body-parser';
 import cookieParser from 'cookie-parser';
-import { handlers } from '@/__mocks__/handlers';
+import { handlers } from '@/express/handlers';
 
 const app = express();
 

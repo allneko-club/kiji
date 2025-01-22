@@ -1,7 +1,7 @@
 import { decode, JWT } from '@auth/core/jwt';
 import { UserRole, UserRoleType } from '@/config/consts';
-import { sanitizeUser } from '@/__mocks__/utils';
-import { prisma } from '@/__mocks__/prisma';
+import { sanitizeUser } from '@/express/utils';
+import { prisma } from '@/express/prisma';
 
 interface MyJWT extends JWT {
   id: string,

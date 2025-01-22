@@ -9,7 +9,7 @@
     "lint": "next lint",
     "prepare": "husky",
     "test": "vitest",
-    "mock-server": "tsx watch ./mock-server.ts",
+    "express": "tsx watch ./express/app.ts",
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build",
     "e2e": "playwright test"

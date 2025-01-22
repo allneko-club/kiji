@@ -1,6 +1,6 @@
 import { queryOptions, useSuspenseQuery } from '@tanstack/react-query';
 import { api, RequestOptions } from '@/lib/api-client';
-import { GetUsersResponseBody } from '@/__mocks__/handlers/users';
+import { GetUsersResponseBody } from '@/express/handlers/users';
 import { UserRoleType } from '@/config/consts';
 import { User } from '@/types/api/users';
 import { BaseSearch } from '@/types/api';
