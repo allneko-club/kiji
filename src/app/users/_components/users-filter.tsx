@@ -10,7 +10,7 @@ import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover
 import { Calendar } from '@/components/ui/calendar';
 import { Button } from '@/components/ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { getFormattedDateFromDateObj } from '@/lib/datetime';
+import { getFormattedDateFromObj } from '@/lib/datetime';
 import { UserRole } from '@/config/consts';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 
@@ -143,7 +143,7 @@ export default function UsersFilter({defaultValues}: Props) {
                           variant="outline"
                           className={cn(!field.value && 'text-muted-foreground')}
                         >
-                          {field.value && getFormattedDateFromDateObj(field.value)}
+                          {field.value && getFormattedDateFromObj(field.value)}
                           <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
                         </Button>
                       </FormControl>
@@ -177,7 +177,7 @@ export default function UsersFilter({defaultValues}: Props) {
                           variant="outline"
                           className={cn(!field.value && 'text-muted-foreground')}
                         >
-                          {field.value && getFormattedDateFromDateObj(field.value)}
+                          {field.value && getFormattedDateFromObj(field.value)}
                           <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
                         </Button>
                       </FormControl>

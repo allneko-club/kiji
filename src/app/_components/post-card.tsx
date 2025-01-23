@@ -1,8 +1,8 @@
 import * as React from "react"
 import Link from 'next/link';
 import { paths } from '@/config/paths';
-import { getFormattedDateTime } from '@/lib/datetime';
-import { Post } from '@/types/api/posts';
+import { getFormattedDateTimeFromObj } from '@/lib/datetime';
+import { Post } from '@prisma/client';
 
 export function PostCard({ post }:{post: Post}) {
 
@@ -15,10 +15,10 @@ export function PostCard({ post }:{post: Post}) {
         <h2>{post.title}</h2>
         <span className="text-sm">#カテゴリー1</span>
         <span className="text-sm text-muted-foreground">
-          {getFormattedDateTime(post.createdAt)}
+          {getFormattedDateTimeFromObj(post.createdAt)}
         </span>
         <p>
-          {post.body}
+          {post.content}
         </p>
       </Link>
     </article>

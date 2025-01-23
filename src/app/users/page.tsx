@@ -1,16 +1,25 @@
 import { UsersTable } from '@/app/users/_components/users-table';
-import { dehydrate, HydrationBoundary } from '@tanstack/react-query';
-import { getQueryClient } from '@/lib/react-query';
-import { usersOptions, UsersQueryParams } from '@/hooks/users/user';
 import UsersFilter from '@/app/users/_components/users-filter';
 import SelectSort from '@/components/select-sort';
 import { cleanSortParam, UserSortItems } from '@/app/users/utils';
-import { USERS_LIMIT } from '@/config/consts';
+import { UserRoleType, USERS_LIMIT } from '@/config/consts';
 import { cleanPage, cleanPerPage, cleanUserRole } from '@/lib/query-params';
 import SelectPerPage from '@/components/select-per-page';
+import { getUsers } from '@/services/users/model';
+import { BaseSearch } from '@/types/api';
+
+interface SearchParams extends BaseSearch {
+  id?: string;
+  sort?: string;
+  name?: string,
+  email?: string,
+  role?: UserRoleType,
+  registeredFrom?: string,
+  registeredTo?: string,
+}
 
 export default async function Page(props: {
-  searchParams?: Promise<UsersQueryParams>;
+  searchParams?: Promise<SearchParams>;
 }) {
   const searchParams = await props.searchParams;
   const params = {
@@ -31,18 +40,15 @@ export default async function Page(props: {
     registeredTo: searchParams?.registeredTo ? new Date(searchParams.registeredTo) : undefined,
   }
 
-  const queryClient = getQueryClient();
-  void queryClient.prefetchQuery(usersOptions(params));
+  const {users, total} = await getUsers(params)
 
   return (<>
     <h1>ユーザー</h1>
-    <HydrationBoundary state={dehydrate(queryClient)}>
       <UsersFilter defaultValues={defaultValues} />
       <div className="p-3 grid grid-cols-2 gap-4">
         <SelectSort selectItems={UserSortItems} />
         <SelectPerPage selectItems={[30, 50, 100]}/>
       </div>
-      <UsersTable params={params} />
-    </HydrationBoundary>
+      <UsersTable params={params} users={users} total={total} />
   </>);
 };

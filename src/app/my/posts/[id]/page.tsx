@@ -1,8 +1,7 @@
 import { UpdatePostForm } from '@/app/my/posts/[id]/_components/update-post-form';
 import { auth } from '@/auth';
-import { dehydrate, HydrationBoundary } from '@tanstack/react-query';
-import { getQueryClient } from '@/lib/react-query';
-import { postOptions } from '@/hooks/posts/post';
+import { getPost } from '@/services/posts/model';
+import { notFound } from 'next/navigation';
 
 type Props = {
   params: Promise<{ id: string }>
@@ -11,14 +10,14 @@ type Props = {
 export default async function Page({ params }: Props) {
   const session = await auth()
   const id = (await params).id
-  const userId = session?.user.id
+  const post = await getPost(id);
+  const userId = Number(session?.user.id)
 
-  const queryClient = getQueryClient()
-  void queryClient.prefetchQuery(postOptions(id))
+  if(!post || post.author.id !== userId){
+    notFound()
+  }
 
   return (
-    <HydrationBoundary state={dehydrate(queryClient)}>
-      <UpdatePostForm id={id} userId={userId} />
-    </HydrationBoundary>
+    <UpdatePostForm id={id} post={post} />
   );
 };

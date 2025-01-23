@@ -3,13 +3,12 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import { PaginationBasic } from '@/components/pagination-basic';
 import { paths } from '@/config/paths';
 import { useRouter } from 'next/navigation';
-import { useUsers } from '@/hooks/users/user';
-import { getFormattedDateTime } from '@/lib/datetime';
+import { getFormattedDateTimeFromObj } from '@/lib/datetime';
 
 import { BaseSearch } from '@/types/api';
+import type { User } from '@prisma/client'
 
-export const UsersTable = ({params}: {params: BaseSearch}) => {
-  const { data } = useUsers(params);
+export const UsersTable = ({params, users, total}: {params: BaseSearch, users: User[], total: number}) => {
   const router = useRouter()
 
   return (<>
@@ -24,18 +23,22 @@ export const UsersTable = ({params}: {params: BaseSearch}) => {
         </TableRow>
       </TableHeader>
       <TableBody>
-        {data.users.map(user => (
-          <TableRow key={user.id} className="hover:cursor-pointer" onClick={() => router.push(paths.users.user.getHref(user.id))}>
+        {users.map(user => (
+          <TableRow
+            key={user.id}
+            className="hover:cursor-pointer"
+            onClick={() => router.push(paths.users.user.getHref(user.id.toString()))}
+          >
             <TableCell className="font-medium">{user.id}</TableCell>
             <TableCell>{user.name}</TableCell>
             <TableCell>{user.email}</TableCell>
             <TableCell>{user.role}</TableCell>
-            <TableCell className="text-right">{getFormattedDateTime(user.createdAt)}</TableCell>
+            <TableCell className="text-right">{getFormattedDateTimeFromObj(user.createdAt)}</TableCell>
           </TableRow>
         ))}
       </TableBody>
     </Table>
 
-    <PaginationBasic perPage={params.perPage} totalPages={data.total} />
+    <PaginationBasic perPage={params.perPage} totalPages={total} />
   </>);
 };

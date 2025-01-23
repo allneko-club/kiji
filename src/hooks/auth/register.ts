@@ -40,4 +40,5 @@ const useRegister = () => {
   });
 };
 
-export {registerInputSchema, RegisterInput, useRegister}
+export { registerInputSchema, useRegister };
+export type { RegisterInput };

@@ -1,10 +1,9 @@
-import { UserRole } from '@/config/consts';
 
 export type User = {
-  id: string;
+  id: number;
   name: string;
   email: string;
-  role: (typeof UserRole)[keyof typeof UserRole];
-  image: string;
+  role: string;
+  image: string | null;
   createdAt: number;
 };

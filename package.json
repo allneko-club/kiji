@@ -10,6 +10,7 @@
     "prepare": "husky",
     "test": "vitest",
     "express": "tsx watch ./express/app.ts",
+    "prisma-web": "npx prisma studio",
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build",
     "e2e": "playwright test"

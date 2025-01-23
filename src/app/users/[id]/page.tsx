@@ -1,7 +1,6 @@
-import { getQueryClient } from '@/lib/react-query';
-import { userOptions } from '@/hooks/users/user';
-import { dehydrate, HydrationBoundary } from '@tanstack/react-query';
 import { UserInfo } from '@/app/users/[id]/_components/user-info';
+import { getUser } from '@/services/users/model';
+import { notFound } from 'next/navigation';
 
 type Props = {
   params: Promise<{ id: string }>
@@ -9,12 +8,13 @@ type Props = {
 
 export default async function Page({ params }: Props) {
   const id = (await params).id
-  const queryClient = getQueryClient()
-  void queryClient.prefetchQuery(userOptions(id))
+  const user = await getUser(Number(id));
+
+  if (!user) {
+    notFound()
+  }
 
   return (
-    <HydrationBoundary state={dehydrate(queryClient)}>
-      <UserInfo id={id} />
-    </HydrationBoundary>
+    <UserInfo user={user} />
   );
 };

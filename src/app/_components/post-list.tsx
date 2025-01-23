@@ -1,17 +1,23 @@
 'use client'
 import { PaginationBasic } from '@/components/pagination-basic';
 import { PostCard } from '@/app/_components/post-card';
-import { PostsSearchParams, usePosts } from '@/hooks/posts/post';
+import { Post } from '@prisma/client';
+import { BaseSearch } from '@/types/api';
 
-export const PostList = ({params}: { params: PostsSearchParams; }) => {
-  const { data } = usePosts(params)
+interface PostsSearchParams extends BaseSearch{
+  myPosts?: boolean,
+  isPublic?: boolean,
+}
+
+export const PostList = ({params, posts, total}: { params: PostsSearchParams; posts: Post[]; total: number }) => {
+
   return (<>
     <div className="grid gap-3 md:grid-cols-2 lg:grid-cols-3">
-      {data.posts.map(post => (
+      {posts.map(post => (
         <PostCard key={post.id} post={post} />
       ))}
     </div>
 
-    <PaginationBasic perPage={params.perPage} totalPages={data.total} />
+    <PaginationBasic perPage={params.perPage} totalPages={total} />
   </>);
 };

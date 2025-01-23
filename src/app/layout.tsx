@@ -1,16 +1,10 @@
 import { ReactNode } from 'react';
 import type { Metadata } from "next";
-import {
-  dehydrate,
-  HydrationBoundary,
-  QueryClient,
-} from '@tanstack/react-query';
+import { ThemeProvider } from 'next-themes';
 import { AppProvider } from '@/app/provider';
-import { getMeQueryOptions } from '@/hooks/auth/me';
 import Header from '@/components/layouts/header';
 import Footer from '@/components/layouts/footer';
 import "@/styles/globals.css";
-import { ThemeProvider } from 'next-themes';
 
 
 export const metadata: Metadata = {
@@ -19,22 +13,16 @@ export const metadata: Metadata = {
 };
 
 const RootLayout = async ({ children }: { children: ReactNode }) => {
-  const queryClient = new QueryClient();
-
-  await queryClient.prefetchQuery(getMeQueryOptions());
-
-  const dehydratedState = dehydrate(queryClient);
   return (
     <html lang="ja" suppressHydrationWarning>
       <body>
-      <AppProvider>
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="system"
-          enableSystem
-          disableTransitionOnChange
-        >
-          <HydrationBoundary state={dehydratedState}>
+        <AppProvider>
+          <ThemeProvider
+            attribute="class"
+            defaultTheme="system"
+            enableSystem
+            disableTransitionOnChange
+          >
             <div className="flex h-full min-h-screen w-full flex-col justify-between">
               <Header />
               <main className="w-full flex-auto px-4 py-4 sm:px-6 md:py-6">
@@ -42,9 +30,8 @@ const RootLayout = async ({ children }: { children: ReactNode }) => {
               </main>
               <Footer />
             </div>
-          </HydrationBoundary>
-        </ThemeProvider>
-      </AppProvider>
+          </ThemeProvider>
+        </AppProvider>
       </body>
     </html>
 );

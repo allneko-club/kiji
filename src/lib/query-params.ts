@@ -4,7 +4,7 @@
 
 import { UserRole } from '@/config/consts';
 import { z } from 'zod';
-import { getFormattedDateFromDateObj } from '@/lib/datetime';
+import { getFormattedDateFromObj } from '@/lib/datetime';
 
 /**
  * クエリパラメーターの page をクリーンする
@@ -48,7 +48,7 @@ export function updateQueryParams<T extends z.ZodTypeAny>(params: URLSearchParam
     }
 
     if (value instanceof Date) {
-      params.set(key, getFormattedDateFromDateObj(value));
+      params.set(key, getFormattedDateFromObj(value));
     } else if (typeof value === 'number') {
       params.set(key, value.toString());
     } else if (typeof value === 'string') {

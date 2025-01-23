@@ -10,8 +10,9 @@ import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import { paths } from '@/config/paths';
 import { DeletePost } from '@/app/my/posts/_components/delete-post';
-import { getFormattedDateTime } from '@/lib/datetime';
-import { Post } from '@/types/api/posts';
+import { getFormattedDateTimeFromObj } from '@/lib/datetime';
+import { Post } from '@prisma/client';
+
 
 export function PostCard({ post }:{post: Post}) {
 
@@ -19,10 +20,12 @@ export function PostCard({ post }:{post: Post}) {
     <Card>
       <CardHeader>
         <CardTitle>{post.title}</CardTitle>
-        <CardDescription>{post.public ? "公開 " : "非公開 "}{getFormattedDateTime(post.createdAt)}</CardDescription>
+        <CardDescription>
+          {post.published ? "公開 " : "非公開 "}{getFormattedDateTimeFromObj(post.createdAt)}
+        </CardDescription>
       </CardHeader>
       <CardContent>
-        {post.body}
+        {post.content}
       </CardContent>
       <CardFooter className="flex justify-between">
         <Link href={paths.my.editPost.getHref(post.id)}>

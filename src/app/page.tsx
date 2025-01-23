@@ -1,7 +1,5 @@
 import { PostList } from '@/app/_components/post-list';
-import { postsOptions, PostsSearchParams } from '@/hooks/posts/post';
-import { getQueryClient } from '@/lib/react-query';
-import { dehydrate, HydrationBoundary } from '@tanstack/react-query';
+import { getPosts } from '@/services/posts/model';
 
 type SearchParams ={
   page?: string;
@@ -13,14 +11,11 @@ export default async function Page(props: {
 }) {
   const searchParams = await props.searchParams;
   const page = Number(searchParams?.page) || 1;
-  const params: PostsSearchParams = { perPage: 100, page, sort:'id', isPublic: true }
-  const queryClient = getQueryClient()
-  void queryClient.prefetchQuery(postsOptions(params))
+  const params = { perPage: 100, page, sort:'id', isPublic: true }
+  const {posts, total} = await getPosts(params)
 
   return (<>
     <h1>新着記事</h1>
-    <HydrationBoundary state={dehydrate(queryClient)}>
-      <PostList params={params} />
-    </HydrationBoundary>
+    <PostList params={params} posts={posts} total={total} />
   </>);
 };

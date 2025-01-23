@@ -1,8 +1,7 @@
 import type { Metadata } from 'next';
 import { PostDetail } from '@/app/posts/[id]/_components/post-detail';
-import { getQueryClient } from '@/lib/react-query';
-import { publicPostOptions } from '@/hooks/posts/post';
-import { dehydrate, HydrationBoundary } from '@tanstack/react-query';
+import { getPost } from '@/services/posts/model';
+import { notFound } from 'next/navigation';
 
 type Props = {
   params: Promise<{ id: string }>
@@ -11,10 +10,9 @@ type Props = {
 // 参考 https://github.com/TanStack/query/discussions/7313
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const id = (await params).id
-  const queryClient = getQueryClient()
   try {
-    const post = await queryClient.fetchQuery(publicPostOptions(id))
-    return { title: post.title }
+    const post = await getPost(id);
+    return { title: post ? post.title: "Not Found" }
   } catch {
     return { title: "Not Found" };
   }
@@ -22,14 +20,13 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export default async function Page({ params }: Props) {
   const id = (await params).id
-  const queryClient = getQueryClient()
-  void queryClient.prefetchQuery(publicPostOptions(id))
+  const post = await getPost(id);
+
+  if (!post) {
+    notFound()
+  }
 
   return (
-    <div>
-      <HydrationBoundary state={dehydrate(queryClient)}>
-        <PostDetail id={id} />
-      </HydrationBoundary>
-    </div>
+    <PostDetail post={post} />
   );
 };

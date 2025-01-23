@@ -24,4 +24,5 @@ const useConfirm = () => {
   });
 };
 
-export {contactInputSchema, contactInput, useConfirm}
+export { contactInputSchema, useConfirm };
+export type { contactInput };

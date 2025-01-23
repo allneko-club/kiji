@@ -23,4 +23,5 @@ const useResetPassword = () => {
   });
 };
 
-export {resetPasswordInputSchema, resetPasswordInput, useResetPassword}
+export { resetPasswordInputSchema, useResetPassword };
+export type { resetPasswordInput };
