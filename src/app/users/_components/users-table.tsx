@@ -7,6 +7,7 @@ import { getFormattedDateTimeFromObj } from '@/lib/datetime';
 
 import { BaseSearch } from '@/types/api';
 import type { User } from '@prisma/client'
+import { getRoleLabel } from '@/config/consts';
 
 export const UsersTable = ({params, users, total}: {params: BaseSearch, users: User[], total: number}) => {
   const router = useRouter()
@@ -32,7 +33,7 @@ export const UsersTable = ({params, users, total}: {params: BaseSearch, users: U
             <TableCell className="font-medium">{user.id}</TableCell>
             <TableCell>{user.name}</TableCell>
             <TableCell>{user.email}</TableCell>
-            <TableCell>{user.role}</TableCell>
+            <TableCell>{getRoleLabel(user.role)}</TableCell>
             <TableCell className="text-right">{getFormattedDateTimeFromObj(user.createdAt)}</TableCell>
           </TableRow>
         ))}

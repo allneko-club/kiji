@@ -11,7 +11,7 @@ export default async function Page(props: {
 }) {
   const searchParams = await props.searchParams;
   const page = Number(searchParams?.page) || 1;
-  const params = { perPage: 100, page, sort:'id', isPublic: true }
+  const params = { perPage: 100, page, sort: '-published', published: true }
   const {posts, total} = await getPosts(params)
 
   return (<>

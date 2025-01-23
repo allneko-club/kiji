@@ -1,16 +1,27 @@
 import { prisma } from '@/express/prisma';
 import { BaseSearch } from '@/types/api';
 
-export const getPosts = async (params: BaseSearch) => {
-  const where = {}
+type Props = {
+  authorId?: number;
+  published?: boolean;
+  sort?: string;
+} & BaseSearch
+
+export const getPosts = async (params: Props) => {
+  const where = {
+    authorId: params.authorId,
+    published: params.published,
+  }
+  // todo  orderBy: [{ role: 'desc' }],
+  // const orderBy = []
   const [posts, total] = await Promise.all([
     prisma.post.findMany({
-      include: {
-        author: true,
-      },
       where,
       take: params.perPage,
       skip: params.perPage * (params.page - 1),
+      include: {
+        author: true,
+      },
     }),
     prisma.post.count({where}),
   ])

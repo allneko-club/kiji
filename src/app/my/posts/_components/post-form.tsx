@@ -3,24 +3,31 @@ import { Input } from '@/components/ui/input';
 import { Switch } from '@/components/ui/switch';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Button } from '@/components/ui/button';
-import { FieldValues, SubmitHandler, useForm, UseFormProps } from 'react-hook-form';
-import { z, ZodType } from 'zod';
+import { SubmitHandler, useForm, UseFormProps } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { UpdatePostInput, updatePostInputSchema } from '@/hooks/posts/use-update-post';
 
-type FormProps<TFormValues extends FieldValues, Schema> = {
-  onSubmit: SubmitHandler<TFormValues>;
-  // className?: string;
-  // children: (methods: UseFormReturn<TFormValues>) => React.ReactNode;
-  options?: UseFormProps<TFormValues>;
-  schema: Schema;
+// todo 追加フォームと更新フォームを共通化したいが、型の定義方法が難解
+// type Props<TFormValues extends FieldValues, Schema> = {
+//   onSubmit: SubmitHandler<TFormValues>;
+//   options?: UseFormProps<TFormValues>;
+//   schema: Schema;
+// };
+
+// export const PostForm =  <
+//   Schema extends z.ZodObject<any>,
+//   TFormValues extends FieldValues = z.infer<Schema>,
+// >({onSubmit, options, schema}: Props<TFormValues, Schema>) => {
+
+type Props = {
+  onSubmit: SubmitHandler<UpdatePostInput>;
+  options?: UseFormProps<UpdatePostInput>;
+  schema: typeof updatePostInputSchema ;
 };
 
-export const PostForm = <
-  Schema extends ZodType<any, any, any>,
-  TFormValues extends FieldValues = z.infer<Schema>,
->({onSubmit, options, schema}: FormProps<TFormValues, Schema>) => {
+export const PostForm = ({onSubmit, options, schema}: Props) => {
 
-  const form = useForm({ ...options, resolver: zodResolver(schema) });
+  const form = useForm<UpdatePostInput>({ ...options, resolver: zodResolver(schema) });
   return (
     <Form {...form}>
       <form className="grid gap-4" onSubmit={form.handleSubmit(onSubmit)}>
@@ -41,10 +48,10 @@ export const PostForm = <
 
         <FormField
           control={form.control}
-          name="body"
+          name="content"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Body</FormLabel>
+              <FormLabel>Content</FormLabel>
               <FormControl>
                 <Textarea {...field} />
               </FormControl>
@@ -55,7 +62,7 @@ export const PostForm = <
 
         <FormField
           control={form.control}
-          name="public"
+          name="published"
           render={({ field }) => (
             <FormItem>
               <div className="flex items-center space-x-2">

@@ -5,7 +5,7 @@ import {
   UseMutationOptions,
 } from '@tanstack/react-query'
 
-// 参照　Next.js app with prefetching
+// 参照 Next.js app with prefetching
 // https://tanstack.com/query/latest/docs/framework/react/examples/nextjs-app-prefetching
 function makeQueryClient() {
   return new QueryClient({

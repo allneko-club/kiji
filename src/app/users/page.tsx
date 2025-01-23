@@ -2,8 +2,8 @@ import { UsersTable } from '@/app/users/_components/users-table';
 import UsersFilter from '@/app/users/_components/users-filter';
 import SelectSort from '@/components/select-sort';
 import { cleanSortParam, UserSortItems } from '@/app/users/utils';
-import { UserRoleType, USERS_LIMIT } from '@/config/consts';
-import { cleanPage, cleanPerPage, cleanUserRole } from '@/lib/query-params';
+import { Role, USERS_LIMIT } from '@/config/consts';
+import { cleanPage, cleanPerPage, cleanRole } from '@/lib/query-params';
 import SelectPerPage from '@/components/select-per-page';
 import { getUsers } from '@/services/users/model';
 import { BaseSearch } from '@/types/api';
@@ -13,7 +13,7 @@ interface SearchParams extends BaseSearch {
   sort?: string;
   name?: string,
   email?: string,
-  role?: UserRoleType,
+  role?: Role,
   registeredFrom?: string,
   registeredTo?: string,
 }
@@ -28,7 +28,7 @@ export default async function Page(props: {
     id: searchParams?.id || '',
     name: decodeURIComponent(searchParams?.name || ''),
     email: searchParams?.email || '',
-    role: cleanUserRole(searchParams?.role),
+    role: cleanRole(searchParams?.role),
     registeredFrom: searchParams?.registeredFrom,
     registeredTo: searchParams?.registeredTo,
   };

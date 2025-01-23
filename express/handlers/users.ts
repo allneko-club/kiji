@@ -1,5 +1,5 @@
 import express from 'express';
-import { UserRole } from '@/config/consts';
+import { Role } from '@/config/consts';
 import { hash, sanitizeUser } from '@/express/utils';
 import { prisma } from '@/express/prisma';
 
@@ -43,7 +43,7 @@ router.post('/api/users', async (req, res) => {
   const result = await prisma.user.create({
     data:{
       ...userObject,
-      role: UserRole.USER,
+      role: Role.USER,
       password: hash(userObject.password),
     }
   });

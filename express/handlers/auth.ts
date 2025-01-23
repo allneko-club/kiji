@@ -1,5 +1,5 @@
 import express from 'express';
-import { hash, sanitizeUser } from '@/express/utils';
+import { hash } from '@/express/utils';
 import { requireAuth } from '@/express/handlers/utils';
 import { prisma } from '@/express/prisma';
 
@@ -16,7 +16,13 @@ router.post('/api/auth/login', async (req, res) => {
 
 
   if (user?.password === hash(credentials.password)) {
-    res.json(sanitizeUser(user));
+    res.json({
+      id: user.id.toString(),
+      name: user.name,
+      email: user.email,
+      role: user.role,
+      image: user.image,
+    })
   }else{
     res.json();
   }

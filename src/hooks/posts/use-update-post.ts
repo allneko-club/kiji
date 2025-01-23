@@ -6,13 +6,13 @@ import { toast } from 'react-toastify';
 import { paths } from '@/config/paths';
 import { useRouter } from 'next/navigation';
 import { MutationConfig } from '@/lib/react-query';
-import { Post } from '@/types/api/posts';
+import { Post } from '@prisma/client';
 
 export const updatePostInputSchema = z.object({
   id: z.string().min(1, 'Required'),
   title: z.string().min(1, 'Required'),
-  body: z.string().min(1, 'Required'),
-  public: z.boolean(),
+  content: z.string().default(""),
+  published: z.boolean(),
 });
 
 export type UpdatePostInput = z.infer<typeof updatePostInputSchema>;

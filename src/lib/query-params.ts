@@ -2,7 +2,7 @@
  * クエリパラメーターや、フォームの値をクリーンする機能を定義するためのファイル
  */
 
-import { UserRole } from '@/config/consts';
+import { Role } from '@/config/consts';
 import { z } from 'zod';
 import { getFormattedDateFromObj } from '@/lib/datetime';
 
@@ -31,8 +31,8 @@ export const cleanPerPage = (perPage: number | string | undefined | null, defaul
   return 1 < result && result <= MAX ? result : defaultValue;
  }
 
-export const cleanUserRole = (role: string | undefined) => {
-  if(role === UserRole.ADMIN || role === UserRole.USER){
+export const cleanRole = (role: number | undefined) => {
+  if(role === Role.ADMIN || role === Role.USER){
     return role
   } else {
     return undefined

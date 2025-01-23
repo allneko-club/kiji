@@ -1,21 +1,28 @@
-import type { DefaultSession } from 'next-auth';
-import { UserRoleType } from '@/config/consts';
+import type { NextAuthConfig } from 'next-auth';
+import Credentials from 'next-auth/providers/credentials';
+import { z } from 'zod';
+import GitHub from 'next-auth/providers/github';
+import { api } from '@/lib/api-client';
 
-declare module "next-auth" {
-  /**
-   * Returned by `auth`, `useSession`, `getSession` and received as a prop on the `SessionProvider` React Context
-   * https://authjs.dev/getting-started/typescript
-   */
-  interface Session {
-    user: {
-      role: UserRoleType
-      /**
-       * By default, TypeScript merges new interface properties and overwrites existing ones.
-       * In this case, the default session user properties will be overwritten,
-       * with the new ones defined above. To keep the default session user properties,
-       * you need to add them back into the newly declared interface.
-       */
-    } & DefaultSession["user"]
+type UserSession = {
+  id: string;
+  name: string;
+  email: string;
+  role: number;
+  image: string;
+};
+
+export const loginInputSchema = z.object({
+  email: z.string().min(1).email(),
+  password: z.string().min(1),
+});
+
+async function loginUser(email: string, password:string): Promise<UserSession|null> {
+  try{
+    return await api.post<UserSession>('/auth/login', { email, password })
+  } catch (error) {
+    console.error('Failed to fetch user:', error);
+    return null;
   }
 }
 
@@ -44,11 +51,29 @@ export const authConfig = {
 
       return token
     },
-    session({ session, token }) {
-      session.user.id = token.id
-      session.user.role = token.role
-      return session
-    },
   },
-  providers: [],
-};
+  providers: [
+    Credentials({
+      // You can specify which fields should be submitted, by adding keys to the `credentials` object.
+      // e.g. domain, username, password, 2FA token, etc.
+      credentials: {
+        email: {},
+        password: {},
+      },
+      async authorize(credentials) {
+        try {
+          const { email, password } = await loginInputSchema.parseAsync(credentials)
+          const user = await loginUser(email, password);
+          if(!user) return null;
+
+          // return JSON object with the user data
+          return user;
+        } catch {
+          // Return `null` to indicate that the credentials are invalid
+          return null
+        }
+      },
+    }),
+    GitHub,
+  ],
+} satisfies NextAuthConfig;

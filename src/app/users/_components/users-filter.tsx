@@ -11,7 +11,7 @@ import { Calendar } from '@/components/ui/calendar';
 import { Button } from '@/components/ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { getFormattedDateFromObj } from '@/lib/datetime';
-import { UserRole } from '@/config/consts';
+import { getRoleLabel, Role } from '@/config/consts';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 
 import { updateQueryParams } from '@/lib/query-params';
@@ -20,7 +20,7 @@ const postFormSchema = z.object({
   id: z.string().optional(),
   name: z.string().optional(),
   email: z.string().optional(),
-  role: z.nativeEnum(UserRole).optional(),
+  role: z.nativeEnum(Role),
   registeredFrom: z.date().optional(),
   registeredTo: z.date().optional(),
 })
@@ -112,14 +112,14 @@ export default function UsersFilter({defaultValues}: Props) {
                 <FormItem className="grid gap-2">
                   <FormLabel>権限</FormLabel>
                   <FormControl>
-                    <Select onValueChange={field.onChange} defaultValue={field.value} value={field.value}>
+                    <Select onValueChange={field.onChange} defaultValue={field.value.toString()} value={field.value.toString()}>
                       <SelectTrigger id="role" aria-label="role">
                         <SelectValue />
                       </SelectTrigger>
                       <SelectContent>
-                        {Object.values(UserRole).map((role) => (
-                          <SelectItem key={role} value={role}>
-                            {role}
+                        {Object.values(Role).map((role) => (
+                          <SelectItem key={role} value={role.toString()}>
+                            {getRoleLabel(role)}
                           </SelectItem>
                         ))}
                       </SelectContent>

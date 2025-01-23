@@ -9,7 +9,7 @@ export default async function Page() {
   const session = await auth()
   if (!session?.user) return null
 
-  const params = { page:1, perPage: 100, sort:'id', myPosts: true }
+  const params = { page:1, perPage: 100, sort:'id', authorId: Number(session.user.id) }
   const {posts, total} = await getPosts(params)
 
   return (<>

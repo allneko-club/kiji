@@ -5,7 +5,6 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import type { Meta, StoryObj } from '@storybook/react'
-import { fn } from '@storybook/test'
 
 const meta: Meta<typeof DropdownMenu> = {
   title: 'Component/DropdownMenu',
@@ -15,7 +14,6 @@ const meta: Meta<typeof DropdownMenu> = {
   },
   tags: ['autodocs'],
   argTypes: {},
-  args: { onClick: fn() },
 }
 
 export default meta

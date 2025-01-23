@@ -1,12 +1,7 @@
-import { decode, JWT } from '@auth/core/jwt';
-import { UserRole, UserRoleType } from '@/config/consts';
+import { decode } from '@auth/core/jwt';
+import { Role } from '@/config/consts';
 import { sanitizeUser } from '@/express/utils';
 import { prisma } from '@/express/prisma';
-
-interface MyJWT extends JWT {
-  id: string,
-  role: UserRoleType,
-}
 
 export async function requireAuth(cookies: Record<string, string>) {
   try {
@@ -20,7 +15,7 @@ export async function requireAuth(cookies: Record<string, string>) {
         token: token,
         secret: process.env.AUTH_SECRET || '',
         salt: salt,
-      }) as MyJWT;
+      });
 
     if (!decodedToken) {
       return { user: null, error: 'Unauthorized' };
@@ -46,7 +41,7 @@ export async function requireAuth(cookies: Record<string, string>) {
 export async function requireAuthAdmin(cookies: Record<string, string>) {
   const { user, error } = await requireAuth(cookies);
 
-  if (error || !user || user.role !== UserRole.ADMIN) {
+  if (error || !user || user.role !== Role.ADMIN) {
     return { user: null, error: 'Unauthorized' };
   }
 
