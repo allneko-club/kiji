@@ -18,17 +18,14 @@ export const cleanPage = (page: number | string | undefined | null) => {
 /**
  * クエリパラメーターの perPage をクリーンする
  * @param perPage
- * @param defaultValue
+ * @param values
  */
-export const cleanPerPage = (perPage: number | string | undefined | null, defaultValue: number) => {
-  if(!perPage){
-    return defaultValue;
+export const cleanPerPage = (perPage: number | string | undefined | null, values: number[]) => {
+  if(!perPage || !values.includes(Number(perPage))){
+    return values[0];
   }
 
-  // 100件を上限とする（仮
-  const MAX = 100;
-  const result = Number(perPage)
-  return 1 < result && result <= MAX ? result : defaultValue;
+  return Number(perPage);
 }
 
 // なぜかcleanRole()の戻り値がstringに推論されてしまうため明示的に定義する

@@ -23,7 +23,7 @@ export default async function Page(props: {
 }) {
   const searchParams = await props.searchParams;
   const params = {
-    perPage: cleanPerPage(searchParams?.perPage, USERS_LIMIT_LIST[0]),
+    perPage: cleanPerPage(searchParams?.perPage, USERS_LIMIT_LIST),
     page: cleanPage(searchParams?.page),
     id: searchParams?.id || '',
     name: decodeURIComponent(searchParams?.name || ''),
@@ -47,7 +47,7 @@ export default async function Page(props: {
       <UsersFilter defaultValues={defaultValues} />
       <div className="p-3 grid grid-cols-2 gap-4">
         <SelectSort selectItems={UserSortItems} />
-        <SelectPerPage selectItems={[30, 50, 100]}/>
+        <SelectPerPage selectItems={USERS_LIMIT_LIST}/>
       </div>
       <UsersTable params={params} users={users} total={total} />
   </>);

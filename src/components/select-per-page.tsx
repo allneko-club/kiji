@@ -25,7 +25,7 @@ export default function SelectPerPage({selectItems}: Props) {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
-  const defaultValue = cleanPerPage(searchParams.get('perPage'), selectItems[0]);
+  const defaultValue = cleanPerPage(searchParams.get('perPage'), selectItems);
 
   const handleChange = (v: string) => {
     const params = new URLSearchParams(Array.from(searchParams.entries()));
