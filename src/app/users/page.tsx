@@ -1,16 +1,21 @@
 import { UsersTable } from '@/app/users/_components/users-table';
 import UsersFilter from '@/app/users/_components/users-filter';
 import SelectSort from '@/components/select-sort';
-import { cleanSortParam, UserSortItems } from '@/app/users/utils';
 import { Role, USERS_LIMIT_LIST } from '@/config/consts';
-import { cleanPage, cleanPerPage, cleanRole } from '@/lib/query-params';
-import SelectPerPage from '@/components/select-per-page';
+import { cleanPage, cleanPerPage, cleanRole, cleanOrder, cleanOrderBy } from '@/lib/query-params';
+import SelectLimit from '@/components/select-limit';
 import { getUsers } from '@/services/users/model';
 import { BaseSearch } from '@/types/api';
 
+const UserSortItems = {
+  'registered_asc': '登録日(昇順)',
+  'registered_desc': '登録日(降順)',
+  'name_asc': '名前(昇順)',
+  'name_desc': '名前(降順)',
+} as const;
+
 interface SearchParams extends BaseSearch {
   id?: string;
-  sort?: string;
   name?: string,
   email?: string,
   role?: Role,
@@ -23,8 +28,10 @@ export default async function Page(props: {
 }) {
   const searchParams = await props.searchParams;
   const params = {
-    perPage: cleanPerPage(searchParams?.perPage, USERS_LIMIT_LIST),
     page: cleanPage(searchParams?.page),
+    perPage: cleanPerPage(searchParams?.perPage, USERS_LIMIT_LIST),
+    order: cleanOrder(searchParams?.order),
+    orderBy: cleanOrderBy(searchParams?.orderBy),
     id: searchParams?.id || '',
     name: decodeURIComponent(searchParams?.name || ''),
     email: searchParams?.email || '',
@@ -34,10 +41,12 @@ export default async function Page(props: {
   };
 
   const defaultValues = {
-    ...params,
-    sort: cleanSortParam(searchParams?.sort),
-    registeredFrom: searchParams?.registeredFrom ? new Date(searchParams.registeredFrom) : undefined,
-    registeredTo: searchParams?.registeredTo ? new Date(searchParams.registeredTo) : undefined,
+    id: params.id,
+    name: params.name,
+    email: params.email,
+    role: params.role,
+    registeredFrom: params.registeredFrom ? new Date(params.registeredFrom) : undefined,
+    registeredTo: params.registeredTo ? new Date(params.registeredTo) : undefined,
   }
 
   const {users, total} = await getUsers(params)
@@ -47,8 +56,8 @@ export default async function Page(props: {
       <UsersFilter defaultValues={defaultValues} />
       <div className="p-3 grid grid-cols-2 gap-4">
         <SelectSort selectItems={UserSortItems} />
-        <SelectPerPage selectItems={USERS_LIMIT_LIST}/>
+        <SelectLimit limitList={USERS_LIMIT_LIST}/>
       </div>
-      <UsersTable params={params} users={users} total={total} />
+      <UsersTable perPage={params.perPage} users={users} total={total} />
   </>);
 };

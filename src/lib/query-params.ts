@@ -41,6 +41,23 @@ export const cleanRole = (role: number | undefined): CleanRole => {
   }
 }
 
+
+export const cleanOrder = (order: string | null | undefined) => {
+  if(order && ['name', 'registered'].includes(order)){
+    return order;
+  }else{
+    return 'registered';
+  }
+}
+
+export const cleanOrderBy = (orderBy: string | null | undefined) => {
+  if(orderBy && ['asc', 'desc'].includes(orderBy)){
+    return orderBy;
+  }else{
+    return 'desc';
+  }
+}
+
 export function updateQueryParams<T extends z.ZodTypeAny>(params: URLSearchParams, data: z.infer<T>) {
 
   for (const [key, value] of Object.entries(data)) {
@@ -61,3 +78,14 @@ export function updateQueryParams<T extends z.ZodTypeAny>(params: URLSearchParam
   const search = params.toString();
   return search ? `?${search}` : '';
 }
+
+export const parseSortValue = (sort: string) => {
+  if (!sort.length) {
+    console.error('invalid sort value');
+    return { order: 'registered', orderBy: 'desc' };
+  }
+
+  const orderBy = sort.endsWith('_asc') ? 'asc' : 'desc';
+  const order = orderBy === 'asc' ? sort.slice(0, -4) : sort.slice(0, -5);
+  return { order, orderBy };
+};

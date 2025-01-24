@@ -1,4 +1,5 @@
 'use client';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import {
   Select,
   SelectContent,
@@ -8,8 +9,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { usePathname, useRouter, useSearchParams } from 'next/navigation';
-import { cleanSortParam } from '@/app/users/utils';
+import { cleanOrder, cleanOrderBy, parseSortValue } from '@/lib/query-params';
 
 type Props = {
   selectItems: { [key: string]: string; },
@@ -26,16 +26,19 @@ export default function SelectSort({selectItems}: Props) {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
-  const defaultValue = cleanSortParam(searchParams.get('sort') || undefined);
+  const order = cleanOrder(searchParams.get('order'));
+  const orderBy = cleanOrderBy(searchParams.get('orderBy'));
 
   const handleChange = (v: string) => {
     const params = new URLSearchParams(Array.from(searchParams.entries()));
-    params.set("sort", v);
+    const {order , orderBy} = parseSortValue(v);
+    params.set('order', order);
+    params.set('orderBy', orderBy);
     router.push(`${pathname}?${params.toString()}`);
   }
 
   return (
-    <Select onValueChange={handleChange} defaultValue={defaultValue}>
+    <Select onValueChange={handleChange} defaultValue={`${order}_${orderBy}`}>
       <SelectTrigger id="sort" aria-label="sort">
         <SelectValue />
       </SelectTrigger>

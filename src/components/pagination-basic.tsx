@@ -7,6 +7,7 @@ import {
   PaginationPrevious, PaginationPreviousDisabled,
 } from '@/components/ui/pagination';
 import { usePathname, useSearchParams } from 'next/navigation';
+import { cleanPage } from '@/lib/query-params';
 
 export interface PaginationBasicProps {
   perPage: number;
@@ -16,7 +17,7 @@ export interface PaginationBasicProps {
 export function PaginationBasic({ perPage = 100, totalPages }:PaginationBasicProps) {
   const pathname = usePathname();
   const searchParams = useSearchParams();
-  const page = Number(searchParams.get('page')) || 1;
+  const page = cleanPage(searchParams.get('page') || 1);
 
   const createPageURL = (pageNumber: number | string) => {
     const params = new URLSearchParams(searchParams);

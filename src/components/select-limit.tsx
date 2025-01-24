@@ -12,20 +12,20 @@ import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { cleanPerPage } from '@/lib/query-params';
 
 type Props = {
-  selectItems: number[],
+  limitList: number[],
 }
 
 /**
  * リストデータの表示件数を変更するためのコンポーネント
  * 表示件数を変更すると、クエリパラメーターのperPageを更新する
- * @param selectItems 表示件数の選択肢
+ * @param limitList 表示件数の選択肢
  */
-export default function SelectPerPage({selectItems}: Props) {
+export default function SelectLimit({limitList}: Props) {
 
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
-  const defaultValue = cleanPerPage(searchParams.get('perPage'), selectItems);
+  const defaultValue = cleanPerPage(searchParams.get('perPage'), limitList);
 
   const handleChange = (v: string) => {
     const params = new URLSearchParams(Array.from(searchParams.entries()));
@@ -41,7 +41,7 @@ export default function SelectPerPage({selectItems}: Props) {
       <SelectContent>
         <SelectGroup>
           <SelectLabel>表示件数</SelectLabel>
-          {selectItems.map((item) => (
+          {limitList.map((item) => (
             <SelectItem key={item} value={item.toString()}>
               {item}
             </SelectItem>

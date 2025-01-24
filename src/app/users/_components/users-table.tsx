@@ -4,12 +4,10 @@ import { PaginationBasic } from '@/components/pagination-basic';
 import { paths } from '@/config/paths';
 import { useRouter } from 'next/navigation';
 import { getFormattedDateTimeFromObj } from '@/lib/datetime';
-
-import { BaseSearch } from '@/types/api';
 import type { User } from '@prisma/client'
 import { getRoleLabel } from '@/config/consts';
 
-export const UsersTable = ({params, users, total}: {params: BaseSearch, users: User[], total: number}) => {
+export const UsersTable = ({perPage, users, total}: {perPage: number, users: User[], total: number}) => {
   const router = useRouter()
 
   return (<>
@@ -40,6 +38,6 @@ export const UsersTable = ({params, users, total}: {params: BaseSearch, users: U
       </TableBody>
     </Table>
 
-    <PaginationBasic perPage={params.perPage} totalPages={total} />
+    <PaginationBasic perPage={perPage} totalPages={total} />
   </>);
 };
