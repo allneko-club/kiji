@@ -2,7 +2,7 @@
 import Link from 'next/link';
 import { cn } from '@/lib/utils';
 import { usePathname } from 'next/navigation';
-import { mainMenu } from '@/config/menu';
+import { mainMenu } from '@/config/consts';
 
 export default function MainNav()  {
   const pathname = usePathname();

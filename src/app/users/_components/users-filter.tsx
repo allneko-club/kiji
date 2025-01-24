@@ -11,7 +11,7 @@ import { Calendar } from '@/components/ui/calendar';
 import { Button } from '@/components/ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { getFormattedDateFromObj } from '@/lib/datetime';
-import { getRoleLabel, Role } from '@/config/consts';
+import { getRoleLabel, RoleFilterValues } from '@/config/consts';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 
 import { updateQueryParams } from '@/lib/query-params';
@@ -20,7 +20,7 @@ const postFormSchema = z.object({
   id: z.string().optional(),
   name: z.string().optional(),
   email: z.string().optional(),
-  role: z.nativeEnum(Role),
+  role: z.union([z.literal(''), z.enum(RoleFilterValues)]) ,
   registeredFrom: z.date().optional(),
   registeredTo: z.date().optional(),
 })
@@ -56,7 +56,8 @@ export default function UsersFilter({defaultValues}: Props) {
             <div className="grid grid-cols-2 gap-2">
               <Button onClick={(e)=> {
                 e.preventDefault();
-                form.reset({id:'', name:'', email: '', role: undefined, registeredFrom: undefined, registeredTo: undefined})
+                console.log(form.getValues('role'))
+                form.reset({id:'', name:'', email: '', role: '', registeredFrom: undefined, registeredTo: undefined})
               }}>
                 クリア
               </Button>
@@ -112,14 +113,18 @@ export default function UsersFilter({defaultValues}: Props) {
                 <FormItem className="grid gap-2">
                   <FormLabel>権限</FormLabel>
                   <FormControl>
-                    <Select onValueChange={field.onChange} defaultValue={field.value.toString()} value={field.value.toString()}>
+                    <Select
+                      onValueChange={field.onChange}
+                      defaultValue={field.value}
+                      value={field.value}
+                    >
                       <SelectTrigger id="role" aria-label="role">
                         <SelectValue />
                       </SelectTrigger>
                       <SelectContent>
-                        {Object.values(Role).map((role) => (
-                          <SelectItem key={role} value={role.toString()}>
-                            {getRoleLabel(role)}
+                        {Object.values(RoleFilterValues).map((role) => (
+                          <SelectItem key={role} value={role}>
+                            {getRoleLabel(Number(role))}
                           </SelectItem>
                         ))}
                       </SelectContent>

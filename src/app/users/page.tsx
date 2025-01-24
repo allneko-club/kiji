@@ -2,7 +2,7 @@ import { UsersTable } from '@/app/users/_components/users-table';
 import UsersFilter from '@/app/users/_components/users-filter';
 import SelectSort from '@/components/select-sort';
 import { cleanSortParam, UserSortItems } from '@/app/users/utils';
-import { Role, USERS_LIMIT } from '@/config/consts';
+import { Role, USERS_LIMIT_LIST } from '@/config/consts';
 import { cleanPage, cleanPerPage, cleanRole } from '@/lib/query-params';
 import SelectPerPage from '@/components/select-per-page';
 import { getUsers } from '@/services/users/model';
@@ -23,7 +23,7 @@ export default async function Page(props: {
 }) {
   const searchParams = await props.searchParams;
   const params = {
-    perPage: cleanPerPage(searchParams?.perPage, USERS_LIMIT),
+    perPage: cleanPerPage(searchParams?.perPage, USERS_LIMIT_LIST[0]),
     page: cleanPage(searchParams?.page),
     id: searchParams?.id || '',
     name: decodeURIComponent(searchParams?.name || ''),

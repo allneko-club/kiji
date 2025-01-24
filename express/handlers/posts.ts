@@ -1,5 +1,4 @@
 import express from 'express';
-import { POSTS_LIMIT } from '@/config/consts';
 import { sanitizeUser } from '@/express/utils';
 import { requireAuth } from '@/express/handlers/utils';
 import { prisma } from '@/express/prisma';
@@ -7,6 +6,7 @@ import { prisma } from '@/express/prisma';
 const router = express.Router()
 
 router.get('/api/posts', async (req, res) => {
+  const perPage = Number(req.query.PerPage || 10);
   const page = Number(req.query.page || 1);
   // todo isMyPosts に応じて 非公開の記事も表示するか切り分ける
   // const isMyPosts = req.query.myPosts === "true";
@@ -18,13 +18,13 @@ router.get('/api/posts', async (req, res) => {
         author: true,
       },
       where,
-      take: POSTS_LIMIT,
-      skip: POSTS_LIMIT * (page - 1),
+      take: perPage,
+      skip: perPage * (page - 1),
     }),
     prisma.post.count({where}),
   ])
 
-  const totalPages = Math.ceil(total / POSTS_LIMIT);
+  const totalPages = Math.ceil(total / perPage);
 
   res.json({
     posts,

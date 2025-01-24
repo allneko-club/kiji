@@ -19,7 +19,7 @@ export default async function RootLayout ({ children }: { children: ReactNode })
         <AppProvider>
           <ThemeProvider
             attribute="class"
-            defaultTheme="system"
+            defaultTheme="light"
             enableSystem
             disableTransitionOnChange
           >

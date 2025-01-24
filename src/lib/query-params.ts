@@ -2,7 +2,7 @@
  * クエリパラメーターや、フォームの値をクリーンする機能を定義するためのファイル
  */
 
-import { Role } from '@/config/consts';
+import { Role, RoleFilterValues } from '@/config/consts';
 import { z } from 'zod';
 import { getFormattedDateFromObj } from '@/lib/datetime';
 
@@ -29,13 +29,18 @@ export const cleanPerPage = (perPage: number | string | undefined | null, defaul
   const MAX = 100;
   const result = Number(perPage)
   return 1 < result && result <= MAX ? result : defaultValue;
- }
+}
 
-export const cleanRole = (role: number | undefined) => {
-  if(role === Role.ADMIN || role === Role.USER){
-    return role
-  } else {
-    return undefined
+// なぜかcleanRole()の戻り値がstringに推論されてしまうため明示的に定義する
+type CleanRole = '' | RoleFilterValues;
+export const cleanRole = (role: number | undefined): CleanRole => {
+  switch(role){
+    case Role.ADMIN:
+      return '0';
+    case Role.USER:
+      return '1';
+    default:
+      return '';
   }
 }
 
