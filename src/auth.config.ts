@@ -2,29 +2,13 @@ import type { NextAuthConfig } from 'next-auth';
 import Credentials from 'next-auth/providers/credentials';
 import { z } from 'zod';
 import GitHub from 'next-auth/providers/github';
-import { api } from '@/lib/api-client';
-
-type UserSession = {
-  id: string;
-  name: string;
-  email: string;
-  role: number;
-  image: string;
-};
+import { prisma } from '@/express/prisma';
+import { hash } from '@/lib/utils';
 
 export const loginInputSchema = z.object({
   email: z.string().min(1).email(),
   password: z.string().min(1),
 });
-
-async function loginUser(email: string, password:string): Promise<UserSession|null> {
-  try{
-    return await api.post<UserSession>('/auth/login', { email, password })
-  } catch (error) {
-    console.error('Failed to fetch user:', error);
-    return null;
-  }
-}
 
 export const authConfig = {
   pages: {
@@ -63,11 +47,23 @@ export const authConfig = {
       async authorize(credentials) {
         try {
           const { email, password } = await loginInputSchema.parseAsync(credentials)
-          const user = await loginUser(email, password);
+          const user = await prisma.user.findFirst({
+            where: {
+              email: email,
+              password: hash(password),
+            }
+          });
+
           if(!user) return null;
 
           // return JSON object with the user data
-          return user;
+          return {
+            id: user.id.toString(),
+            name: user.name,
+            email: user.email,
+            role: user.role,
+            image: user.image,
+          };
         } catch {
           // Return `null` to indicate that the credentials are invalid
           return null

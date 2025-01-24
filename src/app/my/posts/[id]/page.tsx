@@ -9,9 +9,12 @@ type Props = {
 
 export default async function Page({ params }: Props) {
   const session = await auth()
+
+  if (!session?.user) return null
+
   const id = (await params).id
   const post = await getPost(id);
-  const userId = Number(session?.user.id)
+  const userId = Number(session.user.id)
 
   if(!post || post.author.id !== userId){
     notFound()

@@ -1,7 +1,8 @@
 import express from 'express';
 import { Role } from '@/config/consts';
-import { hash, sanitizeUser } from '@/express/utils';
+import { sanitizeUser } from '@/express/utils';
 import { prisma } from '@/express/prisma';
+import { hash } from '@/lib/utils';
 
 const router = express.Router()
 

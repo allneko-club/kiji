@@ -12,7 +12,7 @@ export const metadata: Metadata = {
   description: "Next.jsで作成したCMSアプリケーション",
 };
 
-const RootLayout = async ({ children }: { children: ReactNode }) => {
+export default async function RootLayout ({ children }: { children: ReactNode }) {
   return (
     <html lang="ja" suppressHydrationWarning>
       <body>
@@ -34,11 +34,5 @@ const RootLayout = async ({ children }: { children: ReactNode }) => {
         </AppProvider>
       </body>
     </html>
-);
+  );
 }
-
-export default RootLayout;
-
-// We are not prerendering anything because the app is highly dynamic
-// and the data depends on the user so we need to send cookies with each request
-export const dynamic = 'force-dynamic';

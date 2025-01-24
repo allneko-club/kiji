@@ -7,6 +7,7 @@ import { getPosts } from '@/services/posts/model';
 
 export default async function Page() {
   const session = await auth()
+
   if (!session?.user) return null
 
   const params = { page:1, perPage: 100, sort:'id', authorId: Number(session.user.id) }
