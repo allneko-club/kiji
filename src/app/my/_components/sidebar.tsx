@@ -5,7 +5,6 @@ import Link from 'next/link';
 import { paths } from '@/config/paths';
 
 
-
 export default function Sidebar({ className }: React.HTMLAttributes<HTMLDivElement>) {
   return (
     <div className={cn("pb-12", className)}>

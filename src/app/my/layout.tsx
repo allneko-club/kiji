@@ -1,7 +1,7 @@
-import React from 'react';
+import { ReactNode } from 'react';
 import Sidebar from '@/app/my/_components/sidebar';
 
-export default async function MyPageLayout({ children }: { children: React.ReactNode }) {
+export default async function Layout({ children }: { children: ReactNode }) {
 
   return (
   <div className="grid md:grid-cols-5">

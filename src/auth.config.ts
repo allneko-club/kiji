@@ -29,7 +29,7 @@ export const authConfig = {
     jwt({ token, user }) {
 
       if (user) { // User is available during sign-in
-        token.id = user.id
+        token.id = user.id || ""
         token.role = user.role
       }
 
@@ -58,7 +58,7 @@ export const authConfig = {
 
           // return JSON object with the user data
           return {
-            id: user.id.toString(),
+            id: user.id,
             name: user.name,
             email: user.email,
             role: user.role,

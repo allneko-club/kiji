@@ -1,4 +1,8 @@
 import { User as DefaultUser } from '@auth/core/src/types';
+// The `JWT` interface can be found in the `next-auth/jwt` submodule
+import { JWT as DefaultJWT } from "next-auth/jwt"
+
+// https://authjs.dev/getting-started/typescript?framework=express
 
 declare module "next-auth" {
   /**
@@ -8,10 +12,17 @@ declare module "next-auth" {
   interface User extends DefaultUser {
     role: number;
   }
+
+  /**
+   * Returned by `useSession`, `auth`, contains information about the active session.
+   */
+  interface Session {
+    id: string;
+  }
 }
 
 declare module "next-auth/jwt" {
-  interface JWT {
+  interface JWT extends DefaultJWT{
     id: string;
     role: number;
   }

@@ -50,7 +50,7 @@ router.get('/api/posts/:id', async (req, res) => {
   }else if (!post.published) {
     // 非公開の投稿は投稿したユーザーのみ取得可能
     const { user } = await requireAuth(req.cookies);
-    if (!user || post.authorId !== Number(user.id)) {
+    if (!user || post.authorId !== user.id) {
       res.sendStatus(404);
       return
     }
@@ -61,29 +61,15 @@ router.get('/api/posts/:id', async (req, res) => {
 })
 
 router.post('/api/posts', async (req, res) => {
-  const { user, error } = await requireAuth(req.cookies);
-  if (!user) {
-    res.status(401).json({ message: error });
-    return
-  }
   const postData = req.body;
   const result = await prisma.post.create({
-    data: {
-      ...postData,
-      authorId: user.id
-    }
+    data: postData,
   });
 
   res.json(result);
 })
 
 router.post('/api/posts/:id', async (req, res) => {
-  const { user, error } = await requireAuth(req.cookies);
-  if (!user) {
-    res.status(401).json({ message: error });
-    return;
-  }
-
   const data = req.body;
   const result = await prisma.post.update({
     where: {
@@ -95,18 +81,9 @@ router.post('/api/posts/:id', async (req, res) => {
 })
 
 router.delete('/api/posts/:id', async (req, res) => {
-  const { user, error } = await requireAuth(req.cookies);
-  if (!user) {
-    res.status(401).json({ message: error });
-    return
-  }
-
   // todo 存在しない場合の動作確認
   const post = await prisma.post.delete({
-    where: {
-      id:  req.params.id,
-      authorId: Number(user.id),
-    },
+    where: { id:  req.params.id },
   });
 
   res.json(post);

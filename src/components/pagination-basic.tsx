@@ -28,6 +28,10 @@ export function PaginationBasic({ perPage, totalPages }:Props) {
   const hasPrevPage = 1 < page;
   const hasNextPage = page * perPage < totalPages;
 
+  if(totalPages === 0){
+    return null;
+  }
+
   return (
     <Pagination>
       <PaginationContent>

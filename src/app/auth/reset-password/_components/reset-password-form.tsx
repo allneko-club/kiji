@@ -1,49 +1,28 @@
 "use client"
-import { zodResolver } from '@hookform/resolvers/zod';
-import { useForm } from "react-hook-form"
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
-import { resetPasswordInput, resetPasswordInputSchema, useResetPassword } from '@/hooks/auth/reset-password';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { resetPassword } from '@/app/auth/reset-password/actions';
+import { Label } from '@/components/ui/label';
+import { useActionState } from 'react';
 
 export default function ResetPasswordForm() {
-  const form = useForm<resetPasswordInput>(
-    { resolver: zodResolver(resetPasswordInputSchema), defaultValues: { email: "" }})
-  const reset = useResetPassword();
-  const onSubmit = (data: resetPasswordInput) => reset.mutate(data);
+  const [state, submitAction, isPending] = useActionState(resetPassword, {errors: ""});
 
   return (
-    <Card className="mx-auto max-w-sm">
-      <CardHeader>
-        <CardTitle className="text-2xl">パスワードリセット</CardTitle>
-        <CardDescription>
-          メールアドレスを入力してください。
-        </CardDescription>
-      </CardHeader>
-      <CardContent>
-        <Form {...form}>
-          <form className="grid gap-4" onSubmit={form.handleSubmit(onSubmit)}>
+    <div className="w-full max-w-md">
+      <h1 className="text-2xl">パスワードリセット</h1>
+      <p>メールアドレスを入力してください。</p>
 
-            {reset.isError && <p className="text-orange-500">{reset.error.message}</p>}
+      <form className="grid gap-4 py-6" action={submitAction}>
 
-            <FormField
-              control={form.control}
-              name="email"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>メールアドレス</FormLabel>
-                  <FormControl>
-                    <Input {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <Button type="submit" disabled={reset.isPending}>送信</Button>
-          </form>
-        </Form>
-      </CardContent>
-    </Card>
+        <div className="grid items-center gap-1.5">
+          <Label htmlFor="email">メールアドレス</Label>
+          <Input id="email" name="email" />
+          {state?.errors && <p className="text-red-500">{state.errors}</p>}
+        </div>
+
+        <Button loading={isPending}>送信</Button>
+      </form>
+    </div>
   );
 };

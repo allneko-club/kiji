@@ -14,7 +14,7 @@ export default async function Page({ params }: Props) {
 
   const id = (await params).id
   const post = await getPost(id);
-  const userId = Number(session.user.id)
+  const userId = session.user.id
 
   if(!post || post.author.id !== userId){
     notFound()

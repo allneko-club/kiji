@@ -10,15 +10,15 @@ export default async function Page() {
 
   if (!session?.user) return null
 
-  const params = { page:1, perPage: 100, sort:'id', authorId: Number(session.user.id) }
+  const params = { page:1, perPage: 100, authorId: session.user.id }
   const {posts, total} = await getPosts(params)
 
   return (<>
     <div className="flex items-center space-x-3">
       <h1>投稿</h1>
-      <Link href={paths.my.createPost.getHref()}>
-        <Button>Add</Button>
-      </Link>
+        <Button asChild>
+          <Link href={paths.my.createPost.getHref()}>追加</Link>
+        </Button>
     </div>
     <PostList posts={posts} total={total} />
   </>);

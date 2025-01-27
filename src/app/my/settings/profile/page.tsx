@@ -1,14 +1,14 @@
-import { api } from '@/lib/api-client';
-import { signOut } from "@/auth"
-import { User } from '@/types/api/users';
+import { auth } from '@/auth';
 import { getRoleLabel } from '@/config/consts';
+import { getUser } from '@/services/users/model';
+import { getFormattedDateTimeFromObj } from '@/lib/datetime';
 
 export default async function Page() {
-  const user = await api.get<User>('/auth/me');
+  const session = await auth()
+  if (!session?.user?.id) return null
 
-  if (!user) {
-    await signOut()
-  }
+  const user = await getUser(session.user.id);
+  if(!user) return null
 
   return (
     <div>
@@ -16,7 +16,7 @@ export default async function Page() {
       <p>{user.email}</p>
       <p>{user.image}</p>
       <p>{getRoleLabel(user.role)}</p>
-      <p>{user.createdAt}</p>
+      <p>{getFormattedDateTimeFromObj(user.createdAt)}</p>
     </div>
   );
 };

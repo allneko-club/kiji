@@ -26,7 +26,7 @@ export const UsersTable = ({perPage, users, total}: {perPage: number, users: Use
           <TableRow
             key={user.id}
             className="hover:cursor-pointer"
-            onClick={() => router.push(paths.users.user.getHref(user.id.toString()))}
+            onClick={() => router.push(paths.users.user.getHref(user.id))}
           >
             <TableCell className="font-medium">{user.id}</TableCell>
             <TableCell>{user.name}</TableCell>
