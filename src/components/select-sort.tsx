@@ -9,7 +9,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { cleanOrder, cleanOrderBy, parseSortValue } from '@/lib/query-params';
+import { cleanOrderBy, parseSortValue } from '@/lib/query-params';
+import { cleanOrder } from '@/app/users/clean';
 
 type Props = {
   selectItems: { [key: string]: string; },

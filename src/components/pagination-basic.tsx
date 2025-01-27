@@ -9,12 +9,12 @@ import {
 import { usePathname, useSearchParams } from 'next/navigation';
 import { cleanPage } from '@/lib/query-params';
 
-export interface PaginationBasicProps {
+export interface Props {
   perPage: number;
-  totalPages?: number;
+  totalPages: number;
 }
 
-export function PaginationBasic({ perPage = 100, totalPages }:PaginationBasicProps) {
+export function PaginationBasic({ perPage, totalPages }:Props) {
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const page = cleanPage(searchParams.get('page') || 1);
@@ -26,7 +26,7 @@ export function PaginationBasic({ perPage = 100, totalPages }:PaginationBasicPro
   };
 
   const hasPrevPage = 1 < page;
-  const hasNextPage = totalPages != null && page * perPage < totalPages;
+  const hasNextPage = page * perPage < totalPages;
 
   return (
     <Pagination>

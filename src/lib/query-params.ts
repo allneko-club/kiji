@@ -1,10 +1,9 @@
 /**
  * クエリパラメーターや、フォームの値をクリーンする機能を定義するためのファイル
  */
-
-import { Role, RoleFilterValues } from '@/config/consts';
 import { z } from 'zod';
 import { getFormattedDateFromObj } from '@/lib/datetime';
+import { OrderBy } from '@/types/utils';
 
 /**
  * クエリパラメーターの page をクリーンする
@@ -28,34 +27,8 @@ export const cleanPerPage = (perPage: number | string | undefined | null, values
   return Number(perPage);
 }
 
-// なぜかcleanRole()の戻り値がstringに推論されてしまうため明示的に定義する
-type CleanRole = '' | RoleFilterValues;
-export const cleanRole = (role: number | undefined): CleanRole => {
-  switch(role){
-    case Role.ADMIN:
-      return '0';
-    case Role.USER:
-      return '1';
-    default:
-      return '';
-  }
-}
-
-
-export const cleanOrder = (order: string | null | undefined) => {
-  if(order && ['name', 'registered'].includes(order)){
-    return order;
-  }else{
-    return 'registered';
-  }
-}
-
-export const cleanOrderBy = (orderBy: string | null | undefined) => {
-  if(orderBy && ['asc', 'desc'].includes(orderBy)){
-    return orderBy;
-  }else{
-    return 'desc';
-  }
+export const cleanOrderBy = (orderBy: string | null | undefined): OrderBy => {
+  return orderBy === "desc" ? "desc" : "asc";
 }
 
 export function updateQueryParams<T extends z.ZodTypeAny>(params: URLSearchParams, data: z.infer<T>) {

@@ -8,7 +8,7 @@ type Props = {
 
 export default async function Page({ params }: Props) {
   const id = (await params).id
-  const user = await getUser(Number(id));
+  const user = await getUser(id);
 
   if (!user) {
     notFound()
