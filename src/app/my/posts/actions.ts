@@ -2,7 +2,7 @@
 import { redirect } from 'next/navigation';
 import { z } from 'zod';
 import { paths } from '@/config/paths';
-import { prisma } from '@/express/prisma';
+import { prisma } from '@/lib/prisma';
 import { auth } from '@/auth';
 import { getPost } from '@/services/posts/model';
 

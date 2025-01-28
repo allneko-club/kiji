@@ -1,4 +1,4 @@
-import { prisma } from '@/express/prisma';
+import { prisma } from '@/lib/prisma';
 import { OrderBy } from '@/types/utils';
 
 type GetUsersProps = {

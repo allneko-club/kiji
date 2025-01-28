@@ -2,7 +2,7 @@
 import { PaginationBasic } from '@/components/pagination-basic';
 import { PostCard } from '@/app/_components/post-card';
 import { Post } from '@prisma/client';
-import { BaseSearch } from '@/types/api';
+import { BaseSearch } from '@/types/requests';
 
 interface PostsSearchParams extends BaseSearch{
   myPosts?: boolean,

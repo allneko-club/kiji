@@ -1,17 +1,13 @@
 import * as z from 'zod';
-// import 'dotenv/config';
+import 'dotenv/config';
 
 const createEnv = () => {
   const EnvSchema = z.object({
-    API_URL: z.string(),
     APP_URL: z.string().optional().default('http://localhost:3000'),
-    APP_MOCK_API_PORT: z.string().optional().default('8080'),
   });
 
   const envVars = {
-    API_URL: process.env.NEXT_PUBLIC_API_URL,
     APP_URL: process.env.NEXT_PUBLIC_URL,
-    APP_MOCK_API_PORT: process.env.NEXT_PUBLIC_MOCK_API_PORT,
   };
 
   const parsedEnv = EnvSchema.safeParse(envVars);

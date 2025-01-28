@@ -1,5 +1,5 @@
-import { prisma } from '@/express/prisma';
-import { BaseSearch } from '@/types/api';
+import { prisma } from '@/lib/prisma';
+import { BaseSearch } from '@/types/requests';
 
 type Props = {
   authorId?: string;
