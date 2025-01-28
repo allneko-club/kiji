@@ -34,7 +34,7 @@ export default function LoginForm() {
       </CardHeader>
       <CardContent>
         <div className="grid gap-6">
-          {errorMessage && (<p className="text-orange-500">{errorMessage}</p>)}
+          {errorMessage && (<p className="text-red-500">{errorMessage}</p>)}
 
           <form action={formAction} className="grid gap-4">
             <Label htmlFor="email">メールアドレス</Label>

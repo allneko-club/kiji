@@ -28,7 +28,7 @@ export default function RegisterForm() {
         <Form {...form}>
           <form className="grid gap-4" onSubmit={form.handleSubmit(onSubmit)}>
 
-            {register.isError && <p className="text-orange-500">{register.error.message}</p>}
+            {register.isError && <p className="text-red-500">{register.error.message}</p>}
 
             <FormField
               control={form.control}

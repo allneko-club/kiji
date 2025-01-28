@@ -12,7 +12,7 @@ router.get('/api/users', async (req, res) => {
 })
 
 router.get('/api/users/:id(\\d+)', async (req, res) => {
-  const id = Number(req.params.id);
+  const id = req.params.id;
   const user = await prisma.user.findUnique({
     where: {
       id: id,
