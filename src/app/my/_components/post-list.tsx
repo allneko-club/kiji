@@ -1,6 +1,6 @@
 'use client'
 import { PaginationBasic } from '@/components/pagination-basic';
-import { PostCard } from '@/app/my/posts/_components/post-card';
+import { PostCard } from '@/app/my/_components/post-card';
 import { Post } from '@prisma/client';
 
 export const PostList = ({posts, total}: { posts: Post[]; total: number; }) => {

@@ -29,7 +29,7 @@ export function PostCard({ post }:{post: Post}) {
       </CardContent>
       <CardFooter className="flex justify-between">
         <Link href={paths.my.editPost.getHref(post.id)}>
-          <Button>Edit</Button>
+          <Button>編集</Button>
         </Link>
         <DeletePost id={post.id} />
       </CardFooter>

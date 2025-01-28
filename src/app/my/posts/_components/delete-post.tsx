@@ -1,14 +1,16 @@
+"use client"
 import * as React from "react"
 import { Button } from '@/components/ui/button';
-import { useDeletePost } from '@/hooks/posts/use-delete-post';
 import { ConfirmationDialog } from '@/components/ui/confirmation-dialog';
+import { useActionState } from 'react';
+import { deletePost } from '@/app/my/posts/[id]/actions';
 
 type DeletePostProps = {
   id: string;
 };
 
 export function DeletePost({ id }: DeletePostProps) {
-  const deletePostMutation = useDeletePost();
+  const [, action, isPending] = useActionState(deletePost, null);
 
   return (
     <ConfirmationDialog
@@ -17,13 +19,12 @@ export function DeletePost({ id }: DeletePostProps) {
       body="投稿を削除してもよろしいですか？"
       triggerButton={<Button variant="destructive">削除</Button>}
       confirmButton={
-        <Button
-          variant="destructive"
-          disabled={deletePostMutation.isPending}
-          onClick={() => deletePostMutation.mutate({ id: id })}
-        >
-          削除
-        </Button>
+        <form>
+          <input name="id" hidden defaultValue={id}/>
+          <Button variant="destructive" loading={isPending} formAction={action}>
+            削除
+          </Button>
+        </form>
       }
     />
   )

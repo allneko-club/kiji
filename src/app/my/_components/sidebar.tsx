@@ -15,7 +15,7 @@ export default function Sidebar({ className }: React.HTMLAttributes<HTMLDivEleme
           </h2>
           <div className="space-y-1">
             <Button asChild variant="ghost" className="w-full justify-start">
-              <Link href={paths.my.posts.getHref()}>
+              <Link href={paths.my.getHref()}>
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   viewBox="0 0 24 24"
