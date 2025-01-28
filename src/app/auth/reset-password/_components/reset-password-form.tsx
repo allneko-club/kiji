@@ -7,7 +7,10 @@ import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
 
 export default function ResetPasswordForm() {
-  const [state, submitAction, isPending] = useActionState(resetPassword, { errors: { email: '' } });
+  const [state, submitAction, isPending] = useActionState(
+    resetPassword,
+    {email:'', errors: { email: '' }}
+  );
 
   return (
     <div className="w-full max-w-md">
@@ -17,7 +20,7 @@ export default function ResetPasswordForm() {
       <form className="grid gap-4 py-6" action={submitAction}>
         <FormItem>
           <Label htmlFor="email">メールアドレス</Label>
-          <Input id="email" name="email" />
+          <Input id="email" name="email" defaultValue={state.email} />
           <FormMessage>{state?.errors.email}</FormMessage>
         </FormItem>
 

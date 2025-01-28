@@ -10,6 +10,8 @@ const contactInputSchema = z
   });
 
 type PrevState = {
+  email: string | null;
+  content: string | null;
   errors?: {
     email?: string;
     content?: string;
@@ -17,17 +19,18 @@ type PrevState = {
 }
 
 export async function contact(prevState: PrevState, formData: FormData) {
-  const email = formData.get('email');
-  const content = formData.get('content');
-
+  const email = formData.get('email') as string;
+  const content = formData.get('content') as string;
   const result = contactInputSchema.safeParse({
     email: email,
     content: content,
   });
+
   if (!result.success && result.error) {
     const formatted = result.error.format();
-    console.log(formatted);
     return {
+      email: email,
+      content: content,
       errors: {
         email: formatted.email?._errors[0],
         content: formatted.content?._errors[0],

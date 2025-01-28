@@ -9,7 +9,11 @@ import { Input } from '@/components/ui/input';
 export default function ContactForm() {
   const [state, submitAction, isPending] = useActionState(
     contact,
-    {errors: {email: '', content: ''}}
+    {
+      email:'',
+      content:'',
+      errors: {email: '', content: ''}
+    }
   );
 
   return (
@@ -18,16 +22,15 @@ export default function ContactForm() {
       <p>以下のフォームに入力してください。</p>
 
       <form className="grid gap-4 py-6" action={submitAction}>
-
         <FormItem>
           <Label htmlFor="email">メールアドレス</Label>
-          <Input id="email" name="email" />
+          <Input id="email" name="email" defaultValue={state.email} />
           <FormMessage>{state?.errors.email}</FormMessage>
         </FormItem>
 
         <FormItem>
           <Label htmlFor="content">内容</Label>
-          <Input id="content" name="content" />
+          <Input id="content" name="content" defaultValue={state.content} />
           <FormMessage>{state?.errors.content}</FormMessage>
         </FormItem>
 

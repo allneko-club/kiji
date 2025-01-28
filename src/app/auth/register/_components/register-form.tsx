@@ -1,22 +1,26 @@
 "use client"
-import { zodResolver } from '@hookform/resolvers/zod';
-import { useForm } from "react-hook-form"
-import { useRegister, registerInputSchema, RegisterInput } from '@/hooks/auth/register';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
-import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
+import { useActionState } from 'react';
+import { register } from '@/app/auth/register/actions';
+import { Label } from '@/components/ui/label';
+import { FormItem, FormMessage } from '@/components/form';
 
 export default function RegisterForm() {
-  const form = useForm<RegisterInput>(
-    { resolver: zodResolver(registerInputSchema),
-    defaultValues: { name: "", email: "", password: "", passwordConfirm: "" }
-    })
-  const register = useRegister();
-  const onSubmit = (data: RegisterInput) => register.mutate(data);
+  const [state, submitAction, isPending] = useActionState(
+    register,
+    {
+      name:'',
+      email:'',
+      password:'',
+      passwordConfirm:'',
+      errors: {name: '', email: '', password: '', passwordConfirm: ''}
+    }
+  );
 
   return (
-    <Card className="mx-auto max-w-sm">
+    <Card className="w-full max-w-md">
       <CardHeader>
         <CardTitle className="text-2xl">ユーザー登録</CardTitle>
         <CardDescription>
@@ -24,71 +28,34 @@ export default function RegisterForm() {
         </CardDescription>
       </CardHeader>
       <CardContent>
+        <form className="grid gap-4" action={submitAction}>
+          <FormItem>
+            <Label htmlFor="name">ユーザー名</Label>
+            <Input id="name" name="name" defaultValue={state.name} />
+            <FormMessage>{state?.errors.name}</FormMessage>
+          </FormItem>
 
-        <Form {...form}>
-          <form className="grid gap-4" onSubmit={form.handleSubmit(onSubmit)}>
+          <FormItem>
+            <Label htmlFor="email">メールアドレス</Label>
+            <Input id="email" name="email" defaultValue={state.email} />
+            <FormMessage>{state?.errors.email}</FormMessage>
+          </FormItem>
 
-            {register.isError && <p className="text-red-500">{register.error.message}</p>}
+          <FormItem>
+            <Label htmlFor="password">パスワード</Label>
+            <Input id="password" name="password" defaultValue={state.password}/>
+            <p className="text-sm text-muted-foreground">8文字以上の半角英数字にしてください。</p>
+            <FormMessage>{state?.errors.password}</FormMessage>
+          </FormItem>
 
-            <FormField
-              control={form.control}
-              name="name"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>ユーザー名</FormLabel>
-                  <FormControl>
-                    <Input {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="email"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>メールアドレス</FormLabel>
-                  <FormControl>
-                    <Input {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="password"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>パスワード</FormLabel>
-                  <FormControl>
-                    <Input type="password" {...field} />
-                  </FormControl>
-                  <FormDescription>8文字以上の半角英数字にしてください。</FormDescription>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="passwordConfirm"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>パスワード（確認）</FormLabel>
-                  <FormControl>
-                    <Input type="password" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+          <FormItem>
+            <Label htmlFor="passwordConfirm">パスワード（確認）</Label>
+            <Input id="passwordConfirm" name="passwordConfirm" defaultValue={state.passwordConfirm}/>
+            <FormMessage>{state?.errors.passwordConfirm}</FormMessage>
+          </FormItem>
 
-            <Button type="submit" className="w-full" disabled={register.isPending}>
-              登録
-            </Button>
-          </form>
-        </Form>
+          <Button className="w-full" disabled={isPending}>登録</Button>
+        </form>
       </CardContent>
     </Card>
   );

@@ -9,12 +9,12 @@ const resetPasswordInputSchema = z
   });
 
 type PrevState = {
+  email: string | null;
   errors?: { email?: string; };
 }
 
 export async function resetPassword(prevState: PrevState, formData: FormData) {
-  const email = formData.get('email');
-
+  const email = formData.get('email') as string;
   const result = resetPasswordInputSchema.safeParse({
     email: email,
   });
@@ -22,6 +22,7 @@ export async function resetPassword(prevState: PrevState, formData: FormData) {
   if (!result.success && result.error) {
     const formatted = result.error.format();
     return {
+      email: email,
       errors: { email: formatted.email?._errors[0] },
     };
   }
