@@ -2,17 +2,21 @@
 import { redirect } from 'next/navigation';
 import { z } from 'zod';
 import { paths } from '@/config/paths';
+import { prisma } from '@/express/prisma';
+import { auth } from '@/auth';
+import { getPost } from '@/services/posts/model';
 
 const createPostInputSchema = z.object({
-  title: z.string().min(1, 'Required'),
-  content: z.string().min(1, 'Required'),
+  title: z.string().min(1, 'タイトルを入力してください。'),
+  content: z.string().max(5000, '5000文字以内にしてください。'),
   published: z.boolean(),
 });
 
 type PrevState = {
-  title: string | null;
-  content: string | null;
-  published: string | null;
+  id: string;
+  title: string;
+  content: string;
+  published: string;
   errors?: {
     title?: string;
     content?: string;
@@ -20,21 +24,28 @@ type PrevState = {
   };
 }
 
-export async function createPost(prevState: PrevState, formData: FormData) {
+export async function savePost(prevState: PrevState, formData: FormData) {
+  const session = await auth()
+
+  if (!session?.user?.id) {
+    redirect(paths.auth.login.getHref());
+  }
+
+  const id = prevState.id;
   const title = formData.get('title') as string;
   const content = formData.get('content') as string;
   const published = formData.get('published') as string;
   const result = createPostInputSchema.safeParse({
     title: title,
     content: content,
-    published: published,
+    published: published === "on",
   });
 
   if (!result.success && result.error) {
     const formatted = result.error.format();
 
-    // 入力エラーがある場合はパスワードを再入力させるために空欄にする
     return {
+      id: id,
       title: title,
       content: content,
       published: published,
@@ -45,6 +56,31 @@ export async function createPost(prevState: PrevState, formData: FormData) {
       },
     };
   }
-  // todo toast('アカウントを登録しました')の表示方法
-  redirect(paths.auth.login.getHref());
+
+  if(id){
+    const post = await getPost(id);
+    if(!post){
+      redirect(paths.my.getHref());
+    }
+
+    await prisma.post.update({
+      where: { id: id },
+      data: { ...result.data, authorId: post.authorId } }
+    );
+  }else{
+    // todo 作成エラー処理
+    await prisma.post.create({ data: { ...result.data, authorId: session.user.id } });
+  }
+
+  redirect(paths.my.getHref());
+}
+
+export async function deletePost(prevState: null, formData: FormData): Promise<null> {
+  const id = formData.get('id') as string;
+  try {
+    await prisma.post.delete({ where: { id: id } });
+  } catch {
+    /* RecordNotFound 例外が発生しても無視する */
+  }
+  redirect(paths.my.getHref());
 }

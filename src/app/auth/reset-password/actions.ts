@@ -9,7 +9,7 @@ const resetPasswordInputSchema = z
   });
 
 type PrevState = {
-  email: string | null;
+  email: string;
   errors?: { email?: string; };
 }
 

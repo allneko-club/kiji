@@ -1,72 +1,48 @@
 'use client'
-import { CreatePostInput, createPostInputSchema, useCreatePost } from '@/hooks/posts/use-create-post';
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Switch } from '@/components/ui/switch';
 import { Button } from '@/components/ui/button';
+import { useActionState } from 'react';
+import { savePost } from '@/app/my/posts/actions';
+import { Label } from '@/components/ui/label';
+import { FormItem, FormMessage } from '@/components/form';
 
 export const CreatePostForm = () => {
-  const defaultValues = { title: "", content: "", published: false }
-  const createPost = useCreatePost();
-  const form = useForm({ defaultValues, resolver: zodResolver(createPostInputSchema) });
+  const [state, action, isPending] = useActionState(
+    savePost,
+    {
+      id:'',
+      title:'',
+      content:'',
+      published: '',
+      errors: {title: '', content: '', published: ''}
+    }
+  );
 
   return (
-    <Form {...form}>
-      <form className="grid gap-4" onSubmit={form.handleSubmit(
-        (data: CreatePostInput) => createPost.mutate({data})
-      )}>
+    <form className="grid gap-4" action={action}>
+      <FormItem>
+        <Label htmlFor="title">タイトル</Label>
+        <Input id="title" name="title" defaultValue={state.title} />
+        <FormMessage>{state?.errors.title}</FormMessage>
+      </FormItem>
 
-        <FormField
-          control={form.control}
-          name="title"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Title</FormLabel>
-              <FormControl>
-                <Input {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+      <FormItem>
+        <Label htmlFor="content">本文</Label>
+        <Textarea id="content" name="content" defaultValue={state.content} />
+        <FormMessage>{state?.errors.content}</FormMessage>
+      </FormItem>
 
-        <FormField
-          control={form.control}
-          name="content"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Content</FormLabel>
-              <FormControl>
-                <Textarea {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+      <FormItem>
+        <div className="flex items-center space-x-2">
+          <Label htmlFor="published">公開</Label>
+          <Switch id="published" name="published" />
+        </div>
+          <FormMessage>{state?.errors.published}</FormMessage>
+      </FormItem>
 
-        <FormField
-          control={form.control}
-          name="published"
-          render={({ field }) => (
-            <FormItem>
-              <div className="flex items-center space-x-2">
-                <FormLabel>Public</FormLabel>
-                <FormControl>
-                  <Switch
-                    checked={field.value}
-                    onCheckedChange={field.onChange}
-                  />
-                </FormControl>
-              </div>
-            </FormItem>
-          )}
-        />
-
-        <Button type="submit" disabled={form.formState.isSubmitting}>保存</Button>
-      </form>
-    </Form>
+      <Button loading={isPending}>保存</Button>
+    </form>
   );
 };

@@ -3,7 +3,8 @@ import * as React from "react"
 import { Button } from '@/components/ui/button';
 import { ConfirmationDialog } from '@/components/ui/confirmation-dialog';
 import { useActionState } from 'react';
-import { deletePost } from '@/app/my/posts/[id]/actions';
+
+import { deletePost } from '@/app/my/posts/actions';
 
 type DeletePostProps = {
   id: string;

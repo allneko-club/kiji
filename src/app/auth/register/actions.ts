@@ -21,10 +21,10 @@ const registerInputSchema = z
   });
 
 type PrevState = {
-  name: string | null;
-  email: string | null;
-  password: string | null;
-  passwordConfirm: string | null;
+  name: string;
+  email: string;
+  password: string;
+  passwordConfirm: string;
   errors?: {
     name?: string;
     email?: string;

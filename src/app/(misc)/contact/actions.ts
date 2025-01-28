@@ -10,8 +10,8 @@ const contactInputSchema = z
   });
 
 type PrevState = {
-  email: string | null;
-  content: string | null;
+  email: string;
+  content: string;
   errors?: {
     email?: string;
     content?: string;
