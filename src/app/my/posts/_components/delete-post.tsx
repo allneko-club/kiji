@@ -1,5 +1,6 @@
 "use client"
 import { useActionState } from 'react';
+import { Trash } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { deletePost } from '@/app/my/posts/actions';
 import {
@@ -9,7 +10,6 @@ import {
   DialogHeader,
   DialogTitle, DialogTrigger,
 } from '@/components/ui/dialog';
-import * as React from 'react';
 
 type DeletePostProps = {
   id: string;
@@ -21,7 +21,9 @@ export function DeletePost({ id }: DeletePostProps) {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button variant="destructive">削除</Button>
+        <Button variant="destructive" size="icon">
+          <Trash/>
+        </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]" aria-describedby={undefined}>
         <form action={action}>

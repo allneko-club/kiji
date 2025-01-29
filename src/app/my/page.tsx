@@ -3,7 +3,7 @@ import { getPosts } from '@/services/posts/model';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import { paths } from '@/config/paths';
-import { PostList } from '@/app/my/_components/post-list';
+import { PostsTable } from '@/app/my/_components/posts-table';
 
 export default async function Page() {
   const session = await auth()
@@ -21,7 +21,7 @@ export default async function Page() {
           <Link href={paths.my.createPost.getHref()}>追加</Link>
         </Button>
       </div>
-      <PostList posts={posts} total={total} />
+      <PostsTable posts={posts} total={total} perPage={100}/>
     </div>
   );
 };
