@@ -4,8 +4,7 @@ import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { useActionState } from 'react';
 import { register } from '@/app/auth/register/actions';
-import { Label } from '@/components/ui/label';
-import { FormItem, FormMessage } from '@/components/form';
+import { FormDescription, FormItem, FormLabel, FormMessage } from '@/components/form';
 
 export default function RegisterForm() {
   const [state, submitAction, isPending] = useActionState(
@@ -30,26 +29,26 @@ export default function RegisterForm() {
       <CardContent>
         <form className="grid gap-4" action={submitAction}>
           <FormItem>
-            <Label htmlFor="name">ユーザー名</Label>
+            <FormLabel htmlFor="name">ユーザー名</FormLabel>
             <Input id="name" name="name" defaultValue={state.name} />
             <FormMessage>{state?.errors.name}</FormMessage>
           </FormItem>
 
           <FormItem>
-            <Label htmlFor="email">メールアドレス</Label>
+            <FormLabel htmlFor="email">メールアドレス</FormLabel>
             <Input id="email" name="email" defaultValue={state.email} />
             <FormMessage>{state?.errors.email}</FormMessage>
           </FormItem>
 
           <FormItem>
-            <Label htmlFor="password">パスワード</Label>
+            <FormLabel htmlFor="password">パスワード</FormLabel>
             <Input id="password" name="password" defaultValue={state.password}/>
-            <p className="text-sm text-muted-foreground">8文字以上の半角英数字にしてください。</p>
+            <FormDescription>8文字以上の半角英数字にしてください。</FormDescription>
             <FormMessage>{state?.errors.password}</FormMessage>
           </FormItem>
 
           <FormItem>
-            <Label htmlFor="passwordConfirm">パスワード（確認）</Label>
+            <FormLabel htmlFor="passwordConfirm">パスワード（確認）</FormLabel>
             <Input id="passwordConfirm" name="passwordConfirm" defaultValue={state.passwordConfirm}/>
             <FormMessage>{state?.errors.passwordConfirm}</FormMessage>
           </FormItem>

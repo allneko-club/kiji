@@ -2,8 +2,7 @@
 import { useActionState } from 'react';
 import { contact } from '@/app/(misc)/contact/actions';
 import { Button } from '@/components/ui/button';
-import { FormItem, FormMessage } from '@/components/form';
-import { Label } from '@/components/ui/label';
+import { FormItem, FormLabel, FormMessage } from '@/components/form';
 import { Input } from '@/components/ui/input';
 
 export default function ContactForm() {
@@ -23,13 +22,13 @@ export default function ContactForm() {
 
       <form className="grid gap-4 py-6" action={submitAction}>
         <FormItem>
-          <Label htmlFor="email">メールアドレス</Label>
+          <FormLabel htmlFor="email">メールアドレス</FormLabel>
           <Input id="email" name="email" defaultValue={state.email} />
           <FormMessage>{state?.errors.email}</FormMessage>
         </FormItem>
 
         <FormItem>
-          <Label htmlFor="content">内容</Label>
+          <FormLabel htmlFor="content">内容</FormLabel>
           <Input id="content" name="content" defaultValue={state.content} />
           <FormMessage>{state?.errors.content}</FormMessage>
         </FormItem>

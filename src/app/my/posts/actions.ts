@@ -17,6 +17,7 @@ type PrevState = {
   title: string;
   content: string;
   published: string;
+  message: string;
   errors?: {
     title?: string;
     content?: string;
@@ -49,6 +50,7 @@ export async function savePost(prevState: PrevState, formData: FormData) {
       title: title,
       content: content,
       published: published,
+      message: '',
       errors: {
         title: formatted.title?._errors[0],
         content: formatted.content?._errors[0],
@@ -72,7 +74,14 @@ export async function savePost(prevState: PrevState, formData: FormData) {
     await prisma.post.create({ data: { ...result.data, authorId: session.user.id } });
   }
 
-  redirect(paths.my.getHref());
+  return {
+    id: id,
+    title: title,
+    content: content,
+    published: published,
+    message: '保存しました。',
+    errors: {title: '', content: '', published: ''}
+  }
 }
 
 export async function deletePost(prevState: null, formData: FormData): Promise<null> {

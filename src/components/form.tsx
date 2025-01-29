@@ -1,17 +1,42 @@
 /**
  * server actionsで使うためのフォーム用コンポーネント
  */
-import { ReactNode } from 'react';
 import * as React from 'react';
 import { cn } from '@/lib/utils';
+import * as LabelPrimitive from '@radix-ui/react-label';
+import { Label } from '@/components/ui/label';
 
-function FormItem({ children }: { children: ReactNode }) {
+const FormItem = React.forwardRef<
+  HTMLDivElement,
+  React.HTMLAttributes<HTMLDivElement>
+>(({ className, ...props }, ref) => {
+  return <div ref={ref} className={cn('space-y-2', className)} {...props} />
+})
+FormItem.displayName = "FormItem"
+
+const FormLabel = React.forwardRef<
+  React.ElementRef<typeof LabelPrimitive.Root>,
+  React.ComponentPropsWithoutRef<typeof LabelPrimitive.Root>
+>(({ ...props }, ref) => {
+
+  return <Label ref={ref} {...props} />
+})
+FormLabel.displayName = "FormLabel"
+
+const FormDescription = React.forwardRef<
+  HTMLParagraphElement,
+  React.HTMLAttributes<HTMLParagraphElement>
+>(({ className, ...props }, ref) => {
+
   return (
-    <div className="grid items-center gap-1.5">
-      {children}
-    </div>
-  );
-}
+    <p
+      ref={ref}
+      className={cn("text-sm text-muted-foreground", className)}
+      {...props}
+    />
+  )
+})
+FormDescription.displayName = "FormDescription"
 
 const FormMessage = React.forwardRef<
   HTMLParagraphElement,
@@ -36,5 +61,7 @@ FormMessage.displayName = "FormMessage"
 
 export {
   FormItem,
+  FormLabel,
+  FormDescription,
   FormMessage,
 }

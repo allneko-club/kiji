@@ -4,10 +4,10 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Switch } from '@/components/ui/switch';
 import { Button } from '@/components/ui/button';
-import { useActionState } from 'react';
+import { useActionState, useEffect } from 'react';
 import { savePost } from '@/app/my/posts/actions';
-import { Label } from '@/components/ui/label';
-import { FormItem, FormMessage } from '@/components/form';
+import { FormItem, FormLabel, FormMessage } from '@/components/form';
+import { toast } from 'react-toastify';
 
 type Props = {
   id: string;
@@ -22,33 +22,40 @@ export const UpdatePostForm = ({id, post}: Props) => {
       title:post.title,
       content:post.content,
       published: post.published ? 'on' : '',
+      message: '',
       errors: {title: '', content: '', published: ''}
     }
   );
 
+  useEffect(() => {
+    if(state.message){
+      toast(state.message)
+    }
+  }, [state, state.message]);
+
   return (
     <form className="grid gap-4" action={action}>
       <FormItem>
-        <Label htmlFor="title">タイトル</Label>
+        <FormLabel htmlFor="title">タイトル</FormLabel>
         <Input id="title" name="title" defaultValue={state.title} />
         <FormMessage>{state?.errors.title}</FormMessage>
       </FormItem>
 
       <FormItem>
-        <Label htmlFor="content">本文</Label>
+        <FormLabel htmlFor="content">本文</FormLabel>
         <Textarea id="content" name="content" defaultValue={state.content} />
         <FormMessage>{state?.errors.content}</FormMessage>
       </FormItem>
 
       <FormItem>
         <div className="flex items-center space-x-2">
-          <Label htmlFor="published">公開</Label>
+          <FormLabel htmlFor="published">公開</FormLabel>
           <Switch id="published" name="published" defaultChecked={post.published} />
         </div>
         <FormMessage>{state?.errors.published}</FormMessage>
       </FormItem>
 
-      <Button type="submit" loading={isPending}>保存</Button>
+      <Button type="submit" loading={isPending}>{isPending ? '保存中...' : '保存'}</Button>
     </form>
   );
 };

@@ -26,9 +26,7 @@ export default async function RootLayout ({ children }: { children: ReactNode })
             <div className="flex h-full min-h-screen w-full flex-col justify-between">
               <Header />
               <main className="w-full flex-auto px-4 py-4 sm:px-6 md:py-6">
-                <div className="flex w-full items-center">
-                  {children}
-                </div>
+                {children}
               </main>
               <Footer />
             </div>
