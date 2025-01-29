@@ -1,5 +1,3 @@
-"use client";
-import { signOut, useSession } from "next-auth/react"
 import {
   DropdownMenu,
   DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem,
@@ -10,10 +8,16 @@ import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import Link from 'next/link';
 import { paths } from '@/config/paths';
+import { auth, signOut  } from '@/auth';
 import { LogOut, User } from 'lucide-react';
 
-export function UserNav() {
-  const { data: session } = useSession()
+async function logOut() {
+  'use server';
+  await signOut({ redirectTo: "/" });
+}
+
+export async function UserNav() {
+  const session = await auth()
 
   return session?.user ? (<>
     <DropdownMenu>
@@ -47,7 +51,9 @@ export function UserNav() {
         {/* todo buttonしかクリック判定がない。DropdownMenuItemにしたい。 */}
         <DropdownMenuItem>
           <LogOut />
-          <button onClick={() => signOut()}>ログアウト</button>
+          <form action={logOut}>
+            <button type="submit">ログアウト</button>
+          </form>
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
