@@ -28,28 +28,32 @@ export const CreatePostForm = () => {
   }, [state, state.message]);
 
   return (
-    <form className="grid gap-4" action={action}>
-      <FormItem>
-        <FormLabel htmlFor="title">タイトル</FormLabel>
-        <Input id="title" name="title" defaultValue={state.title} />
-        <FormMessage>{state?.errors.title}</FormMessage>
-      </FormItem>
+    <form action={action}>
+      <div className="py-2">
+        <Button loading={isPending}>{isPending ? '保存中...' : '保存'}</Button>
+      </div>
 
-      <FormItem>
-        <FormLabel htmlFor="content">本文</FormLabel>
-        <Textarea id="content" name="content" defaultValue={state.content} />
-        <FormMessage>{state?.errors.content}</FormMessage>
-      </FormItem>
+      <div className="grid gap-4">
+        <FormItem>
+          <FormLabel htmlFor="title">タイトル</FormLabel>
+          <Input id="title" name="title" defaultValue={state.title} />
+          <FormMessage>{state?.errors.title}</FormMessage>
+        </FormItem>
 
-      <FormItem>
-        <div className="flex items-center space-x-2">
-          <FormLabel htmlFor="published">公開</FormLabel>
-          <Switch id="published" name="published" />
-        </div>
-          <FormMessage>{state?.errors.published}</FormMessage>
-      </FormItem>
+        <FormItem>
+          <FormLabel htmlFor="content">本文</FormLabel>
+          <Textarea id="content" name="content" defaultValue={state.content} />
+          <FormMessage>{state?.errors.content}</FormMessage>
+        </FormItem>
 
-      <Button loading={isPending}>保存</Button>
+        <FormItem>
+          <div className="flex items-center space-x-2">
+            <FormLabel htmlFor="published">公開</FormLabel>
+            <Switch id="published" name="published" />
+          </div>
+            <FormMessage>{state?.errors.published}</FormMessage>
+        </FormItem>
+      </div>
     </form>
   );
 };
