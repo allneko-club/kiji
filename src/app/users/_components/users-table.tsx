@@ -7,7 +7,13 @@ import { getFormattedDateTimeFromObj } from '@/lib/datetime';
 import type { User } from '@prisma/client'
 import { getRoleLabel } from '@/config/consts';
 
-export const UsersTable = ({perPage, users, total}: {perPage: number, users: User[], total: number}) => {
+type Props = {
+  perPage: number;
+  users: User[];
+  total: number;
+}
+
+export const UsersTable = ({perPage, users, total}: Props) => {
   const router = useRouter()
 
   return (<>

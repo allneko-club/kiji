@@ -1,10 +1,10 @@
-import * as React from "react"
+import * as React from 'react';
 import Link from 'next/link';
 import { paths } from '@/config/paths';
 import { getFormattedDateTimeFromObj } from '@/lib/datetime';
 import { Post } from '@prisma/client';
 
-export function PostCard({ post }:{post: Post}) {
+export function PostCard({ post }: { post: Post }) {
 
   return (
     <article>
@@ -22,5 +22,5 @@ export function PostCard({ post }:{post: Post}) {
         </p>
       </Link>
     </article>
-  )
+  );
 }

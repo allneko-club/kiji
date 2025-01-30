@@ -1,9 +1,7 @@
-import { Suspense } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { paths } from '@/config/paths';
 import { UserNav } from '@/components/layouts/user-nav';
-import { Search } from '@/components/layouts/search';
 import MainNav from '@/components/layouts/main-nav';
 import { ModeToggle } from '@/components/layouts/mode-toggle';
 import { MobileNav } from '@/components/layouts/mobile-nav';
@@ -19,9 +17,6 @@ export default async function Header() {
           </Link>
           <MainNav />
           <div className="ml-auto flex items-center space-x-1">
-            <Suspense>
-              <Search />
-            </Suspense>
             <ModeToggle/>
             <UserNav />
             <MobileNav />

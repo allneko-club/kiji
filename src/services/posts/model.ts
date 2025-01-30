@@ -5,12 +5,16 @@ type Props = {
   authorId?: string;
   published?: boolean;
   sort?: string;
+  title?: string;
 } & BaseSearch
 
 export const getPosts = async (params: Props) => {
   const where = {
     authorId: params.authorId,
     published: params.published,
+    title: {
+      contains: params.title,
+    },
   }
 
   const [posts, total] = await Promise.all([
