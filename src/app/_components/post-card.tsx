@@ -13,7 +13,6 @@ export function PostCard({ post }: { post: Post }) {
         className="flex flex-col items-start gap-2 rounded-lg border p-3 text-left transition-all hover:bg-accent"
       >
         <h2>{post.title}</h2>
-        <span className="text-sm">#カテゴリー1</span>
         <span className="text-sm text-muted-foreground">
           {getFormattedDateTimeFromObj(post.createdAt)}
         </span>

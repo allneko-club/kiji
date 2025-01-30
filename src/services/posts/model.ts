@@ -41,6 +41,7 @@ export const getPost = async (id: string) => {
   return prisma.post.findUnique({
     include: {
       author: true,
+      tags: true,
     },
     where: {
       id: id,
