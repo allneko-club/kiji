@@ -84,12 +84,12 @@ export async function savePost(prevState: PrevState, formData: FormData) {
   }
 }
 
-export async function deletePost(prevState: null, formData: FormData): Promise<null> {
+export async function deletePost(prevState: null, formData: FormData) {
   const id = formData.get('id') as string;
   try {
     await prisma.post.delete({ where: { id: id } });
   } catch {
     /* RecordNotFound 例外が発生しても無視する */
   }
-  redirect(paths.my.getHref());
+  return Promise.resolve(null)
 }

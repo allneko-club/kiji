@@ -10,12 +10,16 @@ import {
   DialogHeader,
   DialogTitle, DialogTrigger,
 } from '@/components/ui/dialog';
+import { toast } from 'react-toastify';
+import { useRouter } from 'next/navigation';
+import { paths } from '@/config/paths';
 
 type DeletePostProps = {
   id: string;
 };
 
 export function DeletePost({ id }: DeletePostProps) {
+  const router = useRouter();
   const [, action, isPending] = useActionState(deletePost, null);
 
   return (
@@ -26,7 +30,11 @@ export function DeletePost({ id }: DeletePostProps) {
         </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]" aria-describedby={undefined}>
-        <form action={action}>
+        <form action={(formData) =>{
+          action(formData)
+          toast('削除しました')
+          router.push(paths.my.getHref())
+        }}>
           <input name="id" hidden defaultValue={id} />
           <DialogHeader>
             <DialogTitle>削除確認</DialogTitle>
