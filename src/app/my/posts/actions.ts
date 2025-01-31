@@ -4,12 +4,13 @@ import { z } from 'zod';
 import { paths } from '@/config/paths';
 import { prisma } from '@/lib/prisma';
 import { auth } from '@/auth';
-import { getPost } from '@/services/posts/model';
+import { getPost } from '@/models/post';
 
 const createPostInputSchema = z.object({
   title: z.string().min(1, 'タイトルを入力してください。'),
   content: z.string().max(5000, '5000文字以内にしてください。'),
   published: z.boolean(),
+  categoryId: z.number().min(1, 'カテゴリーIDが不正です。'),
 });
 
 type PrevState = {
@@ -17,11 +18,13 @@ type PrevState = {
   title: string;
   content: string;
   published: string;
+  categoryId: string;
   message: string;
   errors?: {
     title?: string;
     content?: string;
     published?: string;
+    categoryId?: string;
   };
 }
 
@@ -36,10 +39,13 @@ export async function savePost(prevState: PrevState, formData: FormData) {
   const title = formData.get('title') as string;
   const content = formData.get('content') as string;
   const published = formData.get('published') as string;
+  const categoryId = formData.get('categoryId') as string;
+  console.log("categoryId", formData)
   const result = createPostInputSchema.safeParse({
     title: title,
     content: content,
     published: published === "on",
+    categoryId: Number(categoryId),
   });
 
   if (!result.success && result.error) {
@@ -50,11 +56,13 @@ export async function savePost(prevState: PrevState, formData: FormData) {
       title: title,
       content: content,
       published: published,
+      categoryId: categoryId,
       message: '',
       errors: {
         title: formatted.title?._errors[0],
         content: formatted.content?._errors[0],
         published: formatted.published?._errors[0],
+        categoryId: formatted.categoryId?._errors[0],
       },
     };
   }
@@ -79,8 +87,9 @@ export async function savePost(prevState: PrevState, formData: FormData) {
     title: title,
     content: content,
     published: published,
+    categoryId: categoryId,
     message: '保存しました。',
-    errors: {title: '', content: '', published: ''}
+    errors: {title: '', content: '', published: '', categoryId: ''}
   }
 }
 

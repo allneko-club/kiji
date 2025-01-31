@@ -1,7 +1,8 @@
-import { UpdatePostForm } from '@/app/my/posts/[id]/_components/update-post-form';
 import { auth } from '@/auth';
-import { getPost } from '@/services/posts/model';
+import { getPost } from '@/models/post';
 import { notFound } from 'next/navigation';
+import { PostForm } from '@/app/my/posts/_components/post-form';
+import { getCategories } from '@/models/category';
 
 type Props = {
   params: Promise<{ id: string }>
@@ -12,6 +13,7 @@ export default async function Page({ params }: Props) {
 
   if (!session?.user) return null
 
+  const categories = await getCategories()
   const id = (await params).id
   const post = await getPost(id);
   const userId = session.user.id
@@ -20,7 +22,15 @@ export default async function Page({ params }: Props) {
     notFound()
   }
 
+  const initialState = {
+    id: id,
+    title: post.title,
+    content: post.content,
+    published: post.published ? 'on' : '',
+    categoryId: post.categoryId.toString(),
+  }
+
   return (
-    <UpdatePostForm id={id} post={post} />
+    <PostForm initialState={initialState} categories={categories} />
   );
 };

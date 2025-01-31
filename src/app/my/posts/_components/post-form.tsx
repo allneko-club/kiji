@@ -1,85 +1,95 @@
-import { Textarea } from '@/components/ui/textarea';
+'use client';
+import { Category } from '@prisma/client';
 import { Input } from '@/components/ui/input';
+import { Textarea } from '@/components/ui/textarea';
 import { Switch } from '@/components/ui/switch';
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Button } from '@/components/ui/button';
-import { SubmitHandler, useForm, UseFormProps } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { UpdatePostInput, updatePostInputSchema } from '@/hooks/posts/use-update-post';
-
-// todo 追加フォームと更新フォームを共通化したいが、型の定義方法が難解
-// type Props<TFormValues extends FieldValues, Schema> = {
-//   onSubmit: SubmitHandler<TFormValues>;
-//   options?: UseFormProps<TFormValues>;
-//   schema: Schema;
-// };
-
-// export const PostForm =  <
-//   Schema extends z.ZodObject<any>,
-//   TFormValues extends FieldValues = z.infer<Schema>,
-// >({onSubmit, options, schema}: Props<TFormValues, Schema>) => {
+import { useActionState, useEffect } from 'react';
+import { savePost } from '@/app/my/posts/actions';
+import { FormItem, FormLabel, FormMessage } from '@/components/form';
+import { toast } from 'react-toastify';
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
 
 type Props = {
-  onSubmit: SubmitHandler<UpdatePostInput>;
-  options?: UseFormProps<UpdatePostInput>;
-  schema: typeof updatePostInputSchema ;
-};
+  initialState: {
+    id: string;
+    title: string;
+    content: string;
+    published: string;
+    categoryId: string;
+  };
+  categories: Category[];
+}
 
-export const PostForm = ({onSubmit, options, schema}: Props) => {
+export const PostForm = ({ initialState, categories }: Props) => {
+  const [state, action, isPending] = useActionState(
+    savePost,
+    {
+      ...initialState,
+      message: '',
+      errors: { title: '', content: '', published: '', categoryId: '' },
+    }
+  );
 
-  const form = useForm<UpdatePostInput>({ ...options, resolver: zodResolver(schema) });
+  useEffect(() => {
+    if (state.message) {
+      toast(state.message);
+    }
+  }, [state, state.message]);
+
   return (
-    <Form {...form}>
-      <form className="grid gap-4" onSubmit={form.handleSubmit(onSubmit)}>
+    <form action={action}>
+      <div className="py-2">
+        <Button loading={isPending}>{isPending ? '保存中...' : '保存'}</Button>
+      </div>
 
-        <FormField
-          control={form.control}
-          name="title"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Title</FormLabel>
-              <FormControl>
-                <Input {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+      <div className="grid gap-4">
+        <FormItem>
+          <FormLabel htmlFor="title">タイトル</FormLabel>
+          <Input id="title" name="title" defaultValue={state.title} />
+          <FormMessage>{state?.errors.title}</FormMessage>
+        </FormItem>
 
-        <FormField
-          control={form.control}
-          name="content"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Content</FormLabel>
-              <FormControl>
-                <Textarea {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+        <FormItem>
+          <FormLabel htmlFor="content">本文</FormLabel>
+          <Textarea id="content" name="content" defaultValue={state.content} />
+          <FormMessage>{state?.errors.content}</FormMessage>
+        </FormItem>
 
-        <FormField
-          control={form.control}
-          name="published"
-          render={({ field }) => (
-            <FormItem>
-              <div className="flex items-center space-x-2">
-                <FormLabel>Public</FormLabel>
-                <FormControl>
-                  <Switch
-                    checked={field.value}
-                    onCheckedChange={field.onChange}
-                  />
-                </FormControl>
-              </div>
-            </FormItem>
-          )}
-        />
+        <FormItem>
+          <div className="flex items-center space-x-2">
+            <FormLabel htmlFor="published">公開</FormLabel>
+            <Switch id="published" name="published" />
+          </div>
+          <FormMessage>{state?.errors.published}</FormMessage>
+        </FormItem>
 
-        <Button type="submit" disabled={form.formState.isSubmitting}>保存</Button>
-      </form>
-    </Form>
+        <FormItem>
+          <FormLabel htmlFor="categoryId">カテゴリー</FormLabel>
+          <Select name="categoryId" defaultValue={state.categoryId}>
+            <SelectTrigger id="categoryId" aria-label="categoryId">
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectGroup>
+                {categories.map((item) => (
+                  <SelectItem key={item.id} value={item.id.toString()}>
+                    {item.name}
+                  </SelectItem>
+                ))}
+              </SelectGroup>
+            </SelectContent>
+          </Select>
+          <FormMessage>{state?.errors?.categoryId}</FormMessage>
+        </FormItem>
+      </div>
+    </form>
   );
 };
