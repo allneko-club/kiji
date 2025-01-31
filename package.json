@@ -14,6 +14,9 @@
     "build-storybook": "storybook build",
     "e2e": "playwright test"
   },
+  "prisma": {
+    "seed": "ts-node prisma/seed.ts"
+  },
   "dependencies": {
     "@hookform/resolvers": "^3.9.1",
     "@ngneat/falso": "^7.2.0",
@@ -71,7 +74,7 @@
     "@types/cookie-parser": "^1.4.8",
     "@types/cors": "^2.8.17",
     "@types/dotenv": "^6.1.1",
-    "@types/node": "^20",
+    "@types/node": "^20.17.16",
     "@types/react": "^18.3.12",
     "@types/react-dom": "^18.3.1",
     "@vitejs/plugin-react": "^4.3.4",
@@ -91,7 +94,8 @@
     "prisma": "^6.3.0",
     "storybook": "^8.5.2",
     "tailwindcss": "^3.4.16",
-    "typescript": "^5",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.7.3",
     "typescript-eslint": "^8.19.1",
     "vite-tsconfig-paths": "^5.1.4",
     "vitest": "^2.1.8"

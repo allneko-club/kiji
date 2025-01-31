@@ -24,21 +24,36 @@ model User {
 }
 
 model Post {
-  id        String   @id @default(cuid())
-  title     String
-  content   String   @default("")
-  authorId  String
-  author    User     @relation(fields: [authorId], references: [id])
-  published Boolean  @default(false)
-  updatedAt DateTime @updatedAt
-  createdAt DateTime @default(now())
-  tags      Tag[]
+  id         String   @id @default(cuid())
+  title      String
+  eyeCatch   String   @default("")
+  content    String   @default("")
+  authorId   String
+  author     User     @relation(fields: [authorId], references: [id])
+  categoryId Int
+  category   Category @relation(fields: [categoryId], references: [id])
+  published  Boolean  @default(false)
+  updatedAt  DateTime @updatedAt
+  createdAt  DateTime @default(now())
+  tags       Tag[]
+}
+
+model Category {
+  id          Int      @id @default(autoincrement())
+  name        String   @unique
+  description String   @default("")
+  image       String   @default("")
+  updatedAt   DateTime @updatedAt
+  createdAt   DateTime @default(now())
+  posts       Post[]
 }
 
 model Tag {
-  id        Int      @id @default(autoincrement())
-  name      String   @unique
-  updatedAt DateTime @updatedAt
-  createdAt DateTime @default(now())
-  posts     Post[]
+  id          Int      @id @default(autoincrement())
+  name        String   @unique
+  description String   @default("")
+  image       String   @default("")
+  updatedAt   DateTime @updatedAt
+  createdAt   DateTime @default(now())
+  posts       Post[]
 }
