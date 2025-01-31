@@ -1,4 +1,4 @@
-import { getTags } from '@/services/tags/model';
+import { getTags } from '@/models/tag';
 import TagBadge from '@/components/tag-badge';
 
 export default async function Page() {

@@ -1,5 +1,5 @@
 import { UserInfo } from '@/app/users/[id]/_components/user-info';
-import { getUser } from '@/services/users/model';
+import { getUser } from '@/models/user';
 import { notFound } from 'next/navigation';
 
 type Props = {

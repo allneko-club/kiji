@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 import { PostDetail } from '@/app/posts/[id]/_components/post-detail';
-import { getPost } from '@/services/posts/model';
+import { getPost } from '@/models/post';
 import { notFound } from 'next/navigation';
 
 type Props = {

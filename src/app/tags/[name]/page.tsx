@@ -1,5 +1,5 @@
 import { PostList } from '@/components/posts';
-import { getPosts } from '@/services/posts/model';
+import { getPostsByTag } from '@/models/post';
 import * as React from 'react';
 import { POST_LIMIT } from '@/config/consts';
 
@@ -17,8 +17,8 @@ export default async function Page(props: Props) {
   const tagName = params.name;
   const searchParams = await props.searchParams;
   const page = Number(searchParams?.page) || 1;
-  const queryParams = { perPage: POST_LIMIT, page, tagName, sort: '-published', published: true }
-  const {posts, total} = await getPosts(queryParams)
+  const queryParams = { perPage: POST_LIMIT, page, tagName, published: true }
+  const {posts, total} = await getPostsByTag(queryParams)
 
   return (<>
     <h1>{tagName}</h1>

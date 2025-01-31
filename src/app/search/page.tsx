@@ -1,8 +1,8 @@
 import { Suspense } from 'react';
 import { Search } from '@/app/_components';
 import { PostList } from '@/components/posts';
-import { getPosts } from '@/services/posts/model';
-import { getTags } from '@/services/tags/model';
+import { getPosts } from '@/models/post';
+import { getTags } from '@/models/tag';
 import TagBadge from '@/components/tag-badge';
 import * as React from 'react';
 import { POST_LIMIT } from '@/config/consts';
@@ -18,7 +18,7 @@ export default async function Page(props: {
   const searchParams = await props.searchParams;
   const page = Number(searchParams?.page) || 1;
   const query = searchParams?.query;
-  const params = { perPage: POST_LIMIT, page, title: query, sort: '-published', published: true }
+  const params = { perPage: POST_LIMIT, page, title: query, published: true }
   const {posts, total} = await getPosts(params)
   const {tags} = await getTags()
 

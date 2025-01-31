@@ -1,5 +1,5 @@
 import { PostList } from '@/components/posts';
-import { getPosts } from '@/services/posts/model';
+import { getPosts } from '@/models/post';
 import { POST_LIMIT } from '@/config/consts';
 
 type SearchParams ={
@@ -12,7 +12,7 @@ export default async function Page(props: {
 }) {
   const searchParams = await props.searchParams;
   const page = Number(searchParams?.page) || 1;
-  const params = { perPage: POST_LIMIT, page, sort: '-published', published: true }
+  const params = { perPage: POST_LIMIT, page, published: true }
   const {posts, total} = await getPosts(params)
 
   return (<>

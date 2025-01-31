@@ -1,6 +1,6 @@
 import { auth } from '@/auth';
 import { getRoleLabel } from '@/config/consts';
-import { getUser } from '@/services/users/model';
+import { getUser } from '@/models/user';
 import { getFormattedDateTimeFromObj } from '@/lib/datetime';
 
 export default async function Page() {

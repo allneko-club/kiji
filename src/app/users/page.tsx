@@ -4,7 +4,7 @@ import SelectSort from '@/components/select-sort';
 import { Role, USERS_LIMIT_LIST } from '@/config/consts';
 import { cleanPage, cleanPerPage, cleanOrderBy } from '@/lib/query-params';
 import SelectLimit from '@/components/select-limit';
-import { getUsers } from '@/services/users/model';
+import { getUsers } from '@/models/user';
 import { cleanOrder, cleanRole } from '@/app/users/clean';
 import { BaseSearch } from '@/types/requests';
 
