@@ -11,10 +11,10 @@ import { cleanPage } from '@/lib/query-params';
 
 export interface Props {
   perPage: number;
-  totalPages: number;
+  total: number;
 }
 
-export function PaginationBasic({ perPage, totalPages }:Props) {
+export function PaginationBasic({ perPage, total }:Props) {
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const page = cleanPage(searchParams.get('page') || 1);
@@ -26,9 +26,9 @@ export function PaginationBasic({ perPage, totalPages }:Props) {
   };
 
   const hasPrevPage = 1 < page;
-  const hasNextPage = page * perPage < totalPages;
+  const hasNextPage = page * perPage < total;
 
-  if(totalPages === 0){
+  if(total === 0){
     return null;
   }
 

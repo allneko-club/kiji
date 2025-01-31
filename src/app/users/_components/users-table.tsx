@@ -44,6 +44,6 @@ export const UsersTable = ({perPage, users, total}: Props) => {
       </TableBody>
     </Table>
 
-    <PaginationBasic perPage={perPage} totalPages={total} />
+    <PaginationBasic perPage={perPage} total={total} />
   </>);
 };

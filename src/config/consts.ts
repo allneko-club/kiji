@@ -23,9 +23,11 @@ export function getRoleLabel(role: number) {
 
 // ユーザー一覧の表示件数のリスト 要素は1つ以上
 export const USERS_LIMIT_LIST = [10, 25, 50]
+export const POST_LIMIT = 20
 
 // ヘッダーのメニューに表示するリンク
 export const mainMenu = [
   { href: paths.home.getHref(), label: 'posts' },
   { href: paths.users.getHref(), label: 'users' },
+  { href: paths.search.getHref(), label: 'search' },
 ];

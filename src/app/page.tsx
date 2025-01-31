@@ -1,6 +1,6 @@
-import { Suspense } from 'react';
-import { PostList, Search } from '@/app/_components';
+import { PostList } from '@/components/posts';
 import { getPosts } from '@/services/posts/model';
+import { POST_LIMIT } from '@/config/consts';
 
 type SearchParams ={
   page?: string;
@@ -12,17 +12,11 @@ export default async function Page(props: {
 }) {
   const searchParams = await props.searchParams;
   const page = Number(searchParams?.page) || 1;
-  const query = searchParams?.query;
-  const params = { perPage: 100, page, title: query, sort: '-published', published: true }
+  const params = { perPage: POST_LIMIT, page, sort: '-published', published: true }
   const {posts, total} = await getPosts(params)
 
   return (<>
-    <h1>新着記事</h1>
-    <div className="py-4">
-      <Suspense>
-        <Search />
-      </Suspense>
-    </div>
+    <h1>新着</h1>
     <PostList perPage={params.perPage} posts={posts} total={total} />
   </>);
 };

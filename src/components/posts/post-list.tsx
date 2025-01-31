@@ -1,6 +1,6 @@
 'use client';
 import { PaginationBasic } from '@/components/pagination-basic';
-import { PostCard } from '@/app/_components';
+import { PostCard } from '@/components/posts';
 import { Post } from '@prisma/client';
 
 type Props = {
@@ -12,12 +12,12 @@ type Props = {
 export const PostList = ({ perPage, posts, total }: Props) => {
 
   return (<>
-    <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+    <div className="grid gap-3 sm:grid-cols-2">
       {posts.map(post => (
         <PostCard key={post.id} post={post} />
       ))}
     </div>
 
-    <PaginationBasic perPage={perPage} totalPages={total} />
+    <PaginationBasic perPage={perPage} total={total} />
   </>);
 };

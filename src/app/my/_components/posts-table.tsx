@@ -43,6 +43,6 @@ export const PostsTable = ({perPage, posts, total}: {perPage: number, posts: Pos
       </TableBody>
     </Table>
 
-    <PaginationBasic perPage={perPage} totalPages={total} />
+    <PaginationBasic perPage={perPage} total={total} />
   </>);
 };

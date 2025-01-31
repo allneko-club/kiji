@@ -1,19 +1,25 @@
 import { prisma } from '@/lib/prisma';
 import { BaseSearch } from '@/types/requests';
 
-type Props = {
+type GetPostsParams = {
   authorId?: string;
   published?: boolean;
   sort?: string;
   title?: string;
+  tagName?: string;
 } & BaseSearch
 
-export const getPosts = async (params: Props) => {
+export const getPosts = async (params: GetPostsParams) => {
   const where = {
     authorId: params.authorId,
     published: params.published,
     title: {
       contains: params.title,
+    },
+    tags: {
+      some: {
+        name: params.tagName
+      }
     },
   }
 
@@ -32,8 +38,7 @@ export const getPosts = async (params: Props) => {
     prisma.post.count({where}),
   ])
 
-  const totalPages = Math.ceil(total / params.perPage);
-  return {posts, total, totalPages}
+  return {posts, total}
 }
 
 // todo 非公開の投稿は投稿したユーザーのみ取得可能にするために、公開済みのみに絞り込むためのフラグ用引数を追加する

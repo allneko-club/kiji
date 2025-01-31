@@ -17,6 +17,15 @@ export const paths = {
   post: {
     getHref: (id: string) => `/posts/${id}`,
   },
+  tags: {
+    getHref: () => '/tags',
+    tag: {
+      getHref: (name: string) => `/tags/${name}`,
+    }
+  },
+  search: {
+    getHref: () => '/search',
+  },
   auth: {
     register: {
       getHref: (redirectTo?: string | null | undefined) =>
