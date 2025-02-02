@@ -1,5 +1,5 @@
 'use client';
-import { Category } from '@prisma/client';
+import { Category, Tag } from '@prisma/client';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Switch } from '@/components/ui/switch';
@@ -16,6 +16,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
+import {Checkbox} from '@/components/ui/checkbox';
 
 type Props = {
   initialState: {
@@ -24,11 +25,13 @@ type Props = {
     content: string;
     published: string;
     categoryId: string;
+    tagIds: number[];
   };
   categories: Category[];
+  tags: Tag[];
 }
 
-export const PostForm = ({ initialState, categories }: Props) => {
+export const PostForm = ({ initialState, categories, tags }: Props) => {
   const [state, action, isPending] = useActionState(
     savePost,
     {
@@ -88,6 +91,23 @@ export const PostForm = ({ initialState, categories }: Props) => {
             </SelectContent>
           </Select>
           <FormMessage>{state?.errors?.categoryId}</FormMessage>
+        </FormItem>
+
+        <FormItem>
+          <div className="flex items-center space-x-2">
+            <FormLabel htmlFor="tags">タグ</FormLabel>
+            {tags.map(tag => (
+              <div key={tag.id}>
+                <FormLabel>{tag.name}</FormLabel>
+                <Checkbox
+                  name="tagIds"
+                  value={tag.id}
+                  defaultChecked={state.tagIds.includes(tag.id)}
+                />
+              </div>
+            ))}
+          </div>
+          <FormMessage>{state?.errors.published}</FormMessage>
         </FormItem>
       </div>
     </form>

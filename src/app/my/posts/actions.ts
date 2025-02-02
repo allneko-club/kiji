@@ -7,10 +7,11 @@ import { auth } from '@/auth';
 import { getPost } from '@/models/post';
 
 const createPostInputSchema = z.object({
-  title: z.string().min(1, 'タイトルを入力してください。'),
+  title: z.string({ required_error: 'タイトルを入力してください。' }),
   content: z.string().max(5000, '5000文字以内にしてください。'),
   published: z.boolean(),
   categoryId: z.number().min(1, 'カテゴリーIDが不正です。'),
+  tagIds: z.array(z.number()),
 });
 
 type PrevState = {
@@ -19,6 +20,7 @@ type PrevState = {
   content: string;
   published: string;
   categoryId: string;
+  tagIds: number[];
   message: string;
   errors?: {
     title?: string;
@@ -40,16 +42,20 @@ export async function savePost(prevState: PrevState, formData: FormData) {
   const content = formData.get('content') as string;
   const published = formData.get('published') as string;
   const categoryId = formData.get('categoryId') as string;
-  console.log("categoryId", formData)
+  const strTagIds = formData.getAll('tagIds') as string[];
+  const tagIds = strTagIds.map(id => Number(id));
+
   const result = createPostInputSchema.safeParse({
     title: title,
     content: content,
     published: published === "on",
     categoryId: Number(categoryId),
+    tagIds: tagIds,
   });
 
   if (!result.success && result.error) {
     const formatted = result.error.format();
+    console.log("formatted",formatted.tagIds?._errors)
 
     return {
       id: id,
@@ -57,6 +63,7 @@ export async function savePost(prevState: PrevState, formData: FormData) {
       content: content,
       published: published,
       categoryId: categoryId,
+      tagIds: tagIds,
       message: '',
       errors: {
         title: formatted.title?._errors[0],
@@ -67,19 +74,43 @@ export async function savePost(prevState: PrevState, formData: FormData) {
     };
   }
 
+  const saveData = {
+    title: result.data?.title,
+      content: result.data?.content,
+    published: result.data?.published,
+    categoryId: result.data?.categoryId,
+    tags: {
+      // 存在しないタグIDを指定した場合は例外がスローされる
+      connect: result.data?.tagIds.map(id => {
+        return {id}
+      }),
+    },
+    authorId: session.user.id,
+  }
+
+  // todo 作成、更新エラー処理
   if(id){
     const post = await getPost(id);
     if(!post){
       redirect(paths.my.getHref());
     }
-
-    await prisma.post.update({
-      where: { id: id },
-      data: { ...result.data, authorId: post.authorId } }
-    );
+    await prisma.$transaction([
+      // 現在のタグを全て削除
+      prisma.post.update({
+        where: { id: id },
+        data: {
+          tags:{
+            deleteMany: {}
+          }
+        }
+      }),
+      prisma.post.update({
+        where: { id: id },
+        data: saveData
+      }),
+    ])
   }else{
-    // todo 作成エラー処理
-    await prisma.post.create({ data: { ...result.data, authorId: session.user.id } });
+    await prisma.post.create({ data: saveData });
   }
 
   return {
@@ -88,6 +119,7 @@ export async function savePost(prevState: PrevState, formData: FormData) {
     content: content,
     published: published,
     categoryId: categoryId,
+    tagIds: tagIds,
     message: '保存しました。',
     errors: {title: '', content: '', published: '', categoryId: ''}
   }

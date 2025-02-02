@@ -6,6 +6,7 @@ async function main() {
   // Create Category
   await prisma.category.create({
     data: {
+      slug: 'uncategorized',
       name: 'Uncategorized',
     },
   })

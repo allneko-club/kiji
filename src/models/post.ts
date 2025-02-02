@@ -35,7 +35,7 @@ export const getPosts = async (params: GetPostsParams) => {
 }
 
 type GetPostsByTagParams = {
-  tagName?: string;
+  slug?: string;
   published?: boolean;
 } & BaseSearch
 
@@ -44,7 +44,7 @@ export const getPostsByTag = async (params: GetPostsByTagParams) => {
     published: params.published,
     tags: {
       some: {
-        name: params.tagName
+        slug: params.slug
       }
     },
   }

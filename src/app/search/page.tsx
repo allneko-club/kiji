@@ -20,7 +20,7 @@ export default async function Page(props: {
   const query = searchParams?.query;
   const params = { perPage: POST_LIMIT, page, title: query, published: true }
   const {posts, total} = await getPosts(params)
-  const {tags} = await getTags()
+  const tags = await getTags()
 
   return (<>
     <div className="py-4">

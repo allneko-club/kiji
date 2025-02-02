@@ -25,7 +25,7 @@ export default async function Page({ params }: Props) {
   if (!post) {
     notFound()
   }
-  console.log(post)
+
   return (
     <PostDetail post={post} />
   );

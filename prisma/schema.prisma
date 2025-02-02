@@ -21,8 +21,7 @@ model User {
   updatedAt DateTime  @updatedAt
   createdAt DateTime  @default(now())
   posts     Post[]
-  Comment   Comment[]
-  Comment   Comment[]
+  Comments   Comment[]
 }
 
 model Post {
@@ -38,11 +37,13 @@ model Post {
   updatedAt  DateTime @updatedAt
   createdAt  DateTime @default(now())
   tags       Tag[]
+  Comments   Comment[]
 }
 
 model Category {
   id          Int      @id @default(autoincrement())
-  name        String   @unique
+  slug        String   @unique
+  name        String   @default("")
   description String   @default("")
   image       String   @default("")
   updatedAt   DateTime @updatedAt
@@ -52,7 +53,8 @@ model Category {
 
 model Tag {
   id          Int      @id @default(autoincrement())
-  name        String   @unique
+  slug        String   @unique
+  name        String   @default("")
   description String   @default("")
   image       String   @default("")
   updatedAt   DateTime @updatedAt
@@ -61,12 +63,12 @@ model Tag {
 }
 
 model Comment {
-  id        String   @id @default(cuid())
+  id        Int      @id @default(autoincrement())
   body      String
-  authorId  String
-  author    User     @relation(fields: [authorId], references: [id])
-  PostId    String
-  post      User     @relation(fields: [PostId], references: [id])
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+  postId    String
+  post      Post     @relation(fields: [postId], references: [id])
   updatedAt DateTime @updatedAt
   createdAt DateTime @default(now())
 }
