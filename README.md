@@ -1,38 +1,58 @@
-# todo-react
+# Kiji
 
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+Next.jsで作ったCMSアプリ（試作）
 
-## Getting Started
 
-First, run the development server:
+## 特徴
+* Next.jsのApp Routerを使用
+* ログイン機能
+* マイページ機能
+* サーバーアクションを使ったデータの取得や追加
+* Prismaを使用
+* ダークモードあり
+* shadcn/ui, tailwind CSSを使用
+* Storybook
+* Vitestを使ったユニットテスト
+* Playwrightを使ったE2Eテスト
+* huskyとlint-stagedを使い、コミット前にリントを実行
+* フォームの検証にzodを使用
 
+## 開発環境構築
+
+環境構築
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm install
+npx prisma migrate dev --name init
+npx prisma db seed
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+next.jsを起動
+```bash
+npm run dev
+```
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+[http://localhost:3000](http://localhost:3000) を開きます。
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+[登録ページ](http://localhost:3000/auth/register)でユーザー登録をします。
 
-## Learn More
+ログイン後、マイページから投稿の追加などができます。
 
-To learn more about Next.js, take a look at the following resources:
+タグやカテゴリーを編集する機能は無いためDBに直接データを追加する必要があります。
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+prisma studioを使うと、データの追加や編集が簡単にできます。
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
 
-## Deploy on Vercel
+## スクリプト
+```bash
+# ユニットテスト
+npm run test
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+# E2Eテスト
+npm run e2e
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+# Storybookを起動
+npm run storybook
+
+# prisma studioを起動
+npm run prisma-web
+```
