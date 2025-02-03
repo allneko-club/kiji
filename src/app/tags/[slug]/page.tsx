@@ -2,6 +2,8 @@ import { PostList } from '@/components/posts';
 import { getPostsByTag } from '@/models/post';
 import * as React from 'react';
 import { POST_LIMIT } from '@/config/consts';
+import { getTag } from '@/models/tag';
+import { notFound } from 'next/navigation';
 
 type Props ={
   params: Promise<{ slug: string }>
@@ -18,11 +20,15 @@ export default async function Page(props: Props) {
   const searchParams = await props.searchParams;
   const page = Number(searchParams?.page) || 1;
   const queryParams = { perPage: POST_LIMIT, page, slug, published: true }
-  // todo タグのデータとタグに関連する投稿を同時に取得
+  const tag = await getTag({ slug })
   const {posts, total} = await getPostsByTag(queryParams)
 
+  if(!tag){
+    return notFound();
+  }
+
   return (<>
-    <h1>{slug}</h1>
+    <h1>{tag.name}</h1>
     <PostList perPage={queryParams.perPage} posts={posts} total={total} />
   </>);
 };

@@ -35,6 +35,9 @@ export const paths = {
       getHref: (redirectTo?: string | null | undefined) =>
         `/auth/login${redirectTo ? `?redirectTo=${encodeURIComponent(redirectTo)}` : ''}`,
     },
+    deleteAccountDone: {
+      getHref: () => '/auth/delete-account-done',
+    },
     resetPassword: {
       getHref: () => '/auth/reset-password',
     },
@@ -56,10 +59,13 @@ export const paths = {
     editPost: {
       getHref: (id: string) => `/my/posts/${id}`,
     },
+    profile: {
+      getHref: () => '/my/profile',
+    },
     settings: {
       getHref: () => '/my/settings',
-      profile: {
-        getHref: () => '/my/settings/profile',
+      deleteAccount: {
+        getHref: () => '/my/settings/delete-account',
       },
     },
   },

@@ -7,3 +7,14 @@ export const getTags = async () => {
     }
   });
 }
+
+type GetTagParams = {
+  slug?: string;
+}
+export const getTag = async (params: GetTagParams) => {
+  return prisma.tag.findUnique({
+    where: {
+      slug: params.slug,
+    },
+  });
+}
