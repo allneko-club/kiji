@@ -22,7 +22,7 @@ export function PostDetail({ post }: Props) {
       </div>
 
       <Author user={post.author} />
-      <div className="p-4 bg-white dark:bg-slate-800 rounded-md">
+      <div className="p-4 bg-white dark:bg-slate-900 rounded-md">
         <p>{post.content}</p>
       </div>
 

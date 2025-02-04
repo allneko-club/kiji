@@ -10,7 +10,7 @@ export function PostCard({ post }: { post: Post }) {
     <article>
       <Link
         href={paths.post.getHref(post.id)}
-        className="flex flex-col items-start gap-2 rounded-lg border p-3 text-left transition-all hover:bg-accent"
+        className="flex flex-col items-start gap-2 rounded-lg border p-3 text-left transition-all bg-white dark:bg-slate-900 hover:bg-accent"
       >
         <h2>{post.title}</h2>
         <span className="text-sm text-muted-foreground">
