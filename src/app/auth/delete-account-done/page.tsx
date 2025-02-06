@@ -1,6 +1,9 @@
 import Link from 'next/link';
 import { paths } from '@/config/paths';
 import { Button } from '@/components/ui/button';
+import type { Metadata } from 'next';
+
+export const metadata: Metadata = { title: "退会完了" };
 
 export default function Page() {
   return (

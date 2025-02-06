@@ -1,5 +1,8 @@
 import Link from 'next/link';
 import { paths } from '@/config/paths';
+import type { Metadata } from 'next';
+
+export const metadata: Metadata = { title: "プロフィール" };
 
 export default async function Page() {
 

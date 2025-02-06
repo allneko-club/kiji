@@ -3,6 +3,9 @@ import Sidebar from '@/app/my/_components/sidebar';
 import { auth } from '@/auth';
 import { redirect } from 'next/navigation';
 import { paths } from '@/config/paths';
+import type { Metadata } from 'next';
+
+export const metadata: Metadata = { title: "マイページ" };
 
 export default async function Layout({ children }: { children: ReactNode }) {
   const session = await auth()

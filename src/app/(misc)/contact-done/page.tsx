@@ -1,3 +1,7 @@
+import type { Metadata } from 'next';
+
+export const metadata: Metadata = { title: "お問い合わせ完了" };
+
 export default function Page() {
   return (
     <div className="flex justify-center">

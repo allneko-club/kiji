@@ -1,6 +1,8 @@
-'use client'
 import { Button } from '@/components/ui/button';
 import { deleteAccount } from '@/app/my/settings/delete-account/actions';
+import type { Metadata } from 'next';
+
+export const metadata: Metadata = { title: "アカウント削除" };
 
 export default function Page() {
 

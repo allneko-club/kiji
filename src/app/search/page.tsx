@@ -6,6 +6,9 @@ import { getTags } from '@/models/tag';
 import TagBadge from '@/components/tag-badge';
 import * as React from 'react';
 import { POST_LIMIT } from '@/config/consts';
+import type { Metadata } from 'next';
+
+export const metadata: Metadata = { title: "記事の検索" };
 
 type SearchParams ={
   page?: string;

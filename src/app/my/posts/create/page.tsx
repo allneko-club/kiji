@@ -4,7 +4,7 @@ import { getCategories } from '@/models/category';
 import { getTags } from '@/models/tag';
 
 
-export const metadata: Metadata = {title: "記事作成"};
+export const metadata: Metadata = {title: "記事の作成"};
 
 export default async function Page() {
   const categories = await getCategories()
@@ -15,7 +15,7 @@ export default async function Page() {
     content: '',
     published: '',
     categoryId: '1',
-    tags: [],
+    tagIds: [],
   }
 
   return (

@@ -4,10 +4,13 @@ import { notFound } from 'next/navigation';
 import { PostForm } from '@/app/my/posts/_components/post-form';
 import { getCategories } from '@/models/category';
 import { getTags } from '@/models/tag';
+import type { Metadata } from 'next';
 
 type Props = {
   params: Promise<{ id: string }>
 }
+
+export const metadata: Metadata = { title: "記事の編集" };
 
 export default async function Page({ params }: Props) {
   const session = await auth()

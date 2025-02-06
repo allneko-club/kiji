@@ -7,6 +7,9 @@ import SelectLimit from '@/components/select-limit';
 import { getUsers } from '@/models/user';
 import { cleanOrder, cleanRole } from '@/app/users/clean';
 import { BaseSearch } from '@/types/requests';
+import type { Metadata } from 'next';
+
+export const metadata: Metadata = {title: "ユーザー"};
 
 const UserSortItems = {
   'registered_asc': '登録日(昇順)',
