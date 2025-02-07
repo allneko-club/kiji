@@ -1,18 +1,10 @@
 'use server';
 import { redirect } from 'next/navigation';
-import { z } from 'zod';
 import { paths } from '@/config/paths';
 import { prisma } from '@/lib/prisma';
 import { auth } from '@/auth';
 import { getPost } from '@/models/post';
-
-const createPostInputSchema = z.object({
-  title: z.string({ required_error: 'タイトルを入力してください。' }),
-  content: z.string().max(5000, '5000文字以内にしてください。'),
-  published: z.boolean(),
-  categoryId: z.number().min(1, 'カテゴリーIDが不正です。'),
-  tagIds: z.array(z.number()),
-});
+import { createPostInputSchema } from '@/app/my/posts/schema';
 
 type PrevState = {
   id: string;

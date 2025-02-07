@@ -1,30 +1,17 @@
 'use server';
 import { redirect } from 'next/navigation';
-import { z } from 'zod';
 import { paths } from '@/config/paths';
+import { parseWithZod } from '@conform-to/zod';
+import { resetPasswordInputSchema } from '@/app/auth/reset-password/schema';
 
-const resetPasswordInputSchema = z
-  .object({
-    email: z.string().min(1, 'メールアドレスを入力してください。').email('メールアドレスの形式が間違っています。'),
+export async function resetPassword(prevState: unknown, formData: FormData) {
+  const submission = parseWithZod(formData, {
+    schema: resetPasswordInputSchema,
   });
 
-type PrevState = {
-  email: string;
-  errors?: { email?: string; };
-}
-
-export async function resetPassword(prevState: PrevState, formData: FormData) {
-  const email = formData.get('email') as string;
-  const result = resetPasswordInputSchema.safeParse({
-    email: email,
-  });
-
-  if (!result.success && result.error) {
-    const formatted = result.error.format();
-    return {
-      email: email,
-      errors: { email: formatted.email?._errors[0] },
-    };
+  if (submission.status !== 'success') {
+    return submission.reply({ formErrors: ['入力に誤りがあります。'] });
   }
+
   redirect(paths.auth.resetPasswordDone.getHref());
 }
