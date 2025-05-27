@@ -2,7 +2,7 @@
 
 import * as React from "react"
 import { MoonIcon, SunIcon } from "lucide-react"
-import { useTheme } from "next-themes"
+import { useState } from 'react';
 
 import { Button } from "@/components/ui/button"
 import {
@@ -13,7 +13,8 @@ import {
 } from "@/components/ui/dropdown-menu"
 
 export function ModeToggle(){
-  const { setTheme } = useTheme()
+  // todo mui版のテーマ切り替えに変更する
+  const [theme, setTheme] = useState('light')
 
   return (
     <DropdownMenu>
@@ -21,7 +22,7 @@ export function ModeToggle(){
         <Button variant="outline" size="icon">
           <SunIcon className="hidden [html.light_&]:block" />
           <MoonIcon className="hidden [html.dark_&]:block" />
-          <span className="sr-only">Toggle theme</span>
+          <span className="sr-only">Toggle theme: {theme}</span>
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
