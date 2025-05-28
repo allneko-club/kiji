@@ -1,15 +1,10 @@
 'use client';
-import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectLabel,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { cleanPerPage } from '@/lib/query-params';
+import FormControl from '@mui/material/FormControl';
+import InputLabel from '@mui/material/InputLabel';
+import Select from '@mui/material/Select';
+import MenuItem from '@mui/material/MenuItem';
 
 type Props = {
   limitList: number[],
@@ -34,20 +29,21 @@ export default function SelectLimit({limitList}: Props) {
   }
 
   return (
-    <Select onValueChange={handleChange} defaultValue={defaultValue.toString()}>
-      <SelectTrigger id="perPage" aria-label="perPage">
-        <SelectValue />
-      </SelectTrigger>
-      <SelectContent>
-        <SelectGroup>
-          <SelectLabel>表示件数</SelectLabel>
-          {limitList.map((item) => (
-            <SelectItem key={item} value={item.toString()}>
-              {item}
-            </SelectItem>
-          ))}
-        </SelectGroup>
-      </SelectContent>
+  <FormControl fullWidth>
+    <InputLabel>表示件数</InputLabel>
+    <Select
+      labelId="perPage"
+      id="perPage"
+      defaultValue={defaultValue.toString()}
+      label="perPage"
+      onChange={e => handleChange(e.target.value)}
+    >
+      {limitList.map((item) => (
+        <MenuItem key={item} value={item.toString()}>
+          {item}
+        </MenuItem>
+      ))}
     </Select>
+  </FormControl>
   )
 }

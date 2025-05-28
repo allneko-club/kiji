@@ -1,7 +1,7 @@
 'use client'
 import * as React from "react"
 import { User } from '@prisma/client';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { Avatar } from '@mui/material';
 
 type Props = {
   user: User;
@@ -10,11 +10,8 @@ type Props = {
 export function Author({ user }: Props) {
 
   return (
-    <div className="flex space-x-2 my-4">
-        <Avatar>
-          <AvatarImage src={user.image ?? ""} />
-          <AvatarFallback>{user.name}</AvatarFallback>
-        </Avatar>
+    <div>
+      <Avatar alt={user.name} src={user.image}>{user.name}</Avatar>
       <div>{user.name}</div>
     </div>
   )

@@ -1,12 +1,14 @@
 'use client';
 import { useActionState } from 'react';
 import { contact } from '@/app/(misc)/contact/actions';
-import { Button } from '@/components/ui/button';
-import { FormItem, FormLabel, FormMessage } from '@/components/form';
-import { Input } from '@/components/ui/input';
+import { FormItem, FormMessage } from '@/components/form';
 import { useForm } from '@conform-to/react';
 import { parseWithZod } from '@conform-to/zod';
 import { contactInputSchema } from '@/app/(misc)/contact/schema';
+import Typography from '@mui/material/Typography';
+import * as React from 'react';
+import Button from '@mui/material/Button';
+import TextField from '@mui/material/TextField';
 
 export default function ContactForm() {
   const [lastResult, submitAction, isPending] = useActionState(contact, undefined);
@@ -18,25 +20,36 @@ export default function ContactForm() {
   });
 
   return (
-    <div className="w-full max-w-md">
-      <h1 className="text-2xl">お問い合わせ</h1>
-      <p>以下のフォームに入力してください。</p>
+    <div>
+      <Typography component="h1" variant="h3">お問い合わせ</Typography>
+      <Typography>以下のフォームに入力してください。</Typography>
 
-      <form id={form.id} className="grid gap-4 py-6" action={submitAction}>
+      <form id={form.id} action={submitAction}>
         <FormMessage>{form.errors}</FormMessage>
         <FormItem>
-          <FormLabel htmlFor="email">メールアドレス</FormLabel>
-          <Input id="email" name={fields.email.name} />
+          <TextField
+            id="email"
+            required
+            label="メールアドレス"
+            variant="outlined"
+            name={fields.email.name}
+          />
           <FormMessage>{fields.email.errors}</FormMessage>
         </FormItem>
 
         <FormItem>
-          <FormLabel htmlFor="content">内容</FormLabel>
-          <Input id="content" name={fields.content.name} />
+          <TextField
+            id="content"
+            required
+            label="内容"
+            variant="outlined"
+            multiline
+            rows={4}
+            name={fields.content.name}
+          />
           <FormMessage>{fields.content.errors}</FormMessage>
         </FormItem>
-
-        <Button loading={isPending}>送信</Button>
+        <Button type="submit" variant="contained" loading={isPending}>送信</Button>
       </form>
     </div>
   );

@@ -1,22 +1,18 @@
 'use client';
 import { Category, Tag } from '@prisma/client';
-import { Input } from '@/components/ui/input';
-import { Textarea } from '@/components/ui/textarea';
-import { Switch } from '@/components/ui/switch';
-import { Button } from '@/components/ui/button';
 import { useActionState, useEffect } from 'react';
 import { savePost } from '@/app/my/posts/actions';
-import { FormItem, FormLabel, FormMessage } from '@/components/form';
+import { FormItem, FormMessage } from '@/components/form';
+import FormLabel from '@mui/material/FormLabel';
 import { toast } from 'react-toastify';
-import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select';
-import {Checkbox} from '@/components/ui/checkbox';
+import * as React from 'react';
+import Button from '@mui/material/Button';
+import Checkbox from '@mui/material/Checkbox';
+import TextField from '@mui/material/TextField';
+import { Switch } from '@mui/material';
+import InputLabel from '@mui/material/InputLabel';
+import Select from '@mui/material/Select';
+import MenuItem from '@mui/material/MenuItem';
 
 type Props = {
   initialState: {
@@ -49,25 +45,37 @@ export const PostForm = ({ initialState, categories, tags }: Props) => {
 
   return (
     <form action={action}>
-      <div className="py-2">
-        <Button loading={isPending}>{isPending ? '保存中...' : '保存'}</Button>
+      <div>
+        <Button type="submit" variant="contained" loading={isPending}>保存</Button>
       </div>
 
-      <div className="grid gap-4">
+      <div>
         <FormItem>
-          <FormLabel htmlFor="title">タイトル</FormLabel>
-          <Input id="title" name="title" defaultValue={state.title} />
+          <TextField
+            id="title"
+            name="title"
+            required
+            label="タイトル"
+            variant="outlined"
+            defaultValue={state.title}
+          />
           <FormMessage>{state?.errors.title}</FormMessage>
         </FormItem>
 
         <FormItem>
-          <FormLabel htmlFor="content">本文</FormLabel>
-          <Textarea id="content" name="content" defaultValue={state.content} />
+          <TextField
+            id="content"
+            name="content"
+            label="本文"
+            multiline
+            maxRows={4}
+            defaultValue={state.content}
+          />
           <FormMessage>{state?.errors.content}</FormMessage>
         </FormItem>
 
         <FormItem>
-          <div className="flex items-center space-x-2">
+          <div>
             <FormLabel htmlFor="published">公開</FormLabel>
             <Switch id="published" name="published" />
           </div>
@@ -75,26 +83,24 @@ export const PostForm = ({ initialState, categories, tags }: Props) => {
         </FormItem>
 
         <FormItem>
-          <FormLabel htmlFor="categoryId">カテゴリー</FormLabel>
-          <Select name="categoryId" defaultValue={state.categoryId}>
-            <SelectTrigger id="categoryId" aria-label="categoryId">
-              <SelectValue />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectGroup>
-                {categories.map((item) => (
-                  <SelectItem key={item.id} value={item.id.toString()}>
-                    {item.name}
-                  </SelectItem>
-                ))}
-              </SelectGroup>
-            </SelectContent>
+          <InputLabel>カテゴリー</InputLabel>
+          <Select
+            labelId="categoryId"
+            id="categoryId"
+            defaultValue={state.categoryId}
+            label="categoryId"
+          >
+            {categories.map((item) => (
+              <MenuItem key={item.id} value={item.id.toString()}>
+                {item.name}
+              </MenuItem>
+            ))}
           </Select>
           <FormMessage>{state?.errors?.categoryId}</FormMessage>
         </FormItem>
 
         <FormItem>
-          <div className="flex items-center space-x-2">
+          <div>
             <FormLabel htmlFor="tags">タグ</FormLabel>
             {tags.map(tag => (
               <div key={tag.id}>

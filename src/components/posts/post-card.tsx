@@ -1,25 +1,129 @@
+'use client'
 import * as React from 'react';
-import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { paths } from '@/config/paths';
 import { getFormattedDateTimeFromObj } from '@/lib/datetime';
 import { Post } from '@prisma/client';
+import { styled } from '@mui/material/styles';
+import Typography from '@mui/material/Typography';
+import Box from '@mui/material/Box';
+import AvatarGroup from '@mui/material/AvatarGroup';
+import Avatar from '@mui/material/Avatar';
+import Grid from '@mui/material/Grid';
+import CardMedia from '@mui/material/CardMedia';
+import Card from '@mui/material/Card';
+import CardContent from '@mui/material/CardContent';
+
+
+const StyledCard = styled(Card)(({ theme }) => ({
+  display: 'flex',
+  flexDirection: 'column',
+  padding: 0,
+  height: '100%',
+  backgroundColor: (theme.vars || theme).palette.background.paper,
+  '&:hover': {
+    backgroundColor: 'transparent',
+    cursor: 'pointer',
+  },
+  '&:focus-visible': {
+    outline: '3px solid',
+    outlineColor: 'hsla(210, 98%, 48%, 0.5)',
+    outlineOffset: '2px',
+  },
+}));
+
+const StyledCardContent = styled(CardContent)({
+  display: 'flex',
+  flexDirection: 'column',
+  gap: 4,
+  padding: 16,
+  flexGrow: 1,
+  '&:last-child': {
+    paddingBottom: 16,
+  },
+});
+
+const StyledTypography = styled(Typography)({
+  display: '-webkit-box',
+  WebkitBoxOrient: 'vertical',
+  WebkitLineClamp: 2,
+  overflow: 'hidden',
+  textOverflow: 'ellipsis',
+});
+
+function Author({ author, created }: { author: { name: string; avatar: string }, created: string }) {
+  return (
+    <Box
+      sx={{
+        display: 'flex',
+        flexDirection: 'row',
+        gap: 2,
+        alignItems: 'center',
+        justifyContent: 'space-between',
+      }}
+    >
+      <Box
+        sx={{ display: 'flex', flexDirection: 'row', gap: 1, alignItems: 'center' }}
+      >
+        <AvatarGroup max={3}>
+          <Avatar
+            alt={author.name}
+            src={author.avatar}
+            sx={{ width: 24, height: 24 }}
+          />
+        </AvatarGroup>
+        <Typography variant="caption">{author.name}</Typography>
+      </Box>
+      <Typography variant="caption">{created}</Typography>
+    </Box>
+  );
+}
+
 
 export function PostCard({ post }: { post: Post }) {
+  const router = useRouter()
+  const [focusedCardIndex, setFocusedCardIndex] = React.useState<string | null>(
+    null,
+  );
+  const handleFocus = (index: string) => setFocusedCardIndex(index);
+  const handleBlur = () => setFocusedCardIndex(null);
 
   return (
-    <article>
-      <Link
-        href={paths.post.getHref(post.id)}
-        className="flex flex-col items-start gap-2 rounded-lg border p-3 text-left transition-all bg-white dark:bg-slate-900 hover:bg-accent"
+    <Grid size={{ xs: 12, sm: 6 }}>
+      <StyledCard
+        variant="outlined"
+        onFocus={() => handleFocus(post.id)}
+        onBlur={handleBlur}
+        tabIndex={0}
+        className={focusedCardIndex === post.id ? 'Mui-focused' : ''}
+        onClick={() => router.push(paths.posts.detail.getHref(post.id))}
       >
-        <h2>{post.title}</h2>
-        <span className="text-sm text-muted-foreground">
-          {getFormattedDateTimeFromObj(post.createdAt)}
-        </span>
-        <p>
-          {post.content}
-        </p>
-      </Link>
-    </article>
+        <CardMedia
+          component="img"
+          alt="green iguana"
+          image='https://picsum.photos/800/450?random=1'
+          sx={{
+            aspectRatio: '16 / 9',
+            borderBottom: '1px solid',
+            borderColor: 'divider',
+          }}
+        />
+        <StyledCardContent>
+          <Typography gutterBottom variant="caption" component="div">
+            タグ
+          </Typography>
+          <Typography gutterBottom variant="h6" component="div">
+            {post.title}
+          </Typography>
+          <StyledTypography variant="body2" color="text.secondary" gutterBottom>
+            {post.content}
+          </StyledTypography>
+        </StyledCardContent>
+        <Author
+          author={{name: 'Cindy Baker', avatar: '/static/images/avatar/3.jpg' }}
+          created={getFormattedDateTimeFromObj(post.createdAt)}
+        />
+      </StyledCard>
+    </Grid>
   );
 }

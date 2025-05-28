@@ -1,13 +1,14 @@
 'use client';
-import { Button } from '@/components/ui/button';
 import { resetPassword } from '@/app/auth/reset-password/actions';
 import { useActionState } from 'react';
 import { FormItem, FormMessage } from '@/components/form';
-import { Label } from '@/components/ui/label';
-import { Input } from '@/components/ui/input';
 import { useForm } from '@conform-to/react';
 import { parseWithZod } from '@conform-to/zod';
 import { resetPasswordInputSchema } from '@/app/auth/reset-password/schema';
+import Typography from '@mui/material/Typography';
+import Button from '@mui/material/Button';
+import * as React from 'react';
+import TextField from '@mui/material/TextField';
 
 export default function ResetPasswordForm() {
   const [lastResult, submitAction, isPending] = useActionState(resetPassword, undefined);
@@ -19,18 +20,23 @@ export default function ResetPasswordForm() {
   });
 
   return (
-    <div className="w-full max-w-md">
-      <h1 className="text-2xl">パスワードリセット</h1>
-      <p>メールアドレスを入力してください。</p>
+    <div>
+      <Typography component="h1" variant="h3">パスワードリセット</Typography>
+      <Typography>メールアドレスを入力してください</Typography>
 
-      <form id={form.id} className="grid gap-4 py-6" action={submitAction}>
+      <form id={form.id} action={submitAction}>
         <FormItem>
-          <Label htmlFor="email">メールアドレス</Label>
-          <Input id="email" name={fields.email.name} />
+          <TextField
+            id="email"
+            required
+            label="メールアドレス"
+            variant="outlined"
+            name={fields.email.name}
+          />
           <FormMessage>{fields.email.errors}</FormMessage>
         </FormItem>
 
-        <Button loading={isPending}>送信</Button>
+        <Button type="submit" variant="contained" loading={isPending}>送信</Button>
       </form>
     </div>
   );

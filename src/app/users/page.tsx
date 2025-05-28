@@ -8,6 +8,7 @@ import { getUsers } from '@/models/user';
 import { cleanOrder, cleanRole } from '@/app/users/clean';
 import { BaseSearch } from '@/types/requests';
 import type { Metadata } from 'next';
+import Typography from '@mui/material/Typography';
 
 export const metadata: Metadata = {title: "ユーザー"};
 
@@ -55,13 +56,15 @@ export default async function Page(props: {
 
   const {users, total} = await getUsers(params)
 
-  return (<>
-    <h1>ユーザー</h1>
+  return (
+    <>
+      <Typography component="h1" variant="h3">ユーザー</Typography>
       <UsersFilter defaultValues={defaultValues} />
-      <div className="p-3 grid grid-cols-2 gap-4">
+      <div>
         <SelectSort selectItems={UserSortItems} />
         <SelectLimit limitList={USERS_LIMIT_LIST}/>
       </div>
       <UsersTable perPage={params.perPage} users={users} total={total} />
-  </>);
+    </>
+  );
 };

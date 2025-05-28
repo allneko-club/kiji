@@ -12,7 +12,7 @@ const compat = new FlatCompat({
 export default [
   {files: ["**/*.{js,mjs,cjs,ts,jsx,tsx}"]},
   {ignores: ['.lintstagedrc.js', 'tailwind.config.ts']},
-  {languageOptions: { globals: globals.browser }},
+  {languageOptions: {globals: globals.browser}},
   pluginJs.configs.recommended,
   ...tseslint.configs.recommended,
   ...compat.config({

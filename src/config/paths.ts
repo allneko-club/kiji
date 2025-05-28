@@ -14,17 +14,23 @@ export const paths = {
   contactDone: {
     getHref: () => '/contact-done',
   },
-  post: {
-    getHref: (id: string) => `/posts/${id}`,
+  posts:{
+    getHref: () => '/posts',
+    detail: {
+      getHref: (id: string) => `/posts/${id}`,
+    },
   },
   tags: {
     getHref: () => '/tags',
-    tag: {
+    detail: {
       getHref: (name: string) => `/tags/${name}`,
     }
   },
-  search: {
-    getHref: () => '/search',
+  users:{
+    getHref: () => '/users',
+    detail: {
+      getHref: (id: string) => `/users/${id}`,
+    },
   },
   auth: {
     register: {
@@ -69,10 +75,4 @@ export const paths = {
       },
     },
   },
-  users:{
-      getHref: () => '/users',
-    user: {
-      getHref: (id: string) => `/users/${id}`,
-    },
-  }
 } as const;

@@ -1,5 +1,6 @@
 'use client'
 import { useEffect } from 'react'
+import Typography from '@mui/material/Typography';
 
 export default function Error({ error, reset }: {
   error: Error & { digest?: string }
@@ -13,7 +14,7 @@ export default function Error({ error, reset }: {
 
   return (
     <div role="alert">
-      <h2>エラーが発生しました :( </h2>
+      <Typography component="h1" variant="h3">エラーが発生しました :(</Typography>
       <button
         onClick={
           // Attempt to recover by trying to re-render the segment

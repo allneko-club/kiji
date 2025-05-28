@@ -1,6 +1,9 @@
-import { clsx, type ClassValue } from "clsx"
-import { twMerge } from "tailwind-merge"
+export const hash = (str: string) => {
+  let hash = 5381,
+    i = str.length;
 
-export function cn(...inputs: ClassValue[]) {
-  return twMerge(clsx(inputs))
-}
+  while (i) {
+    hash = (hash * 33) ^ str.charCodeAt(--i);
+  }
+  return String(hash >>> 0);
+};

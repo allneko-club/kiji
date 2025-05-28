@@ -5,6 +5,7 @@ import { POST_LIMIT } from '@/config/consts';
 import { getTag } from '@/models/tag';
 import { notFound } from 'next/navigation';
 import type { Metadata } from 'next';
+import Typography from '@mui/material/Typography';
 
 export const metadata: Metadata = { title: "タグ" };
 
@@ -40,8 +41,10 @@ export default async function Page(props: Props) {
     return notFound();
   }
 
-  return (<>
-    <h1>{tag.name}</h1>
-    <PostList perPage={queryParams.perPage} posts={posts} total={total} />
-  </>);
+  return (
+    <div>
+      <Typography component="h1" variant="h3">{tag.name}</Typography>
+      <PostList perPage={queryParams.perPage} posts={posts} total={total} />
+    </div>
+  );
 };

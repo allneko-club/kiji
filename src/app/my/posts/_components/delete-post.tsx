@@ -1,16 +1,16 @@
 "use client"
-import { useActionState } from 'react';
-import { Trash } from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { deletePost } from '@/app/my/posts/actions';
-import {
-  Dialog, DialogClose,
-  DialogContent,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle, DialogTrigger,
-} from '@/components/ui/dialog';
+import * as React from 'react';
 import { toast } from 'react-toastify';
+import { useActionState } from 'react';
+import IconButton from '@mui/material/IconButton';
+import DeleteIcon from '@mui/icons-material/Delete';
+import { deletePost } from '@/app/my/posts/actions';
+import Button from '@mui/material/Button';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
 import { useRouter } from 'next/navigation';
 import { paths } from '@/config/paths';
 
@@ -21,37 +21,42 @@ type DeletePostProps = {
 export function DeletePost({ id }: DeletePostProps) {
   const router = useRouter();
   const [, action, isPending] = useActionState(deletePost, null);
+  const [open, setOpen] = React.useState(false);
+  const handleClickOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
 
   return (
-    <Dialog>
-      <DialogTrigger asChild>
-        <Button variant="destructive" size="icon">
-          <Trash/>
-        </Button>
-      </DialogTrigger>
-      <DialogContent className="sm:max-w-[425px]" aria-describedby={undefined}>
+    <div>
+      <IconButton aria-label="delete" onClick={handleClickOpen}>
+        <DeleteIcon />
+      </IconButton>
+      <Dialog
+        open={open}
+        onClose={handleClose}
+        aria-labelledby="alert-delete-post"
+        aria-describedby="alert-delete-post"
+      >
         <form action={(formData) =>{
           action(formData)
+          handleClose()
           toast('削除しました')
           router.push(paths.my.getHref())
         }}>
           <input name="id" hidden defaultValue={id} />
-          <DialogHeader>
-            <DialogTitle>削除確認</DialogTitle>
-          </DialogHeader>
-
-          <p className="py-4">投稿を削除してもよろしいですか？</p>
-
-          <DialogFooter>
-            <DialogClose asChild>
-              <Button>キャンセル</Button>
-            </DialogClose>
-            <Button variant="destructive" loading={isPending}>
-              削除
-            </Button>
-          </DialogFooter>
+          <DialogTitle id="delete-post">
+            削除確認
+          </DialogTitle>
+          <DialogContent>
+            <DialogContentText id="alert-delete-post">
+              投稿を削除してもよろしいですか？
+            </DialogContentText>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={handleClose}>キャンセル</Button>
+            <Button type="submit" color="error" loading={isPending} autoFocus>削除</Button>
+          </DialogActions>
         </form>
-      </DialogContent>
-    </Dialog>
+      </Dialog>
+    </div>
 )
 }

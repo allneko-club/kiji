@@ -1,16 +1,11 @@
 'use client';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
-import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectLabel,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select';
 import { cleanOrderBy, parseSortValue } from '@/lib/query-params';
 import { cleanOrder } from '@/app/users/clean';
+import FormControl from '@mui/material/FormControl';
+import InputLabel from '@mui/material/InputLabel';
+import MenuItem from '@mui/material/MenuItem';
+import Select from '@mui/material/Select';
 
 type Props = {
   selectItems: { [key: string]: string; },
@@ -39,20 +34,21 @@ export default function SelectSort({selectItems}: Props) {
   }
 
   return (
-    <Select onValueChange={handleChange} defaultValue={`${order}_${orderBy}`}>
-      <SelectTrigger id="sort" aria-label="sort">
-        <SelectValue />
-      </SelectTrigger>
-      <SelectContent>
-        <SelectGroup>
-          <SelectLabel>ソート</SelectLabel>
-          {Object.keys(selectItems).map((key) => (
-            <SelectItem key={key} value={key}>
-              {selectItems[key]}
-            </SelectItem>
-          ))}
-        </SelectGroup>
-      </SelectContent>
-    </Select>
+    <FormControl fullWidth>
+      <InputLabel>ソート</InputLabel>
+      <Select
+        labelId="sort"
+        id="sort"
+        defaultValue={`${order}_${orderBy}`}
+        label="sort"
+        onChange={e => handleChange(e.target.value)}
+      >
+        {Object.keys(selectItems).map((key) => (
+          <MenuItem key={key} value={key}>
+            {selectItems[key]}
+          </MenuItem>
+        ))}
+      </Select>
+    </FormControl>
   )
 }

@@ -13,12 +13,10 @@ export default async function Layout({ children }: { children: ReactNode }) {
   if (!session?.user) return redirect(paths.auth.login.getHref());
 
   return (
-  <div className="grid md:grid-cols-5">
-    <Sidebar className="hidden md:block" />
-    <div className="col-span-3 md:col-span-4 md:border-l">
-      <div className="h-full px-4 py-6 md:px-8">
-        {children}
-      </div>
+  <div>
+    <Sidebar/>
+    <div>
+      {children}
     </div>
   </div>
 

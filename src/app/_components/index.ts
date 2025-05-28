@@ -1,1 +1,2 @@
-export * from './search';
+export * from './latest';
+export * from './main-content';

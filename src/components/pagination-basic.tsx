@@ -1,13 +1,6 @@
-import {
-  Pagination,
-  PaginationContent,
-  PaginationItem,
-  PaginationLink,
-  PaginationNext, PaginationNextDisabled,
-  PaginationPrevious, PaginationPreviousDisabled,
-} from '@/components/ui/pagination';
-import { usePathname, useSearchParams } from 'next/navigation';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { cleanPage } from '@/lib/query-params';
+import Pagination from '@mui/material/Pagination';
 
 export interface Props {
   perPage: number;
@@ -16,59 +9,21 @@ export interface Props {
 
 export function PaginationBasic({ perPage, total }:Props) {
   const pathname = usePathname();
+  const router = useRouter()
   const searchParams = useSearchParams();
   const page = cleanPage(searchParams.get('page') || 1);
 
-  const createPageURL = (pageNumber: number | string) => {
+  const handleChange = (pageNumber: number | string) => {
     const params = new URLSearchParams(searchParams);
     params.set('page', pageNumber.toString());
-    return `${pathname}?${params.toString()}`;
+    router.push(`${pathname}?${params.toString()}`);
   };
 
-  const hasPrevPage = 1 < page;
-  const hasNextPage = page * perPage < total;
-
-  if(total === 0){
-    return null;
-  }
-
   return (
-    <Pagination>
-      <PaginationContent>
-        <PaginationItem>
-          {hasPrevPage
-            ? <PaginationPrevious href={createPageURL(page - 1)} />
-            : <PaginationPreviousDisabled />
-          }
-        </PaginationItem>
-        <PaginationItem>
-          {hasPrevPage && (
-            <PaginationLink href={createPageURL(page - 1)}>
-              {page - 1}
-            </PaginationLink>
-          )}
-        </PaginationItem>
-
-        <PaginationItem>
-          <PaginationLink href={createPageURL(page)} isActive>
-            {page}
-          </PaginationLink>
-        </PaginationItem>
-
-        <PaginationItem>
-        {hasNextPage && (
-          <PaginationLink href={createPageURL(page + 1)}>
-            {page + 1}
-          </PaginationLink>
-        )}
-        </PaginationItem>
-        <PaginationItem>
-          {hasNextPage
-            ? <PaginationNext href={createPageURL(page + 1)} />
-            : <PaginationNextDisabled />
-          }
-        </PaginationItem>
-      </PaginationContent>
-    </Pagination>
+    <Pagination
+      count={Math.ceil(total/perPage)}
+      page={page}
+      onChange={() => handleChange(page)}
+    />
   )
 }

@@ -1,11 +1,11 @@
 'use client'
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { PaginationBasic } from '@/components/pagination-basic';
 import { paths } from '@/config/paths';
 import { useRouter } from 'next/navigation';
 import { getFormattedDateTimeFromObj } from '@/lib/datetime';
 import type { User } from '@prisma/client'
 import { getRoleLabel } from '@/config/consts';
+import { Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@mui/material';
 
 type Props = {
   perPage: number;
@@ -17,32 +17,32 @@ export const UsersTable = ({perPage, users, total}: Props) => {
   const router = useRouter()
 
   return (<>
-    <Table>
-      <TableHeader>
-        <TableRow>
-          <TableHead className="w-[100px]">ID</TableHead>
-          <TableHead>名前</TableHead>
-          <TableHead>メールアドレス</TableHead>
-          <TableHead>権限</TableHead>
-          <TableHead className="text-right">登録日時</TableHead>
-        </TableRow>
-      </TableHeader>
-      <TableBody>
-        {users.map(user => (
-          <TableRow
-            key={user.id}
-            className="hover:cursor-pointer"
-            onClick={() => router.push(paths.users.user.getHref(user.id))}
-          >
-            <TableCell className="font-medium">{user.id}</TableCell>
-            <TableCell>{user.name}</TableCell>
-            <TableCell>{user.email}</TableCell>
-            <TableCell>{getRoleLabel(user.role)}</TableCell>
-            <TableCell className="text-right">{getFormattedDateTimeFromObj(user.createdAt)}</TableCell>
+    <TableContainer component={Paper}>
+      <Table sx={{ minWidth: 650 }} aria-label="simple table">
+        <TableHead>
+          <TableRow>
+            <TableCell align="right">名前</TableCell>
+            <TableCell align="right">メールアドレス</TableCell>
+            <TableCell align="right">権限</TableCell>
+            <TableCell align="right">登録日時</TableCell>
           </TableRow>
-        ))}
-      </TableBody>
-    </Table>
+        </TableHead>
+        <TableBody>
+          {users.map((user) => (
+            <TableRow
+              key={user.id}
+              sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+              onClick={() => router.push(paths.users.detail.getHref(user.id))}
+            >
+              <TableCell align="right">{user.name}</TableCell>
+              <TableCell align="right">{user.email}</TableCell>
+              <TableCell align="right">{getRoleLabel(user.role)}</TableCell>
+              <TableCell align="right">{getFormattedDateTimeFromObj(user.createdAt)}</TableCell>
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
+    </TableContainer>
 
     <PaginationBasic perPage={perPage} total={total} />
   </>);
