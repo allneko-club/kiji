@@ -13,7 +13,8 @@ import Drawer from '@mui/material/Drawer';
 import MenuIcon from '@mui/icons-material/Menu';
 import CloseRoundedIcon from '@mui/icons-material/CloseRounded';
 import ModeToggle from './mode-toggle';
-import Sitemark from './sitemark-icon';
+import Logo from './logo';
+import { mainMenu } from '@/config/consts';
 
 const StyledToolbar = styled(Toolbar)(({ theme }) => ({
   display: 'flex',
@@ -45,17 +46,13 @@ export default function Header() {
         <Container maxWidth="lg" disableGutters>
           <StyledToolbar variant="dense" disableGutters>
             <Box sx={{ flexGrow: 1, display: 'flex', alignItems: 'center', px: 0 }}>
-              <Sitemark />
+              <Logo />
               <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
-                <Button variant="text" color="info" size="small">
-                  Posts
-                </Button>
-                <Button variant="text" color="info" size="small">
-                  Users
-                </Button>
-                <Button variant="text" color="info" size="small">
-                  Search
-                </Button>
+                {mainMenu.map((menu) => (
+                  <Button key={menu.label} variant="text" color="info" size="small">
+                    {menu.label}
+                  </Button>
+                ))}
               </Box>
             </Box>
             <Box
@@ -100,9 +97,10 @@ export default function Header() {
                       <CloseRoundedIcon />
                     </IconButton>
                   </Box>
-                  <MenuItem>Posts</MenuItem>
-                  <MenuItem>Users</MenuItem>
-                  <MenuItem>Search</MenuItem>
+                  {mainMenu.map((menu) => (
+                    <MenuItem key={menu.label}>{menu.label}</MenuItem>
+                  ))}
+
                   <Divider sx={{ my: 3 }} />
                   <MenuItem>
                     <Button color="primary" variant="contained" fullWidth>

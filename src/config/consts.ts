@@ -27,7 +27,6 @@ export const POST_LIMIT = 20
 
 // ヘッダーのメニューに表示するリンク
 export const mainMenu = [
-  { href: paths.home.getHref(), label: 'home' },
-  { href: paths.posts.getHref(), label: 'posts' },
-  { href: paths.users.getHref(), label: 'users' },
+  { href: paths.posts.getHref(), label: 'Posts' },
+  { href: paths.users.getHref(), label: 'Users' },
 ];
