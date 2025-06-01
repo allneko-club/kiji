@@ -10,7 +10,7 @@ export default async function Page() {
 
   return (
     <div>
-      <Typography component="h1" variant="h3">タグ</Typography>
+      <Typography variant="h1">タグ</Typography>
       <div>
         {tags.map((tag) =>
           <Chip key={tag.id} label={tag.name} />

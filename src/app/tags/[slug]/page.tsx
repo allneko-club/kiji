@@ -43,7 +43,7 @@ export default async function Page(props: Props) {
 
   return (
     <div>
-      <Typography component="h1" variant="h3">{tag.name}</Typography>
+      <Typography variant="h1">{tag.name}</Typography>
       <PostList perPage={queryParams.perPage} posts={posts} total={total} />
     </div>
   );

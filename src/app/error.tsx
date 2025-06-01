@@ -14,7 +14,7 @@ export default function Error({ error, reset }: {
 
   return (
     <div role="alert">
-      <Typography component="h1" variant="h3">エラーが発生しました :(</Typography>
+      <Typography variant="h1">エラーが発生しました :(</Typography>
       <button
         onClick={
           // Attempt to recover by trying to re-render the segment

@@ -1,6 +1,5 @@
 'use client'
 import NextLink from 'next/link'
-import Link from '@mui/material/Link';
 import CreateIcon from '@mui/icons-material/Create';
 import { PaginationBasic } from '@/components/pagination-basic';
 import { paths } from '@/config/paths';
@@ -8,7 +7,7 @@ import { getFormattedDateTimeFromObj } from '@/lib/datetime';
 import type { Post } from '@prisma/client'
 import { DeletePost } from '@/app/my/posts/_components/delete-post';
 import * as React from 'react';
-import { Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@mui/material';
+import { IconButton, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@mui/material';
 
 export const PostsTable = ({perPage, posts, total}: {perPage: number, posts: Post[], total: number}) => {
 
@@ -30,9 +29,9 @@ export const PostsTable = ({perPage, posts, total}: {perPage: number, posts: Pos
               sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
             >
               <TableCell component="th" scope="row">
-                <Link href={paths.my.editPost.getHref(post.id)} component={NextLink}>
+                <IconButton href={paths.my.editPost.getHref(post.id)} component={NextLink}>
                   <CreateIcon/>
-                </Link>
+                </IconButton>
                 <DeletePost id={post.id} />
               </TableCell>
               <TableCell align="right">{post.title}</TableCell>

@@ -69,7 +69,6 @@ export default function Footer() {
                   id="email-newsletter"
                   hiddenLabel
                   size="small"
-                  variant="outlined"
                   fullWidth
                   aria-label="Enter your email address"
                   placeholder="Your email address"

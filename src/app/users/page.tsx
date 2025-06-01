@@ -58,7 +58,7 @@ export default async function Page(props: {
 
   return (
     <>
-      <Typography component="h1" variant="h3">ユーザー</Typography>
+      <Typography variant="h1">ユーザー</Typography>
       <UsersFilter defaultValues={defaultValues} />
       <div>
         <SelectSort selectItems={UserSortItems} />

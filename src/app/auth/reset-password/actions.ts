@@ -10,7 +10,7 @@ export async function resetPassword(prevState: unknown, formData: FormData) {
   });
 
   if (submission.status !== 'success') {
-    return submission.reply({ formErrors: ['入力に誤りがあります。'] });
+    return submission.reply();
   }
 
   redirect(paths.auth.resetPasswordDone.getHref());

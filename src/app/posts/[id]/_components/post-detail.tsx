@@ -15,7 +15,7 @@ export function PostDetail({ post }: Props) {
 
   return (
     <article>
-      <Typography component="h1" variant="h3">{post.title}</Typography>
+      <Typography variant="h1">{post.title}</Typography>
       <div>{getFormattedDateTimeFromObj(post.createdAt)}</div>
       <div>{post.category.name}</div>
       <div>

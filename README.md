@@ -4,18 +4,18 @@ Next.jsで作ったCMSアプリ（試作）
 
 
 ## 特徴
-* Next.jsのApp Routerを使用
+* Next.jsのApp Router
 * ログイン機能
 * マイページ機能
 * サーバーアクションを使ったデータの取得や追加
-* Prismaを使用
 * ダークモードあり
-* shadcn/ui, tailwind CSSを使用
+* Prisma - ORM
+* MUI - UIフレームワーク
 * Storybook
-* Vitestを使ったユニットテスト
-* Playwrightを使ったE2Eテスト
-* huskyとlint-stagedを使い、コミット前にリントを実行
-* フォームの検証にzodを使用
+* Vitest - ユニットテスト
+* Playwright - E2Eテスト
+* husky & lint-staged - コミット前にリントを実行
+* Zod - フォームの検証
 
 ## 開発環境構築
 

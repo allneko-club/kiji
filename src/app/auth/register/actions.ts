@@ -17,12 +17,12 @@ export async function register(prevState: unknown, formData: FormData) {
   }
 
   await prisma.user.create({
-    data:{
+    data: {
       name: submission.value.name,
       email: submission.value.email,
       role: Role.USER,
       password: hash(submission.value.password),
-    }
+    },
   });
 
   redirect(paths.auth.login.getHref());

@@ -11,7 +11,7 @@ const compat = new FlatCompat({
 /** @type {import('eslint').Linter.Config[]} */
 export default [
   {files: ["**/*.{js,mjs,cjs,ts,jsx,tsx}"]},
-  {ignores: ['.lintstagedrc.js', 'tailwind.config.ts']},
+  {ignores: ['.lintstagedrc.js']},
   {languageOptions: {globals: globals.browser}},
   pluginJs.configs.recommended,
   ...tseslint.configs.recommended,

@@ -1,14 +1,11 @@
 'use client';
-import { resetPassword } from '@/app/auth/reset-password/actions';
+import * as React from 'react';
 import { useActionState } from 'react';
-import { FormItem, FormMessage } from '@/components/form';
-import { useForm } from '@conform-to/react';
+import { resetPassword } from '@/app/auth/reset-password/actions';
+import { FormProvider, useForm } from '@conform-to/react';
 import { parseWithZod } from '@conform-to/zod';
 import { resetPasswordInputSchema } from '@/app/auth/reset-password/schema';
-import Typography from '@mui/material/Typography';
-import Button from '@mui/material/Button';
-import * as React from 'react';
-import TextField from '@mui/material/TextField';
+import { Button, FormControl, FormLabel, Stack, TextField, Typography } from '@mui/material';
 
 export default function ResetPasswordForm() {
   const [lastResult, submitAction, isPending] = useActionState(resetPassword, undefined);
@@ -21,23 +18,32 @@ export default function ResetPasswordForm() {
 
   return (
     <div>
-      <Typography component="h1" variant="h3">パスワードリセット</Typography>
-      <Typography>メールアドレスを入力してください</Typography>
+      <Typography variant="h1">パスワードリセット</Typography>
+      <Typography>メールアドレスを入力してください。</Typography>
 
-      <form id={form.id} action={submitAction}>
-        <FormItem>
-          <TextField
-            id="email"
-            required
-            label="メールアドレス"
-            variant="outlined"
-            name={fields.email.name}
-          />
-          <FormMessage>{fields.email.errors}</FormMessage>
-        </FormItem>
+      <FormProvider context={form.context}>
+        <form
+          id={form.id}
+          onSubmit={form.onSubmit}
+          action={submitAction}
+          noValidate
+        >
+          <Stack spacing={4} marginY={4}>
+            <FormControl required>
+              <FormLabel htmlFor={fields.email.name}>メールアドレス</FormLabel>
+              <TextField
+                id={fields.email.id}
+                name={fields.email.name}
+                defaultValue={fields.email.initialValue}
+                error={!fields.email.valid}
+                helperText={fields.email.errors}
+              />
+            </FormControl>
 
-        <Button type="submit" variant="contained" loading={isPending}>送信</Button>
-      </form>
+            <Button type="submit" variant="contained" loading={isPending}>送信</Button>
+          </Stack>
+        </form>
+      </FormProvider>
     </div>
   );
 };

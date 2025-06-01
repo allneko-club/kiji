@@ -15,6 +15,10 @@ import CloseRoundedIcon from '@mui/icons-material/CloseRounded';
 import ModeToggle from './mode-toggle';
 import Logo from './logo';
 import { mainMenu } from '@/config/consts';
+import NextLink from 'next/link';
+import { paths } from '@/config/paths';
+import { User } from '@prisma/client';
+import { signOut } from "next-auth/react"
 
 const StyledToolbar = styled(Toolbar)(({ theme }) => ({
   display: 'flex',
@@ -29,7 +33,43 @@ const StyledToolbar = styled(Toolbar)(({ theme }) => ({
   padding: '8px 12px',
 }));
 
-export default function Header() {
+ function LogOutButton(){
+   return (
+    <Button color="primary" variant="text" size="small" onClick={() => signOut()}>
+      ログアウト
+    </Button>
+   )
+}
+
+function LogInButton(){
+   return (
+    <Button
+      color="primary"
+      variant="text"
+      size="small"
+      component={NextLink}
+      href={paths.auth.login.getHref()}
+    >
+      ログイン
+    </Button>
+   )
+}
+
+function SignUpButton(){
+   return (
+    <Button
+      color="primary"
+      variant="contained"
+      size="small"
+      component={NextLink}
+      href={paths.auth.login.getHref()}
+    >
+      登録
+    </Button>
+   )
+}
+
+export default function Header({logInUser}: { logInUser: User | undefined }) {
   const [open, setOpen] = React.useState(false);
 
   const toggleDrawer = (newOpen: boolean) => () => {
@@ -41,7 +81,7 @@ export default function Header() {
       <AppBar
         position="static"
         enableColorOnDark
-        sx={{boxShadow: 0, bgcolor: 'transparent' }}
+        sx={{ boxShadow: 0, bgcolor: 'transparent' }}
       >
         <Container maxWidth="lg" disableGutters>
           <StyledToolbar variant="dense" disableGutters>
@@ -49,7 +89,14 @@ export default function Header() {
               <Logo />
               <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
                 {mainMenu.map((menu) => (
-                  <Button key={menu.label} variant="text" color="info" size="small">
+                  <Button
+                    key={menu.label}
+                    variant="text"
+                    color="info"
+                    size="small"
+                    href={menu.href}
+                    component={NextLink}
+                  >
                     {menu.label}
                   </Button>
                 ))}
@@ -62,13 +109,12 @@ export default function Header() {
                 alignItems: 'center',
               }}
             >
-              <Button color="primary" variant="text" size="small">
-                {/*todo /auth/login へのリンクにする*/}
-                Sign in
-              </Button>
-              <Button color="primary" variant="contained" size="small">
-                Sign up
-              </Button>
+              {logInUser ? <LogOutButton/> :
+                <>
+                  <LogInButton/>
+                  <SignUpButton/>
+                </>
+              }
               <ModeToggle />
             </Box>
             <Box sx={{ display: { xs: 'flex', md: 'none' }, gap: 1 }}>
@@ -98,20 +144,36 @@ export default function Header() {
                     </IconButton>
                   </Box>
                   {mainMenu.map((menu) => (
-                    <MenuItem key={menu.label}>{menu.label}</MenuItem>
+                    <MenuItem key={menu.label}>
+                      <Button
+                        key={menu.label}
+                        variant="text"
+                        color="info"
+                        fullWidth
+                        href={menu.href}
+                        component={NextLink}
+                      >
+                        {menu.label}
+                      </Button>
+                    </MenuItem>
                   ))}
 
                   <Divider sx={{ my: 3 }} />
-                  <MenuItem>
-                    <Button color="primary" variant="contained" fullWidth>
-                      Sign up
-                    </Button>
-                  </MenuItem>
-                  <MenuItem>
-                    <Button color="primary" variant="outlined" fullWidth>
-                      Sign in
-                    </Button>
-                  </MenuItem>
+                  {logInUser ?
+                    <MenuItem>
+                      <LogOutButton/>
+                    </MenuItem>
+                  :
+                    <>
+                      <MenuItem>
+                        <SignUpButton/>
+                      </MenuItem>
+                      <MenuItem>
+                        <LogInButton/>
+                      </MenuItem>
+                    </>
+                  }
+
                 </Box>
               </Drawer>
             </Box>

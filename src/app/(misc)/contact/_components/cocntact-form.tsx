@@ -1,14 +1,11 @@
 'use client';
+import * as React from 'react';
 import { useActionState } from 'react';
 import { contact } from '@/app/(misc)/contact/actions';
-import { FormItem, FormMessage } from '@/components/form';
-import { useForm } from '@conform-to/react';
+import { FormProvider, useForm } from '@conform-to/react';
 import { parseWithZod } from '@conform-to/zod';
 import { contactInputSchema } from '@/app/(misc)/contact/schema';
-import Typography from '@mui/material/Typography';
-import * as React from 'react';
-import Button from '@mui/material/Button';
-import TextField from '@mui/material/TextField';
+import { Button, FormControl, FormLabel, Stack, TextField, Typography } from '@mui/material';
 
 export default function ContactForm() {
   const [lastResult, submitAction, isPending] = useActionState(contact, undefined);
@@ -21,36 +18,44 @@ export default function ContactForm() {
 
   return (
     <div>
-      <Typography component="h1" variant="h3">お問い合わせ</Typography>
+      <Typography variant="h1">お問い合わせ</Typography>
       <Typography>以下のフォームに入力してください。</Typography>
 
-      <form id={form.id} action={submitAction}>
-        <FormMessage>{form.errors}</FormMessage>
-        <FormItem>
-          <TextField
-            id="email"
-            required
-            label="メールアドレス"
-            variant="outlined"
-            name={fields.email.name}
-          />
-          <FormMessage>{fields.email.errors}</FormMessage>
-        </FormItem>
+      <FormProvider context={form.context}>
+        <form
+          id={form.id}
+          onSubmit={form.onSubmit}
+          action={submitAction}
+          noValidate
+        >
+          <Stack spacing={4} marginY={4}>
+            <FormControl required>
+              <FormLabel htmlFor={fields.email.name}>メールアドレス</FormLabel>
+              <TextField
+                id={fields.email.id}
+                name={fields.email.name}
+                defaultValue={fields.email.initialValue}
+                error={!fields.email.valid}
+                helperText={fields.email.errors}
+              />
+            </FormControl>
+            <FormControl required>
+              <FormLabel htmlFor={fields.content.name}>内容</FormLabel>
+              <TextField
+                id={fields.content.id}
+                name={fields.content.name}
+                defaultValue={fields.content.initialValue}
+                error={!fields.content.valid}
+                helperText={fields.content.errors}
+                multiline
+                rows={4}
+              />
+            </FormControl>
 
-        <FormItem>
-          <TextField
-            id="content"
-            required
-            label="内容"
-            variant="outlined"
-            multiline
-            rows={4}
-            name={fields.content.name}
-          />
-          <FormMessage>{fields.content.errors}</FormMessage>
-        </FormItem>
-        <Button type="submit" variant="contained" loading={isPending}>送信</Button>
-      </form>
+            <Button type="submit" variant="contained" loading={isPending}>送信</Button>
+          </Stack>
+        </form>
+      </FormProvider>
     </div>
   );
 }

@@ -1,18 +1,20 @@
 'use client';
 import { Category, Tag } from '@prisma/client';
+import * as React from 'react';
 import { useActionState, useEffect } from 'react';
 import { savePost } from '@/app/my/posts/actions';
-import { FormItem, FormMessage } from '@/components/form';
-import FormLabel from '@mui/material/FormLabel';
 import { toast } from 'react-toastify';
-import * as React from 'react';
-import Button from '@mui/material/Button';
-import Checkbox from '@mui/material/Checkbox';
-import TextField from '@mui/material/TextField';
-import { Switch } from '@mui/material';
-import InputLabel from '@mui/material/InputLabel';
-import Select from '@mui/material/Select';
-import MenuItem from '@mui/material/MenuItem';
+import {
+  Button,
+  Checkbox,
+  FormControl,
+  FormLabel,
+  InputLabel,
+  MenuItem,
+  Select,
+  Switch,
+  TextField,
+} from '@mui/material';
 
 type Props = {
   initialState: {
@@ -34,7 +36,7 @@ export const PostForm = ({ initialState, categories, tags }: Props) => {
       ...initialState,
       message: '',
       errors: { title: '', content: '', published: '', categoryId: '' },
-    }
+    },
   );
 
   useEffect(() => {
@@ -50,19 +52,19 @@ export const PostForm = ({ initialState, categories, tags }: Props) => {
       </div>
 
       <div>
-        <FormItem>
+        <FormControl required>
           <TextField
             id="title"
             name="title"
-            required
-            label="タイトル"
-            variant="outlined"
-            defaultValue={state.title}
-          />
-          <FormMessage>{state?.errors.title}</FormMessage>
-        </FormItem>
 
-        <FormItem>
+            label="タイトル"
+            defaultValue={state.title}
+            error={!!state.errors.title}
+            helperText={state?.errors.title}
+          />
+        </FormControl>
+
+        <FormControl>
           <TextField
             id="content"
             name="content"
@@ -70,19 +72,23 @@ export const PostForm = ({ initialState, categories, tags }: Props) => {
             multiline
             maxRows={4}
             defaultValue={state.content}
+            error={!!state.errors.content}
+            helperText={state?.errors.content}
           />
-          <FormMessage>{state?.errors.content}</FormMessage>
-        </FormItem>
+        </FormControl>
 
-        <FormItem>
+        <FormControl>
           <div>
             <FormLabel htmlFor="published">公開</FormLabel>
-            <Switch id="published" name="published" />
+            <Switch
+              id="published"
+              name="published"
+              // helperText={state?.errors.published}
+            />
           </div>
-          <FormMessage>{state?.errors.published}</FormMessage>
-        </FormItem>
+        </FormControl>
 
-        <FormItem>
+        <FormControl>
           <InputLabel>カテゴリー</InputLabel>
           <Select
             labelId="categoryId"
@@ -96,10 +102,11 @@ export const PostForm = ({ initialState, categories, tags }: Props) => {
               </MenuItem>
             ))}
           </Select>
-          <FormMessage>{state?.errors?.categoryId}</FormMessage>
-        </FormItem>
+          {/*todo エラーメッセージ*/}
+          {state?.errors?.categoryId}
+        </FormControl>
 
-        <FormItem>
+        <FormControl>
           <div>
             <FormLabel htmlFor="tags">タグ</FormLabel>
             {tags.map(tag => (
@@ -113,8 +120,9 @@ export const PostForm = ({ initialState, categories, tags }: Props) => {
               </div>
             ))}
           </div>
-          <FormMessage>{state?.errors.published}</FormMessage>
-        </FormItem>
+          {/*todo エラーメッセージ*/}
+          {state?.errors.published}
+        </FormControl>
       </div>
     </form>
   );

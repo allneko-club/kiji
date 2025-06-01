@@ -6,18 +6,9 @@ import CssBaseline from '@mui/material/CssBaseline';
 import Container from '@mui/material/Container';
 import Header from '@/components/layouts/header';
 import Footer from '@/components/layouts/footer';
-
-import { Roboto } from 'next/font/google';
 import { ThemeProvider } from '@mui/material/styles';
 import theme from '@/theme';
-
-const roboto = Roboto({
-  weight: ['300', '400', '500', '700'],
-  subsets: ['latin'],
-  display: 'swap',
-  variable: '--font-roboto',
-});
-
+import { auth } from '@/auth';
 
 export const metadata: Metadata = {
   title: 'Kiji',
@@ -25,14 +16,16 @@ export const metadata: Metadata = {
 };
 
 export default async function RootLayout({ children }: { children: ReactNode }) {
+  const session = await auth()
+
   return (
-    <html lang="ja" suppressHydrationWarning className={roboto.variable}>
+    <html lang="ja" suppressHydrationWarning>
     <body>
     <AppRouterCacheProvider>
       <AppProvider>
         <ThemeProvider theme={theme}>
           <CssBaseline enableColorScheme />
-          <Header />
+          <Header logInUser={session?.user} />
           <Container
             maxWidth="lg"
             component="main"

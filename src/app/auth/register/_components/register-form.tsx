@@ -1,17 +1,13 @@
-"use client"
+'use client';
+import * as React from 'react';
 import { useActionState } from 'react';
 import { register } from '@/app/auth/register/actions';
-import { FormItem, FormMessage } from '@/components/form';
 import { useForm } from '@conform-to/react';
 import { registerInputSchema } from '@/app/auth/register/schema';
 import { parseWithZod } from '@conform-to/zod';
 import { toast } from 'react-toastify';
-import Button from '@mui/material/Button';
-import * as React from 'react';
-import Typography from '@mui/material/Typography';
-import { Alert, Card } from '@mui/material';
-import Box from '@mui/material/Box';
-import TextField from '@mui/material/TextField';
+import { Box, Button, FormControl, FormHelperText, FormLabel, TextField, Typography } from '@mui/material';
+import { Card } from '@/app/auth/_components/card';
 
 export default function RegisterForm() {
   const [lastResult, action, isPending] = useActionState(register, undefined);
@@ -32,7 +28,6 @@ export default function RegisterForm() {
         ユーザー登録
       </Typography>
       <Typography>以下のフォームに入力してください。</Typography>
-      {form.errors && <Alert severity="error">{form.errors}</Alert>}
       <Box
         id={form.id}
         component="form"
@@ -49,53 +44,45 @@ export default function RegisterForm() {
           gap: 2,
         }}
       >
-        <FormMessage>{form.errors}</FormMessage>
-        <FormItem>
+        <FormControl required>
+          <FormLabel htmlFor={fields.name.name}>ユーザー名</FormLabel>
           <TextField
-            id="name"
-            required
-            label="ユーザー名"
-            variant="outlined"
+            id={fields.name.id}
             name={fields.name.name}
+            error={!!fields.name.errors}
+            helperText={fields.name.errors}
           />
-          <FormMessage>{fields.name.errors}</FormMessage>
-        </FormItem>
-
-        <FormItem>
+        </FormControl>
+        <FormControl required>
+          <FormLabel htmlFor={fields.email.name}>メールアドレス</FormLabel>
           <TextField
-            id="email"
-            required
-            label="メールアドレス"
-            variant="outlined"
+            id={fields.email.id}
             name={fields.email.name}
+            error={!!fields.email.errors}
+            helperText={fields.email.errors}
           />
-          <FormMessage>{fields.email.errors}</FormMessage>
-        </FormItem>
-
-        <FormItem>
+        </FormControl>
+        <FormControl required>
+          <FormLabel htmlFor={fields.password.name}>パスワード</FormLabel>
           <TextField
-            id="password"
-            required
+            id={fields.password.id}
             type="password"
-            label="パスワード"
-            variant="outlined"
             name={fields.password.name}
+            error={!!fields.password.errors}
+            helperText={fields.password.errors}
           />
-          <div>8文字以上の半角英数字にしてください。</div>
-          <FormMessage>{fields.password.errors}</FormMessage>
-        </FormItem>
-
-        <FormItem>
+          <FormHelperText>8文字以上の半角英数字にしてください。</FormHelperText>
+        </FormControl>
+        <FormControl required>
+          <FormLabel htmlFor={fields.passwordConfirm.name}>パスワード（確認）</FormLabel>
           <TextField
-            id="passwordConfirm"
-            required
+            id={fields.passwordConfirm.id}
             type="password"
-            label="パスワード（確認）"
-            variant="outlined"
             name={fields.passwordConfirm.name}
+            error={!!fields.passwordConfirm.errors}
+            helperText={fields.passwordConfirm.errors}
           />
-          <FormMessage>{fields.passwordConfirm.errors}</FormMessage>
-        </FormItem>
+        </FormControl>
 
         <Button type="submit" variant="contained" loading={isPending}>登録</Button>
       </Box>
