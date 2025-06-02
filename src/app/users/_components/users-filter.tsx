@@ -1,8 +1,7 @@
 'use client';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useForm } from 'react-hook-form';
+import { Controller, useForm } from 'react-hook-form';
 import { z } from 'zod';
-import { Form, FormControl, FormField } from '@/components/ui/form';
 import { getRoleLabel, RoleFilterValues } from '@/config/consts';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { updateQueryParams } from '@/lib/query-params';
@@ -10,16 +9,17 @@ import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import 'dayjs/locale/de';
 import * as React from 'react';
-import dayjs from 'dayjs';
 import {
   Button,
+  FormControl,
   FormLabel,
-  InputLabel,
+  Grid,
   MenuItem,
   Select,
+  Stack,
   TextField,
+  Typography,
 } from '@mui/material';
-
 
 const postFormSchema = z.object({
   id: z.string().optional(),
@@ -41,7 +41,7 @@ export default function UsersFilter({defaultValues}: Props) {
   const pathname = usePathname();
   const searchParams = useSearchParams();
 
-  const form = useForm<PostFormValues>({
+  const { handleSubmit, control, reset } = useForm<PostFormValues>({
     defaultValues,
     resolver: zodResolver(postFormSchema),
   })
@@ -53,121 +53,104 @@ export default function UsersFilter({defaultValues}: Props) {
   }
 
   return (
-    <div>
-      <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="ja">
-        <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)}>
-            <div>
-              <span>フィルター</span>
-              <div>
-                <Button
-                  variant="contained"
-                  onClick={(e)=> {
-                    e.preventDefault();
-                    console.log(form.getValues('role'))
-                    form.reset({id:'', name:'', email: '', role: '', registeredFrom: undefined, registeredTo: undefined})
-                  }}
-                >
-                  クリア
-                </Button>
-                <Button type="submit" variant="contained">検索</Button>
-              </div>
-            </div>
+    <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="ja">
+      <form onSubmit={handleSubmit(onSubmit)}>
+        <Typography variant="h2">フィルター</Typography>
 
-            <div>
-              <FormField
-                control={form.control}
+        <Grid container spacing={2}>
+          <Grid size={6}>
+            <FormControl fullWidth>
+              <FormLabel htmlFor="id">ID</FormLabel>
+              <Controller
                 name="id"
-                render={({ field }) => (
-                  <div>
-                    <FormLabel>ID</FormLabel>
-                    <FormControl>
-                      <TextField {...field} />
-                    </FormControl>
-                  </div>
-                )}
+                control={control}
+                render={({ field }) => <TextField {...field} />}
               />
-              <FormField
-                control={form.control}
+            </FormControl>
+          </Grid>
+          <Grid size={6}>
+            <FormControl fullWidth>
+              <FormLabel htmlFor="name">名前</FormLabel>
+              <Controller
                 name="name"
-                render={({ field }) => (
-                  <div>
-                    <FormLabel>Name</FormLabel>
-                    <FormControl>
-                      <TextField {...field} />
-                    </FormControl>
-                  </div>
-                )}
+                control={control}
+                render={({ field }) => <TextField {...field} />}
               />
-              <FormField
-                control={form.control}
+            </FormControl>
+          </Grid>
+          <Grid size={6}>
+            <FormControl fullWidth>
+              <FormLabel htmlFor="email">メールアドレス</FormLabel>
+              <Controller
                 name="email"
-                render={({ field }) => (
-                  <div>
-                    <FormLabel>Email</FormLabel>
-                    <FormControl>
-                      <TextField {...field} />
-                    </FormControl>
-                  </div>
-                )}
+                control={control}
+                render={({ field }) => <TextField {...field} />}
               />
-
-              <FormField
-                control={form.control}
+            </FormControl>
+          </Grid>
+          <Grid size={6}>
+            <FormControl fullWidth>
+              <FormLabel htmlFor="role">権限</FormLabel>
+              <Controller
                 name="role"
-                render={({ field }) => (
-                  <div>
-                    <InputLabel>権限</InputLabel>
-                    <FormControl>
-                      <Select
-                        labelId="role"
-                        id="role"
-                        defaultValue={field.value}
-                        value={field.value}
-                        label="role"
-                        onChange={e => field.onChange(e.target.value)}
-                      >
-                        {Object.keys(RoleFilterValues).map((role) => (
-                          <MenuItem key={role} value={role}>
-                            {getRoleLabel(Number(role))}
-                          </MenuItem>
-                        ))}
-                      </Select>
-                    </FormControl>
-                  </div>
-                )}
+                control={control}
+                render={({ field }) =>
+                  <Select
+                    defaultValue={defaultValues.role}
+                    value={field.value}
+                    onChange={e => field.onChange(e.target.value)}
+                  >
+                    {Object.keys(RoleFilterValues).map((role) => (
+                      <MenuItem key={role} value={role}>
+                        {getRoleLabel(Number(role))}
+                      </MenuItem>
+                    ))}
+                  </Select>}
               />
-
-              <FormField
-                control={form.control}
-                name="registeredFrom"
-                render={({ field }) => (
-                  <div>
-                    <DatePicker
-                      label="登録日(From)"
-                      value={dayjs(field.value)}
-                      onChange={(newValue) => field.onChange(newValue)}
-                    />
-                  </div>
-                )}
-              />
-              <FormField
-                control={form.control}
+            </FormControl>
+          </Grid>
+          <Grid size={6}>
+            <Controller
+              control={control}
+              name="registeredFrom"
+              render={({ field }) => (
+                <div>
+                  <DatePicker
+                    label="登録日(From)"
+                    onChange={(newValue) => field.onChange(newValue)}
+                  />
+                </div>
+              )}
+            />
+          </Grid>
+          <Grid size={6}>
+            <Controller
+                control={control}
                 name="registeredTo"
                 render={({ field }) => (
                   <div>
                     <DatePicker
                       label="登録日(To)"
-                      value={dayjs(field.value)}
                       onChange={(newValue) => field.onChange(newValue)}
                     />
                   </div>
                 )}
               />
-            </div>
-          </form>
-        </Form>
-      </LocalizationProvider>
-    </div>
+          </Grid>
+        </Grid>
+        <Stack spacing={2} direction="row">
+          <Button
+            variant="contained"
+            onClick={(e)=> {
+              e.preventDefault();
+              reset({id:'', name:'', email: '', role: '', registeredFrom: undefined, registeredTo: undefined})
+            }}
+          >
+            クリア
+          </Button>
+          <Button type="submit" variant="contained">検索</Button>
+        </Stack>
+      </form>
+    </LocalizationProvider>
   )
 }

@@ -7,7 +7,7 @@ import { notFound } from 'next/navigation';
 import type { Metadata } from 'next';
 import Typography from '@mui/material/Typography';
 
-export const metadata: Metadata = { title: "タグ" };
+// export const metadata: Metadata = { title: "タグ" };
 
 type Props ={
   params: Promise<{ slug: string }>
@@ -18,7 +18,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const slug = (await params).slug
   try {
     const tag = await getTag({ slug })
-    return { title: tag ? `[${tag.name}]タグがある記事一覧`: "Not Found" }
+    return { title: tag ? `[${tag.name}]タグがある記事`: "Not Found" }
   } catch {
     return { title: "Not Found" };
   }

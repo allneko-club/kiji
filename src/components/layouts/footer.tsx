@@ -14,7 +14,7 @@ function Copyright() {
     <Typography variant="body2" sx={{ color: 'text.secondary', mt: 1 }}>
       {'Copyright © '}
       <Link color="text.secondary" href="https://mui.com/">
-        Footer
+        Kiji
       </Link>
       &nbsp;
       {new Date().getFullYear()}
@@ -58,24 +58,23 @@ export default function Footer() {
                 gutterBottom
                 sx={{ fontWeight: 600, mt: 2 }}
               >
-                Join the newsletter
+                ニュースレターを購読する
               </Typography>
               <Typography variant="body2" sx={{ color: 'text.secondary', mb: 2 }}>
-                Subscribe for weekly updates. No spams ever!
+                毎週の最新情報を購読してください。スパムメールは一切ありません。
               </Typography>
-              <InputLabel htmlFor="email-newsletter">Email</InputLabel>
+              <InputLabel htmlFor="email-newsletter">メールアドレス</InputLabel>
               <Stack direction="row" spacing={1} useFlexGap>
                 <TextField
                   id="email-newsletter"
                   hiddenLabel
                   size="small"
                   fullWidth
-                  aria-label="Enter your email address"
-                  placeholder="Your email address"
+                  aria-label="メールアドレスを入力して下さい。"
                   slotProps={{
                     htmlInput: {
                       autoComplete: 'off',
-                      'aria-label': 'Enter your email address',
+                      'aria-label': 'メールアドレスを入力して下さい。',
                     },
                   }}
                   sx={{ width: '250px' }}
@@ -86,7 +85,7 @@ export default function Footer() {
                   size="small"
                   sx={{ flexShrink: 0 }}
                 >
-                  Subscribe
+                  購読する
                 </Button>
               </Stack>
             </Box>

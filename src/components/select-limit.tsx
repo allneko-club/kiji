@@ -1,10 +1,12 @@
 'use client';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { cleanPerPage } from '@/lib/query-params';
-import FormControl from '@mui/material/FormControl';
-import InputLabel from '@mui/material/InputLabel';
-import Select from '@mui/material/Select';
-import MenuItem from '@mui/material/MenuItem';
+import {
+  FormControl,
+  FormLabel,
+  MenuItem,
+  Select,
+} from '@mui/material';
 
 type Props = {
   limitList: number[],
@@ -30,7 +32,7 @@ export default function SelectLimit({limitList}: Props) {
 
   return (
   <FormControl fullWidth>
-    <InputLabel>表示件数</InputLabel>
+    <FormLabel>表示件数</FormLabel>
     <Select
       labelId="perPage"
       id="perPage"

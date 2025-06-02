@@ -1,7 +1,9 @@
-import { getTags } from '@/models/tag';
 import type { Metadata } from 'next';
+import NextLink from 'next/link';
 import Typography from '@mui/material/Typography';
 import Chip from '@mui/material/Chip';
+import { paths } from '@/config/paths';
+import { getTags } from '@/models/tag';
 
 export const metadata: Metadata = {title: "タグ"};
 
@@ -13,7 +15,13 @@ export default async function Page() {
       <Typography variant="h1">タグ</Typography>
       <div>
         {tags.map((tag) =>
-          <Chip key={tag.id} label={tag.name} />
+          <Chip
+            key={tag.id}
+            label={tag.name}
+            clickable
+            component={NextLink}
+            href={paths.tags.detail.getHref(tag.slug)}
+          />
         )}
       </div>
     </div>

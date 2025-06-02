@@ -2,10 +2,12 @@
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { cleanOrderBy, parseSortValue } from '@/lib/query-params';
 import { cleanOrder } from '@/app/users/clean';
-import FormControl from '@mui/material/FormControl';
-import InputLabel from '@mui/material/InputLabel';
-import MenuItem from '@mui/material/MenuItem';
-import Select from '@mui/material/Select';
+import {
+  FormControl,
+  FormLabel,
+  MenuItem,
+  Select,
+} from '@mui/material';
 
 type Props = {
   selectItems: { [key: string]: string; },
@@ -35,7 +37,7 @@ export default function SelectSort({selectItems}: Props) {
 
   return (
     <FormControl fullWidth>
-      <InputLabel>ソート</InputLabel>
+      <FormLabel>ソート</FormLabel>
       <Select
         labelId="sort"
         id="sort"

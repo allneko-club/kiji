@@ -9,6 +9,7 @@ import { cleanOrder, cleanRole } from '@/app/users/clean';
 import { BaseSearch } from '@/types/requests';
 import type { Metadata } from 'next';
 import Typography from '@mui/material/Typography';
+import { Grid } from '@mui/material';
 
 export const metadata: Metadata = {title: "ユーザー"};
 
@@ -60,10 +61,14 @@ export default async function Page(props: {
     <>
       <Typography variant="h1">ユーザー</Typography>
       <UsersFilter defaultValues={defaultValues} />
-      <div>
-        <SelectSort selectItems={UserSortItems} />
-        <SelectLimit limitList={USERS_LIMIT_LIST}/>
-      </div>
+      <Grid container spacing={2}>
+        <Grid size={6}>
+          <SelectSort selectItems={UserSortItems} />
+        </Grid>
+        <Grid size={6}>
+          <SelectLimit limitList={USERS_LIMIT_LIST}/>
+        </Grid>
+      </Grid>
       <UsersTable perPage={params.perPage} users={users} total={total} />
     </>
   );
