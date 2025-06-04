@@ -4,7 +4,7 @@ import { toast } from 'react-toastify';
 import { useActionState } from 'react';
 import IconButton from '@mui/material/IconButton';
 import DeleteIcon from '@mui/icons-material/Delete';
-import { deletePost } from '@/app/my/posts/actions';
+import { deletePost } from '@/app/admin/posts/actions';
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
@@ -40,7 +40,7 @@ export function DeletePost({ id }: DeletePostProps) {
           action(formData)
           handleClose()
           toast('削除しました')
-          router.push(paths.my.getHref())
+          router.push(paths.admin.getHref())
         }}>
           <input name="id" hidden defaultValue={id} />
           <DialogTitle id="delete-post">

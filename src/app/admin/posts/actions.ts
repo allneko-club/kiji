@@ -4,7 +4,7 @@ import { paths } from '@/config/paths';
 import { prisma } from '@/lib/prisma';
 import { auth } from '@/auth';
 import { getPost } from '@/models/post';
-import { createPostInputSchema } from '@/app/my/posts/schema';
+import { createPostInputSchema } from '@/app/admin/posts/schema';
 
 type PrevState = {
   id: string;
@@ -84,7 +84,7 @@ export async function savePost(prevState: PrevState, formData: FormData) {
   if(id){
     const post = await getPost(id);
     if(!post){
-      redirect(paths.my.getHref());
+      redirect(paths.admin.getHref());
     }
     await prisma.$transaction([
       // 現在のタグを全て削除

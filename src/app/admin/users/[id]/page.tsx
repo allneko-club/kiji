@@ -1,4 +1,4 @@
-import { UserInfo } from '@/app/users/[id]/_components/user-info';
+import { UserInfo } from '@/app/admin/users/[id]/_components/user-info';
 import { getUser } from '@/models/user';
 import { notFound } from 'next/navigation';
 import type { Metadata } from 'next';

@@ -17,8 +17,8 @@ import Logo from './logo';
 import { mainMenu } from '@/config/consts';
 import NextLink from 'next/link';
 import { paths } from '@/config/paths';
-import { User } from '@prisma/client';
 import { signOut } from "next-auth/react"
+
 
 const StyledToolbar = styled(Toolbar)(({ theme }) => ({
   display: 'flex',
@@ -68,8 +68,13 @@ function SignUpButton(){
     </Button>
    )
 }
+type User = {
+  name:string | null | undefined;
+  email:string | null | undefined;
+  image:string | null | undefined;
+}
 
-export default function Header({logInUser}: { logInUser: User | undefined }) {
+export default function Header({logInUser}: { logInUser: User | null }) {
   const [open, setOpen] = React.useState(false);
 
   const toggleDrawer = (newOpen: boolean) => () => {

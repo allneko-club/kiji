@@ -5,9 +5,9 @@ import { PaginationBasic } from '@/components/pagination-basic';
 import { paths } from '@/config/paths';
 import { getFormattedDateTimeFromObj } from '@/lib/datetime';
 import type { Post } from '@prisma/client'
-import { DeletePost } from '@/app/my/posts/_components/delete-post';
+import { DeletePost } from '@/app/admin/posts/_components/delete-post';
 import * as React from 'react';
-import { IconButton, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@mui/material';
+import { IconButton, Paper, Stack, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@mui/material';
 
 export const PostsTable = ({perPage, posts, total}: {perPage: number, posts: Post[], total: number}) => {
 
@@ -29,10 +29,12 @@ export const PostsTable = ({perPage, posts, total}: {perPage: number, posts: Pos
               sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
             >
               <TableCell component="th" scope="row">
-                <IconButton href={paths.my.editPost.getHref(post.id)} component={NextLink}>
-                  <CreateIcon/>
-                </IconButton>
-                <DeletePost id={post.id} />
+                <Stack spacing={1} direction="row">
+                  <IconButton href={paths.admin.posts.edit.getHref(post.id)} component={NextLink}>
+                    <CreateIcon/>
+                  </IconButton>
+                  <DeletePost id={post.id} />
+                </Stack>
               </TableCell>
               <TableCell align="right">{post.title}</TableCell>
               <TableCell align="right">{post.published ? '公開' : '非公開'}</TableCell>

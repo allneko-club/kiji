@@ -17,7 +17,7 @@ export const metadata: Metadata = {
 
 export default async function RootLayout({ children }: { children: ReactNode }) {
   const session = await auth()
-
+  const user = session?.user
   return (
     <html lang="ja" suppressHydrationWarning>
     <body>
@@ -25,7 +25,7 @@ export default async function RootLayout({ children }: { children: ReactNode }) 
       <AppProvider>
         <ThemeProvider theme={theme}>
           <CssBaseline enableColorScheme />
-          <Header logInUser={session?.user} />
+          <Header logInUser={user ? {name: user.name, email: user.email, image: user.image } : null} />
           <Container
             maxWidth="lg"
             component="main"

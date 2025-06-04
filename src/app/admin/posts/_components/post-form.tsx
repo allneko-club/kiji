@@ -2,7 +2,7 @@
 import { Category, Tag } from '@prisma/client';
 import * as React from 'react';
 import { useActionState, useEffect } from 'react';
-import { savePost } from '@/app/my/posts/actions';
+import { savePost } from '@/app/admin/posts/actions';
 import { toast } from 'react-toastify';
 import {
   Button,

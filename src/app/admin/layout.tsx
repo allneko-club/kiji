@@ -1,5 +1,5 @@
 import { ReactNode } from 'react';
-import Sidebar from '@/app/my/_components/sidebar';
+import Sidebar from '@/app/admin/_components/sidebar';
 import { auth } from '@/auth';
 import { redirect } from 'next/navigation';
 import { paths } from '@/config/paths';

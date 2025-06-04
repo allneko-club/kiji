@@ -1,7 +1,7 @@
 'use client';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { cleanOrderBy, parseSortValue } from '@/lib/query-params';
-import { cleanOrder } from '@/app/users/clean';
+import { cleanOrder } from '@/app/admin/users/clean';
 import {
   FormControl,
   FormLabel,

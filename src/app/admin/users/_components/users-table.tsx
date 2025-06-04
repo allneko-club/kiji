@@ -32,7 +32,7 @@ export const UsersTable = ({perPage, users, total}: Props) => {
             <TableRow
               key={user.id}
               sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-              onClick={() => router.push(paths.users.detail.getHref(user.id))}
+              onClick={() => router.push(paths.admin.users.detail.getHref(user.id))}
             >
               <TableCell align="right">{user.name}</TableCell>
               <TableCell align="right">{user.email}</TableCell>
