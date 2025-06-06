@@ -6,20 +6,18 @@ import NextLink from 'next/link';
 import { authenticate } from '@/lib/actions';
 import { paths } from '@/config/paths';
 import GitHubIcon from '@mui/icons-material/GitHub';
-import {
-  Alert,
-  Box,
-  Button,
-  Checkbox,
-  Divider,
-  FormControl,
-  FormControlLabel,
-  FormLabel,
-  Link,
-  TextField,
-  Typography,
-} from '@mui/material';
+import Button from '@mui/material/Button';
+import FormControl from '@mui/material/FormControl';
+import FormLabel from '@mui/material/FormLabel';
+import TextField from '@mui/material/TextField';
 import { Card } from '@/app/auth/_components/card';
+import Typography from '@mui/material/Typography';
+import Box from '@mui/material/Box';
+import Alert from '@mui/material/Alert';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import Checkbox from '@mui/material/Checkbox';
+import Link from '@mui/material/Link';
+import Divider from '@mui/material/Divider';
 
 export default function LoginForm() {
   const searchParams = useSearchParams();

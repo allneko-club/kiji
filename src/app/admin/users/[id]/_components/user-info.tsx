@@ -6,26 +6,24 @@ import { User } from '@prisma/client';
 import { getRoleLabel } from '@/config/consts';
 import { deleteUser } from '@/app/admin/users/[id]/actions';
 import { useRouter } from 'next/navigation';
-import {
-  Avatar,
-  Button,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogContentText,
-  DialogTitle,
-  IconButton,
-  Typography,
-} from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { toast } from 'react-toastify';
 import { paths } from '@/config/paths';
+import Typography from '@mui/material/Typography';
+import Avatar from '@mui/material/Avatar';
+import IconButton from '@mui/material/IconButton';
+import Dialog from '@mui/material/Dialog';
+import DialogTitle from '@mui/material/DialogTitle';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogActions from '@mui/material/DialogActions';
+import Button from '@mui/material/Button';
 
 export const UserInfo = ({ user }: { user: User }) => {
 
   return (
     <div>
-      <DeleteUser id={user.id}/>
+      <DeleteUser id={user.id} />
       <Avatar alt={user.name} src={user.image}>{user.name}</Avatar>
       <Typography>{user.name}</Typography>
       <Typography>{user.email}</Typography>

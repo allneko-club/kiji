@@ -18,7 +18,13 @@ export default [
   ...compat.config({
     extends: ['next', 'prettier'],
     "rules": {
-      "@typescript-eslint/no-explicit-any": 1
+      "@typescript-eslint/no-explicit-any": 1,
+      "no-restricted-imports": [
+        "error",
+        {
+          "patterns": [{ "regex": "^@mui/[^/]+$" }]
+        }
+      ]
     }
   }),
 ];

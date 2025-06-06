@@ -8,9 +8,9 @@ import { Search } from '@/app/posts/search';
 import { getTags } from '@/models/tag';
 import type { Metadata } from 'next';
 
-export const metadata: Metadata = { title: "記事一覧" };
+export const metadata: Metadata = { title: '記事一覧' };
 
-type SearchParams ={
+type SearchParams = {
   page?: string;
   query?: string;
 }
@@ -21,9 +21,9 @@ export default async function Page(props: {
   const searchParams = await props.searchParams;
   const page = Number(searchParams?.page) || 1;
   const query = searchParams?.query;
-  const params = { perPage: POST_LIMIT, page, title: query, published: true }
-  const {posts, total} = await getPosts(params)
-  const tags = await getTags()
+  const params = { perPage: POST_LIMIT, page, title: query, published: true };
+  const { posts, total } = await getPosts(params);
+  const tags = await getTags();
 
   return (
     <>
@@ -35,7 +35,7 @@ export default async function Page(props: {
       </div>
       <div>
         {tags.map((tag) =>
-          <Chip key={tag.id} label={tag.name} />
+          <Chip key={tag.id} label={tag.name} />,
         )}
       </div>
       <PostList perPage={params.perPage} posts={posts} total={total} />

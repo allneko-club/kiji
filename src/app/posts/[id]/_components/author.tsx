@@ -1,8 +1,10 @@
-'use client'
-import * as React from "react"
+'use client';
+import * as React from 'react';
 import { User } from '@prisma/client';
-import { Avatar, AvatarGroup, Typography } from '@mui/material';
 import Box from '@mui/material/Box';
+import AvatarGroup from '@mui/material/AvatarGroup';
+import Avatar from '@mui/material/Avatar';
+import Typography from '@mui/material/Typography';
 
 type Props = {
   author: User;

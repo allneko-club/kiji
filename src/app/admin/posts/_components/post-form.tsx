@@ -4,17 +4,15 @@ import * as React from 'react';
 import { useActionState, useEffect } from 'react';
 import { savePost } from '@/app/admin/posts/actions';
 import { toast } from 'react-toastify';
-import {
-  Button,
-  Checkbox,
-  FormControl,
-  FormLabel,
-  InputLabel,
-  MenuItem,
-  Select,
-  Switch,
-  TextField,
-} from '@mui/material';
+import Button from '@mui/material/Button';
+import FormControl from '@mui/material/FormControl';
+import FormLabel from '@mui/material/FormLabel';
+import TextField from '@mui/material/TextField';
+import InputLabel from '@mui/material/InputLabel';
+import Switch from '@mui/material/Switch';
+import MenuItem from '@mui/material/MenuItem';
+import Select from '@mui/material/Select';
+import Checkbox from '@mui/material/Checkbox';
 
 type Props = {
   initialState: {

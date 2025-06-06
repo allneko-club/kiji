@@ -1,11 +1,17 @@
-'use client'
+'use client';
 import { PaginationBasic } from '@/components/pagination-basic';
 import { paths } from '@/config/paths';
 import { useRouter } from 'next/navigation';
 import { getFormattedDateTimeFromObj } from '@/lib/datetime';
-import type { User } from '@prisma/client'
+import type { User } from '@prisma/client';
 import { getRoleLabel } from '@/config/consts';
-import { Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@mui/material';
+import Paper from '@mui/material/Paper';
+import Table from '@mui/material/Table';
+import TableBody from '@mui/material/TableBody';
+import TableContainer from '@mui/material/TableContainer';
+import TableHead from '@mui/material/TableHead';
+import TableRow from '@mui/material/TableRow';
+import TableCell from '@mui/material/TableCell';
 
 type Props = {
   perPage: number;
@@ -13,8 +19,8 @@ type Props = {
   total: number;
 }
 
-export const UsersTable = ({perPage, users, total}: Props) => {
-  const router = useRouter()
+export const UsersTable = ({ perPage, users, total }: Props) => {
+  const router = useRouter();
 
   return (<>
     <TableContainer component={Paper}>

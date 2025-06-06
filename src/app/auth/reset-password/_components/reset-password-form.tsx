@@ -5,7 +5,12 @@ import { resetPassword } from '@/app/auth/reset-password/actions';
 import { FormProvider, useForm } from '@conform-to/react';
 import { parseWithZod } from '@conform-to/zod';
 import { resetPasswordInputSchema } from '@/app/auth/reset-password/schema';
-import { Button, FormControl, FormLabel, Stack, TextField, Typography } from '@mui/material';
+import Typography from '@mui/material/Typography';
+import Button from '@mui/material/Button';
+import FormControl from '@mui/material/FormControl';
+import FormLabel from '@mui/material/FormLabel';
+import Stack from '@mui/material/Stack';
+import TextField from '@mui/material/TextField';
 
 export default function ResetPasswordForm() {
   const [lastResult, submitAction, isPending] = useActionState(resetPassword, undefined);

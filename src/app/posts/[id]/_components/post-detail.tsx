@@ -1,5 +1,5 @@
-'use client'
-import * as React from "react"
+'use client';
+import * as React from 'react';
 import { getFormattedDateTimeFromObj } from '@/lib/datetime';
 import { Category, Post, Tag, User } from '@prisma/client';
 import { Author } from '@/app/posts/[id]/_components/author';
@@ -18,11 +18,11 @@ export function PostDetail({ post }: Props) {
 
       <Author author={post.author} created={getFormattedDateTimeFromObj(post.createdAt)} />
 
-      <Chip size="medium" label={post.category.name}/>
+      <Chip size="medium" label={post.category.name} />
 
       <div>
         {post.tags.map((tag) =>
-          <Chip key={tag.id} label={`#${tag.name}`} />
+          <Chip key={tag.id} label={`#${tag.name}`} />,
         )}
       </div>
 
@@ -30,5 +30,5 @@ export function PostDetail({ post }: Props) {
         {post.content}
       </div>
     </article>
-  )
+  );
 }

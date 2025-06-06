@@ -1,12 +1,10 @@
 'use client';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { cleanPerPage } from '@/lib/query-params';
-import {
-  FormControl,
-  FormLabel,
-  MenuItem,
-  Select,
-} from '@mui/material';
+import FormControl from '@mui/material/FormControl';
+import FormLabel from '@mui/material/FormLabel';
+import Select from '@mui/material/Select';
+import MenuItem from '@mui/material/MenuItem';
 
 type Props = {
   limitList: number[],
@@ -17,7 +15,7 @@ type Props = {
  * 表示件数を変更すると、クエリパラメーターのperPageを更新する
  * @param limitList 表示件数の選択肢
  */
-export default function SelectLimit({limitList}: Props) {
+export default function SelectLimit({ limitList }: Props) {
 
   const router = useRouter();
   const pathname = usePathname();
@@ -26,26 +24,26 @@ export default function SelectLimit({limitList}: Props) {
 
   const handleChange = (v: string) => {
     const params = new URLSearchParams(Array.from(searchParams.entries()));
-    params.set("perPage", v);
+    params.set('perPage', v);
     router.push(`${pathname}?${params.toString()}`);
-  }
+  };
 
   return (
-  <FormControl fullWidth>
-    <FormLabel>表示件数</FormLabel>
-    <Select
-      labelId="perPage"
-      id="perPage"
-      defaultValue={defaultValue.toString()}
-      label="perPage"
-      onChange={e => handleChange(e.target.value)}
-    >
-      {limitList.map((item) => (
-        <MenuItem key={item} value={item.toString()}>
-          {item}
-        </MenuItem>
-      ))}
-    </Select>
-  </FormControl>
-  )
+    <FormControl fullWidth>
+      <FormLabel>表示件数</FormLabel>
+      <Select
+        labelId="perPage"
+        id="perPage"
+        defaultValue={defaultValue.toString()}
+        label="perPage"
+        onChange={e => handleChange(e.target.value)}
+      >
+        {limitList.map((item) => (
+          <MenuItem key={item} value={item.toString()}>
+            {item}
+          </MenuItem>
+        ))}
+      </Select>
+    </FormControl>
+  );
 }

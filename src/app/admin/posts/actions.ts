@@ -23,7 +23,7 @@ type PrevState = {
 }
 
 export async function savePost(prevState: PrevState, formData: FormData) {
-  const session = await auth()
+  const session = await auth();
 
   if (!session?.user?.id) {
     redirect(paths.auth.login.getHref());
@@ -40,14 +40,14 @@ export async function savePost(prevState: PrevState, formData: FormData) {
   const result = createPostInputSchema.safeParse({
     title: title,
     content: content,
-    published: published === "on",
+    published: published === 'on',
     categoryId: Number(categoryId),
     tagIds: tagIds,
   });
 
   if (!result.success && result.error) {
     const formatted = result.error.format();
-    console.log("formatted",formatted.tagIds?._errors)
+    console.log('formatted', formatted.tagIds?._errors);
 
     return {
       id: id,
@@ -68,22 +68,22 @@ export async function savePost(prevState: PrevState, formData: FormData) {
 
   const saveData = {
     title: result.data?.title,
-      content: result.data?.content,
+    content: result.data?.content,
     published: result.data?.published,
     categoryId: result.data?.categoryId,
     tags: {
       // 存在しないタグIDを指定した場合は例外がスローされる
       connect: result.data?.tagIds.map(id => {
-        return {id}
+        return { id };
       }),
     },
     authorId: session.user.id,
-  }
+  };
 
   // todo 作成、更新エラー処理
-  if(id){
+  if (id) {
     const post = await getPost(id);
-    if(!post){
+    if (!post) {
       redirect(paths.admin.getHref());
     }
     await prisma.$transaction([
@@ -91,17 +91,17 @@ export async function savePost(prevState: PrevState, formData: FormData) {
       prisma.post.update({
         where: { id: id },
         data: {
-          tags:{
-            deleteMany: {}
-          }
-        }
+          tags: {
+            deleteMany: {},
+          },
+        },
       }),
       prisma.post.update({
         where: { id: id },
-        data: saveData
+        data: saveData,
       }),
-    ])
-  }else{
+    ]);
+  } else {
     await prisma.post.create({ data: saveData });
   }
 
@@ -113,8 +113,8 @@ export async function savePost(prevState: PrevState, formData: FormData) {
     categoryId: categoryId,
     tagIds: tagIds,
     message: '保存しました。',
-    errors: {title: '', content: '', published: '', categoryId: ''}
-  }
+    errors: { title: '', content: '', published: '', categoryId: '' },
+  };
 }
 
 export async function deletePost(prevState: null, formData: FormData) {
@@ -124,5 +124,5 @@ export async function deletePost(prevState: null, formData: FormData) {
   } catch {
     /* RecordNotFound 例外が発生しても無視する */
   }
-  return Promise.resolve(null)
+  return Promise.resolve(null);
 }

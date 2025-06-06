@@ -6,25 +6,25 @@ import { getCategories } from '@/models/category';
 import { getTags } from '@/models/tag';
 import type { Metadata } from 'next';
 
+export const metadata: Metadata = { title: '記事の編集' };
+
 type Props = {
   params: Promise<{ id: string }>
 }
 
-export const metadata: Metadata = { title: "記事の編集" };
-
 export default async function Page({ params }: Props) {
-  const session = await auth()
+  const session = await auth();
 
-  if (!session?.user) return null
+  if (!session?.user) return null;
 
-  const categories = await getCategories()
-  const tags = await getTags()
-  const id = (await params).id
+  const categories = await getCategories();
+  const tags = await getTags();
+  const id = (await params).id;
   const post = await getPost(id);
-  const userId = session.user.id
+  const userId = session.user.id;
 
-  if(!post || post.author.id !== userId){
-    notFound()
+  if (!post || post.author.id !== userId) {
+    notFound();
   }
 
   const initialState = {
@@ -34,7 +34,7 @@ export default async function Page({ params }: Props) {
     published: post.published ? 'on' : '',
     categoryId: post.categoryId.toString(),
     tagIds: post.tags.map(tag => tag.id),
-  }
+  };
 
   return (
     <PostForm initialState={initialState} categories={categories} tags={tags} />

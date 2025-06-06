@@ -2,12 +2,10 @@
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { cleanOrderBy, parseSortValue } from '@/lib/query-params';
 import { cleanOrder } from '@/app/admin/users/clean';
-import {
-  FormControl,
-  FormLabel,
-  MenuItem,
-  Select,
-} from '@mui/material';
+import FormControl from '@mui/material/FormControl';
+import FormLabel from '@mui/material/FormLabel';
+import Select from '@mui/material/Select';
+import MenuItem from '@mui/material/MenuItem';
 
 type Props = {
   selectItems: { [key: string]: string; },
@@ -19,7 +17,7 @@ type Props = {
  * @param selectItems 並び順の選択肢 keyはapiに渡すための値、 valueは表示する値
  * @constructor
  */
-export default function SelectSort({selectItems}: Props) {
+export default function SelectSort({ selectItems }: Props) {
 
   const router = useRouter();
   const pathname = usePathname();
@@ -29,11 +27,11 @@ export default function SelectSort({selectItems}: Props) {
 
   const handleChange = (v: string) => {
     const params = new URLSearchParams(Array.from(searchParams.entries()));
-    const {order , orderBy} = parseSortValue(v);
+    const { order, orderBy } = parseSortValue(v);
     params.set('order', order);
     params.set('orderBy', orderBy);
     router.push(`${pathname}?${params.toString()}`);
-  }
+  };
 
   return (
     <FormControl fullWidth>
@@ -52,5 +50,5 @@ export default function SelectSort({selectItems}: Props) {
         ))}
       </Select>
     </FormControl>
-  )
+  );
 }

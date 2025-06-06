@@ -1,4 +1,4 @@
-'use client'
+'use client';
 import * as React from 'react';
 import Avatar from '@mui/material/Avatar';
 import AvatarGroup from '@mui/material/AvatarGroup';
@@ -62,7 +62,7 @@ const articleInfo = [
     tag: 'Engineering',
     title: 'Pioneering sustainable engineering solutions',
     description:
-      "Learn about our commitment to sustainability and the innovative engineering solutions we're implementing to create a greener future. Discover the impact of our eco-friendly initiatives.",
+      'Learn about our commitment to sustainability and the innovative engineering solutions we\'re implementing to create a greener future. Discover the impact of our eco-friendly initiatives.',
     authors: [
       { name: 'Agnes Walker', avatar: '/static/images/avatar/4.jpg' },
       { name: 'Trevor Henderson', avatar: '/static/images/avatar/5.jpg' },
@@ -84,9 +84,9 @@ const articleInfo = [
   },
   {
     tag: 'Company',
-    title: "Our company's journey: milestones and achievements",
+    title: 'Our company\'s journey: milestones and achievements',
     description:
-      "Take a look at our company's journey and the milestones we've achieved along the way. From humble beginnings to industry leader, discover our story of growth and success.",
+      'Take a look at our company\'s journey and the milestones we\'ve achieved along the way. From humble beginnings to industry leader, discover our story of growth and success.',
     authors: [{ name: 'Cindy Baker', avatar: '/static/images/avatar/3.jpg' }],
   },
 ];

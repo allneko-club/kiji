@@ -5,7 +5,12 @@ import { contact } from '@/app/(misc)/contact/actions';
 import { FormProvider, useForm } from '@conform-to/react';
 import { parseWithZod } from '@conform-to/zod';
 import { contactInputSchema } from '@/app/(misc)/contact/schema';
-import { Button, FormControl, FormLabel, Stack, TextField, Typography } from '@mui/material';
+import Button from '@mui/material/Button';
+import FormControl from '@mui/material/FormControl';
+import FormLabel from '@mui/material/FormLabel';
+import Stack from '@mui/material/Stack';
+import TextField from '@mui/material/TextField';
+import Typography from '@mui/material/Typography';
 
 export default function ContactForm() {
   const [lastResult, submitAction, isPending] = useActionState(contact, undefined);

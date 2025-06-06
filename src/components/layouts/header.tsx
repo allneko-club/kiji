@@ -17,7 +17,7 @@ import Logo from './logo';
 import { mainMenu } from '@/config/consts';
 import NextLink from 'next/link';
 import { paths } from '@/config/paths';
-import { signOut } from "next-auth/react"
+import { signOut } from 'next-auth/react';
 
 
 const StyledToolbar = styled(Toolbar)(({ theme }) => ({
@@ -33,16 +33,16 @@ const StyledToolbar = styled(Toolbar)(({ theme }) => ({
   padding: '8px 12px',
 }));
 
- function LogOutButton(){
-   return (
+function LogOutButton() {
+  return (
     <Button color="primary" variant="text" size="small" onClick={() => signOut()}>
       ログアウト
     </Button>
-   )
+  );
 }
 
-function LogInButton(){
-   return (
+function LogInButton() {
+  return (
     <Button
       color="primary"
       variant="text"
@@ -52,11 +52,11 @@ function LogInButton(){
     >
       ログイン
     </Button>
-   )
+  );
 }
 
-function SignUpButton(){
-   return (
+function SignUpButton() {
+  return (
     <Button
       color="primary"
       variant="contained"
@@ -66,15 +66,16 @@ function SignUpButton(){
     >
       登録
     </Button>
-   )
-}
-type User = {
-  name:string | null | undefined;
-  email:string | null | undefined;
-  image:string | null | undefined;
+  );
 }
 
-export default function Header({logInUser}: { logInUser: User | null }) {
+type User = {
+  name: string | null | undefined;
+  email: string | null | undefined;
+  image: string | null | undefined;
+}
+
+export default function Header({ logInUser }: { logInUser: User | null }) {
   const [open, setOpen] = React.useState(false);
 
   const toggleDrawer = (newOpen: boolean) => () => {
@@ -114,10 +115,10 @@ export default function Header({logInUser}: { logInUser: User | null }) {
                 alignItems: 'center',
               }}
             >
-              {logInUser ? <LogOutButton/> :
+              {logInUser ? <LogOutButton /> :
                 <>
-                  <LogInButton/>
-                  <SignUpButton/>
+                  <LogInButton />
+                  <SignUpButton />
                 </>
               }
               <ModeToggle />
@@ -166,15 +167,15 @@ export default function Header({logInUser}: { logInUser: User | null }) {
                   <Divider sx={{ my: 3 }} />
                   {logInUser ?
                     <MenuItem>
-                      <LogOutButton/>
+                      <LogOutButton />
                     </MenuItem>
-                  :
+                    :
                     <>
                       <MenuItem>
-                        <SignUpButton/>
+                        <SignUpButton />
                       </MenuItem>
                       <MenuItem>
-                        <LogInButton/>
+                        <LogInButton />
                       </MenuItem>
                     </>
                   }

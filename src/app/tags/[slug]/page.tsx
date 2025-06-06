@@ -9,18 +9,18 @@ import Typography from '@mui/material/Typography';
 
 // export const metadata: Metadata = { title: "タグ" };
 
-type Props ={
+type Props = {
   params: Promise<{ slug: string }>
   searchParams?: Promise<{ page?: string; }>;
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const slug = (await params).slug
+  const slug = (await params).slug;
   try {
-    const tag = await getTag({ slug })
-    return { title: tag ? `[${tag.name}]タグがある記事`: "Not Found" }
+    const tag = await getTag({ slug });
+    return { title: tag ? `[${tag.name}]タグがある記事` : 'Not Found' };
   } catch {
-    return { title: "Not Found" };
+    return { title: 'Not Found' };
   }
 }
 
@@ -33,11 +33,11 @@ export default async function Page(props: Props) {
   const slug = params.slug;
   const searchParams = await props.searchParams;
   const page = Number(searchParams?.page) || 1;
-  const queryParams = { perPage: POST_LIMIT, page, slug, published: true }
-  const tag = await getTag({ slug })
-  const {posts, total} = await getPostsByTag(queryParams)
+  const queryParams = { perPage: POST_LIMIT, page, slug, published: true };
+  const tag = await getTag({ slug });
+  const { posts, total } = await getPostsByTag(queryParams);
 
-  if(!tag){
+  if (!tag) {
     return notFound();
   }
 

@@ -5,7 +5,7 @@ import Chip from '@mui/material/Chip';
 import { paths } from '@/config/paths';
 import { getTags } from '@/models/tag';
 
-export const metadata: Metadata = {title: "タグ"};
+export const metadata: Metadata = { title: 'タグ' };
 
 export default async function Page() {
   const tags = await getTags();
@@ -21,7 +21,7 @@ export default async function Page() {
             clickable
             component={NextLink}
             href={paths.tags.detail.getHref(tag.slug)}
-          />
+          />,
         )}
       </div>
     </div>

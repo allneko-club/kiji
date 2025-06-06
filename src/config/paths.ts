@@ -3,6 +3,15 @@ const adminPath = '/admin';
 export const paths = {
   admin:{
     getHref: () => adminPath,
+    categories: {
+      getHref: () => `${adminPath}/categories`,
+      create: {
+        getHref: () => `${adminPath}/categories/create`,
+      },
+      update: {
+        getHref: (id: number) => `${adminPath}/categories/${id}/update`,
+      },
+    },
     posts: {
       getHref: () => `${adminPath}/posts`,
       detail: {
@@ -11,18 +20,18 @@ export const paths = {
       create: {
         getHref: () => `${adminPath}/posts/create`,
       },
-      edit: {
-        getHref: (id: string) => `${adminPath}/posts/edit/${id}`,
+      update: {
+        getHref: (id: string) => `${adminPath}/posts/${id}/update`,
       },
+    },
+    tags: {
+      getHref: () => `${adminPath}/tags`,
     },
     users:{
       getHref: () => `${adminPath}/users`,
       detail: {
         getHref: (id: string) => `${adminPath}/users/${id}`,
       },
-    },
-    profile: {
-      getHref: () => `${adminPath}/profile`,
     },
   },
   home: {

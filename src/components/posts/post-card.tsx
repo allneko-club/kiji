@@ -1,4 +1,4 @@
-'use client'
+'use client';
 import * as React from 'react';
 import { useRouter } from 'next/navigation';
 import { paths } from '@/config/paths';
@@ -81,7 +81,7 @@ function Author({ author, created }: { author: { name: string; avatar: string },
 
 
 export function PostCard({ post }: { post: Post }) {
-  const router = useRouter()
+  const router = useRouter();
   const [focusedCardIndex, setFocusedCardIndex] = React.useState<string | null>(
     null,
   );
@@ -101,7 +101,7 @@ export function PostCard({ post }: { post: Post }) {
         <CardMedia
           component="img"
           alt="green iguana"
-          image='https://picsum.photos/800/450?random=1'
+          image="https://picsum.photos/800/450?random=1"
           sx={{
             aspectRatio: '16 / 9',
             borderBottom: '1px solid',
@@ -120,7 +120,7 @@ export function PostCard({ post }: { post: Post }) {
           </StyledTypography>
         </StyledCardContent>
         <Author
-          author={{name: 'Cindy Baker', avatar: '/static/images/avatar/3.jpg' }}
+          author={{ name: 'Cindy Baker', avatar: '/static/images/avatar/3.jpg' }}
           created={getFormattedDateTimeFromObj(post.createdAt)}
         />
       </StyledCard>

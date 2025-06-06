@@ -7,9 +7,9 @@ export interface Props {
   total: number;
 }
 
-export function PaginationBasic({ perPage, total }:Props) {
+export function PaginationBasic({ perPage, total }: Props) {
   const pathname = usePathname();
-  const router = useRouter()
+  const router = useRouter();
   const searchParams = useSearchParams();
   const page = cleanPage(searchParams.get('page') || 1);
 
@@ -21,9 +21,9 @@ export function PaginationBasic({ perPage, total }:Props) {
 
   return (
     <Pagination
-      count={Math.ceil(total/perPage)}
+      count={Math.ceil(total / perPage)}
       page={page}
       onChange={() => handleChange(page)}
     />
-  )
+  );
 }

@@ -6,8 +6,14 @@ import { useForm } from '@conform-to/react';
 import { registerInputSchema } from '@/app/auth/register/schema';
 import { parseWithZod } from '@conform-to/zod';
 import { toast } from 'react-toastify';
-import { Box, Button, FormControl, FormHelperText, FormLabel, TextField, Typography } from '@mui/material';
+import Button from '@mui/material/Button';
+import FormControl from '@mui/material/FormControl';
+import FormLabel from '@mui/material/FormLabel';
+import TextField from '@mui/material/TextField';
 import { Card } from '@/app/auth/_components/card';
+import Typography from '@mui/material/Typography';
+import Box from '@mui/material/Box';
+import FormHelperText from '@mui/material/FormHelperText';
 
 export default function RegisterForm() {
   const [lastResult, action, isPending] = useActionState(register, undefined);
