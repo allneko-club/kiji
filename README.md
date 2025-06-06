@@ -6,7 +6,6 @@ Next.jsで作ったCMSアプリ（試作）
 ## 特徴
 * Next.jsのApp Router
 * ログイン機能
-* マイページ機能
 * サーバーアクションを使ったデータの取得や追加
 * ダークモードあり
 * Prisma - ORM
@@ -33,13 +32,9 @@ npm run dev
 
 [http://localhost:3000](http://localhost:3000) を開きます。
 
-[登録ページ](http://localhost:3000/auth/register)でユーザー登録をします。
+[ユーザー登録](http://localhost:3000/auth/register)をし、[ログイン](http://localhost:3000/auth/login)します。
 
-ログイン後、マイページから投稿の追加などができます。
-
-タグやカテゴリーを編集する機能は無いためDBに直接データを追加する必要があります。
-
-prisma studioを使うと、データの追加や編集が簡単にできます。
+ログイン後、[管理ページ](http://localhost:3000/auth/register)でデータの管理ができます。
 
 
 ## スクリプト
