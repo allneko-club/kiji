@@ -20,10 +20,10 @@ import RssFeedRoundedIcon from '@mui/icons-material/RssFeedRounded';
 const cardData = [
   {
     img: 'https://picsum.photos/800/450?random=1',
-    tag: 'Engineering',
-    title: 'Revolutionizing software development with cutting-edge tools',
+    tag: 'エンジニア',
+    title: '最先端のツールでソフトウェア開発に革命を起こす',
     description:
-      'Our latest engineering tools are designed to streamline workflows and boost productivity. Discover how these innovations are transforming the software development landscape.',
+      '当社の最新のエンジニアリングツールは、ワークフローを効率化し、生産性を向上させるように設計されています。これらのイノベーションがソフトウェア開発環境をどのように変革しているかをご覧ください。',
     authors: [
       { name: 'Remy Sharp', avatar: '/static/images/avatar/1.jpg' },
       { name: 'Travis Howard', avatar: '/static/images/avatar/2.jpg' },
@@ -31,34 +31,34 @@ const cardData = [
   },
   {
     img: 'https://picsum.photos/800/450?random=2',
-    tag: 'Product',
-    title: 'Innovative product features that drive success',
+    tag: '商品',
+    title: '成功を導く革新的な製品機能',
     description:
-      'Explore the key features of our latest product release that are helping businesses achieve their goals. From user-friendly interfaces to robust functionality, learn why our product stands out.',
+      '企業の目標達成を支援する最新製品リリースの主な機能をご覧ください。ユーザーフレンドリーなインターフェースから堅牢な機能まで、当社製品が際立つ理由をご覧ください。',
     authors: [{ name: 'Erica Johns', avatar: '/static/images/avatar/6.jpg' }],
   },
   {
     img: 'https://picsum.photos/800/450?random=3',
-    tag: 'Design',
-    title: 'Designing for the future: trends and insights',
+    tag: 'デザイン',
+    title: '未来のためのデザイン：トレンドと洞察',
     description:
-      'Stay ahead of the curve with the latest design trends and insights. Our design team shares their expertise on creating intuitive and visually stunning user experiences.',
+      '最新のデザイントレンドとインサイトを活用して、常に時代の先を行く。当社のデザインチームが、直感的で視覚的に魅力的なユーザーエクスペリエンスを創造するための専門知識を共有します。',
     authors: [{ name: 'Kate Morrison', avatar: '/static/images/avatar/7.jpg' }],
   },
   {
     img: 'https://picsum.photos/800/450?random=4',
-    tag: 'Company',
-    title: 'Our company\'s journey: milestones and achievements',
+    tag: '企業',
+    title: '当社の歩み：マイルストーンと成果',
     description:
-      'Take a look at our company\'s journey and the milestones we\'ve achieved along the way. From humble beginnings to industry leader, discover our story of growth and success.',
+      '当社の歩みと、その過程で達成したマイルストーンをご覧ください。小さな会社から業界のリーダーへと成長し、成功へと至った当社のストーリーをご覧ください。',
     authors: [{ name: 'Cindy Baker', avatar: '/static/images/avatar/3.jpg' }],
   },
   {
     img: 'https://picsum.photos/800/450?random=45',
-    tag: 'Engineering',
-    title: 'Pioneering sustainable engineering solutions',
+    tag: 'エンジニア',
+    title: '持続可能なエンジニアリングソリューションの先駆者',
     description:
-      'Learn about our commitment to sustainability and the innovative engineering solutions we\'re implementing to create a greener future. Discover the impact of our eco-friendly initiatives.',
+      '当社の持続可能性への取り組みと、より環境に優しい未来を創造するために実践している革新的なエンジニアリングソリューションについてご紹介します。当社の環境に配慮した取り組みがもたらす効果をご覧ください。',
     authors: [
       { name: 'Agnes Walker', avatar: '/static/images/avatar/4.jpg' },
       { name: 'Trevor Henderson', avatar: '/static/images/avatar/5.jpg' },
@@ -66,10 +66,10 @@ const cardData = [
   },
   {
     img: 'https://picsum.photos/800/450?random=6',
-    tag: 'Product',
-    title: 'Maximizing efficiency with our latest product updates',
+    tag: '商品',
+    title: '最新の製品アップデートで効率を最大化',
     description:
-      'Our recent product updates are designed to help you maximize efficiency and achieve more. Get a detailed overview of the new features and improvements that can elevate your workflow.',
+      '最新の製品アップデートは、お客様の効率を最大限に高め、より多くの成果を達成できるよう設計されています。ワークフローを向上させる新機能と改善点の詳細な概要をご覧ください。',
     authors: [{ name: 'Travis Howard', avatar: '/static/images/avatar/2.jpg' }],
   },
 ];

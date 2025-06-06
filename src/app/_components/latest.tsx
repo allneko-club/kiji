@@ -11,82 +11,82 @@ import NavigateNextRoundedIcon from '@mui/icons-material/NavigateNextRounded';
 
 const articleInfo = [
   {
-    tag: 'Engineering',
-    title: 'The future of AI in software engineering',
+    tag: 'エンジニア',
+    title: 'ソフトウェアエンジニアリングにおけるAIの未来',
     description:
-      'Artificial intelligence is revolutionizing software engineering. Explore how AI-driven tools are enhancing development processes and improving software quality.',
+      '人工知能はソフトウェアエンジニアリングに革命をもたらしています。AIを活用したツールがどのように開発プロセスを強化し、ソフトウェアの品質を向上させるのかを探ります。',
     authors: [
       { name: 'Remy Sharp', avatar: '/static/images/avatar/1.jpg' },
       { name: 'Travis Howard', avatar: '/static/images/avatar/2.jpg' },
     ],
   },
   {
-    tag: 'Product',
-    title: 'Driving growth with user-centric product design',
+    tag: '商品',
+    title: 'ユーザー中心の製品設計で成長を促進',
     description:
-      'Our user-centric product design approach is driving significant growth. Learn about the strategies we employ to create products that resonate with users.',
+      'ユーザー中心の製品設計アプローチが、当社の大きな成長を牽引しています。ユーザーの心に響く製品を生み出すために私たちが採用している戦略についてご覧ください。',
     authors: [{ name: 'Erica Johns', avatar: '/static/images/avatar/6.jpg' }],
   },
   {
-    tag: 'Design',
-    title: 'Embracing minimalism in modern design',
+    tag: 'デザイン',
+    title: 'モダンデザインにおけるミニマリズムの採用',
     description:
-      'Minimalism is a key trend in modern design. Discover how our design team incorporates minimalist principles to create clean and impactful user experiences.',
+      'ミニマリズムは現代デザインの重要なトレンドです。私たちのデザインチームがミニマリズムの原則をどのように取り入れ、クリーンでインパクトのあるユーザーエクスペリエンスを創造しているかをご覧ください。',
     authors: [{ name: 'Kate Morrison', avatar: '/static/images/avatar/7.jpg' }],
   },
   {
-    tag: 'Company',
-    title: 'Cultivating a culture of innovation',
+    tag: '企業',
+    title: 'イノベーションの文化を育む',
     description:
-      'Innovation is at the heart of our company culture. Learn about the initiatives we have in place to foster creativity and drive groundbreaking solutions.',
+      'イノベーションは私たちの企業文化の中核です。創造性を育み、画期的なソリューションを推進するための取り組みについてご紹介します。',
     authors: [{ name: 'Cindy Baker', avatar: '/static/images/avatar/3.jpg' }],
   },
   {
-    tag: 'Engineering',
-    title: 'Advancing cybersecurity with next-gen solutions',
+    tag: 'エンジニア',
+    title: '次世代ソリューションでサイバーセキュリティを進化させる',
     description:
-      'Our next-generation cybersecurity solutions are setting new standards in the industry. Discover how we protect our clients from evolving cyber threats.',
+      '当社の次世代サイバーセキュリティソリューションは、業界の新たな基準を確立しています。進化するサイバー脅威からお客様を守る当社の取り組みをご覧ください。',
     authors: [
       { name: 'Agnes Walker', avatar: '/static/images/avatar/4.jpg' },
       { name: 'Trevor Henderson', avatar: '/static/images/avatar/5.jpg' },
     ],
   },
   {
-    tag: 'Product',
-    title: 'Enhancing customer experience through innovation',
+    tag: '商品',
+    title: 'イノベーションを通じて顧客体験を向上',
     description:
-      'Our innovative approaches are enhancing customer experience. Learn about the new features and improvements that are delighting our users.',
+      '当社の革新的なアプローチは、顧客体験の向上に貢献しています。ユーザーの皆様にご満足いただいている新機能と改善点についてご紹介します。',
     authors: [{ name: 'Travis Howard', avatar: '/static/images/avatar/2.jpg' }],
   },
   {
-    tag: 'Engineering',
-    title: 'Pioneering sustainable engineering solutions',
+    tag: 'エンジニア',
+    title: '持続可能なエンジニアリングソリューションの先駆者',
     description:
-      'Learn about our commitment to sustainability and the innovative engineering solutions we\'re implementing to create a greener future. Discover the impact of our eco-friendly initiatives.',
+      '当社の持続可能性への取り組みと、より環境に優しい未来を創造するために実践している革新的なエンジニアリングソリューションについてご紹介します。当社の環境に配慮した取り組みがもたらす効果をご覧ください。',
     authors: [
       { name: 'Agnes Walker', avatar: '/static/images/avatar/4.jpg' },
       { name: 'Trevor Henderson', avatar: '/static/images/avatar/5.jpg' },
     ],
   },
   {
-    tag: 'Product',
-    title: 'Maximizing efficiency with our latest product updates',
+    tag: '商品',
+    title: '最新の製品アップデートで効率を最大化',
     description:
-      'Our recent product updates are designed to help you maximize efficiency and achieve more. Get a detailed overview of the new features and improvements that can elevate your workflow.',
+      '最新の製品アップデートは、お客様の効率を最大限に高め、より多くの成果を達成できるよう設計されています。ワークフローを向上させる新機能と改善点の詳細な概要をご覧ください。',
     authors: [{ name: 'Travis Howard', avatar: '/static/images/avatar/2.jpg' }],
   },
   {
-    tag: 'Design',
-    title: 'Designing for the future: trends and insights',
+    tag: 'デザイン',
+    title: '未来のためのデザイン：トレンドと洞察',
     description:
-      'Stay ahead of the curve with the latest design trends and insights. Our design team shares their expertise on creating intuitive and visually stunning user experiences.',
+      '最新のデザイントレンドとインサイトを活用して、常に時代の先を行く。当社のデザインチームが、直感的で視覚的に魅力的なユーザーエクスペリエンスを創造するための専門知識を共有します。',
     authors: [{ name: 'Kate Morrison', avatar: '/static/images/avatar/7.jpg' }],
   },
   {
-    tag: 'Company',
-    title: 'Our company\'s journey: milestones and achievements',
+    tag: '企業',
+    title: '当社の歩み：マイルストーンと成果',
     description:
-      'Take a look at our company\'s journey and the milestones we\'ve achieved along the way. From humble beginnings to industry leader, discover our story of growth and success.',
+      '当社の歩みと、その過程で達成したマイルストーンをご覧ください。小さな会社から業界のリーダーへと成長し、成功へと至った当社のストーリーをご覧ください。',
     authors: [{ name: 'Cindy Baker', avatar: '/static/images/avatar/3.jpg' }],
   },
 ];
