@@ -15,6 +15,7 @@ import { paths } from '@/config/paths';
 import NextLink from 'next/link';
 import CreateIcon from '@mui/icons-material/Create';
 import { DeleteCategory } from '@/app/admin/categories/_components/delete-category';
+import Image from 'next/image';
 
 type Props = {
   categories: Category[];
@@ -27,7 +28,7 @@ export const CategoriesTable = ({ categories }: Props) => {
       <Table sx={{ minWidth: 650 }} aria-label="simple table">
         <TableHead>
           <TableRow>
-            <TableCell>操作</TableCell>
+            <TableCell align="right">操作</TableCell>
             <TableCell align="right">名前</TableCell>
             <TableCell align="right">スラッグ</TableCell>
             <TableCell align="right">画像</TableCell>
@@ -49,7 +50,9 @@ export const CategoriesTable = ({ categories }: Props) => {
               </TableCell>
               <TableCell align="right">{category.name}</TableCell>
               <TableCell align="right">{category.slug}</TableCell>
-              <TableCell align="right">{category.image}</TableCell>
+              <TableCell align="right">
+                {category.image && <Image src={category.image} width={30} height={30} alt="" />}
+              </TableCell>
               <TableCell align="right">{category.description}</TableCell>
               <TableCell align="right">{getFormattedDateTimeFromObj(category.updatedAt)}</TableCell>
               <TableCell align="right">{getFormattedDateTimeFromObj(category.createdAt)}</TableCell>

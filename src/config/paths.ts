@@ -26,6 +26,12 @@ export const paths = {
     },
     tags: {
       getHref: () => `${adminPath}/tags`,
+      create: {
+        getHref: () => `${adminPath}/tags/create`,
+      },
+      update: {
+        getHref: (id: number) => `${adminPath}/tags/${id}/update`,
+      },
     },
     users:{
       getHref: () => `${adminPath}/users`,
