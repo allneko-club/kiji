@@ -11,7 +11,7 @@ import { getFormProps, getInputProps, useForm } from '@conform-to/react';
 import { parseWithZod } from '@conform-to/zod';
 import { createCategoryInputSchema } from '@/app/admin/categories/schema';
 import Alert from '@mui/material/Alert';
-import { UsePreventFormReset } from '@/app/admin/categories/[id]/update/use-prevent-form-reset';
+import { UsePreventFormReset } from '@/hooks/use-prevent-form-reset';
 
 
 export const CreateCategoryForm = () => {

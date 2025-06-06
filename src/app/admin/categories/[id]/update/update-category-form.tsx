@@ -12,7 +12,7 @@ import { getFormProps, getInputProps, useForm } from '@conform-to/react';
 import { parseWithZod } from '@conform-to/zod';
 import { editCategoryInputSchema } from '@/app/admin/categories/schema';
 import { Category } from '@prisma/client';
-import { UsePreventFormReset } from '@/app/admin/categories/[id]/update/use-prevent-form-reset';
+import { UsePreventFormReset } from '@/hooks/use-prevent-form-reset';
 
 
 export const UpdateCategoryForm = ({ category }: { category: Category }) => {

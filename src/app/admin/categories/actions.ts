@@ -64,6 +64,8 @@ export async function updateCategory(prevState: unknown, formData: FormData) {
     if (e instanceof Prisma.PrismaClientKnownRequestError) {
       if (e.code === 'P2002') {
         return submission.reply({ formErrors: ['スラッグの値は一意にして下さい。'] });
+      }else if (e.code === 'P2025') {
+        return submission.reply({ formErrors: ['このカテゴリーは既に削除されています。'] });
       }
     }
     console.error('unknown error', e);
