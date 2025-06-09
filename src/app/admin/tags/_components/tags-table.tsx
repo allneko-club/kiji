@@ -39,7 +39,7 @@ export const TagsTable = ({ tags }: Props) => {
         <TableBody>
           {tags.map((tag) => (
             <TableRow key={tag.id}>
-              <TableCell component="th" scope="row">
+              <TableCell>
                 <Stack spacing={1} direction="row">
                   <IconButton href={paths.admin.tags.update.getHref(tag.id)} component={NextLink}>
                     <CreateIcon />

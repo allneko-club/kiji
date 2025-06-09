@@ -4,7 +4,7 @@ import * as React from 'react';
 import { useActionState } from 'react';
 import { User } from '@prisma/client';
 import { getRoleLabel } from '@/config/consts';
-import { deleteUser } from '@/app/admin/users/[id]/actions';
+import { deleteUser } from '@/app/admin/users/actions';
 import { useRouter } from 'next/navigation';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { toast } from 'react-toastify';

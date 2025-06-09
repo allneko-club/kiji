@@ -12,6 +12,12 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import TableCell from '@mui/material/TableCell';
+import * as React from 'react';
+import Stack from '@mui/material/Stack';
+import IconButton from '@mui/material/IconButton';
+import NextLink from 'next/link';
+import { DeleteUser } from '@/app/admin/users/[id]/_components/user-info';
+import CreateIcon from '@mui/icons-material/Create';
 
 type Props = {
   perPage: number;
@@ -27,6 +33,7 @@ export const UsersTable = ({ perPage, users, total }: Props) => {
       <Table sx={{ minWidth: 650 }} aria-label="simple table">
         <TableHead>
           <TableRow>
+            <TableCell align="right">操作</TableCell>
             <TableCell align="right">名前</TableCell>
             <TableCell align="right">メールアドレス</TableCell>
             <TableCell align="right">権限</TableCell>
@@ -35,12 +42,19 @@ export const UsersTable = ({ perPage, users, total }: Props) => {
         </TableHead>
         <TableBody>
           {users.map((user) => (
-            <TableRow
-              key={user.id}
-              sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-              onClick={() => router.push(paths.admin.users.detail.getHref(user.id))}
-            >
-              <TableCell align="right">{user.name}</TableCell>
+            <TableRow key={user.id}>
+              <TableCell>
+                <Stack spacing={1} direction="row">
+                  <IconButton href={paths.admin.users.update.getHref(user.id)} component={NextLink}>
+                    <CreateIcon />
+                  </IconButton>
+                  <DeleteUser id={user.id} />
+                </Stack>
+              </TableCell>
+              <TableCell
+                align="right"
+                onClick={() => router.push(paths.admin.users.detail.getHref(user.id))}
+              >{user.name}</TableCell>
               <TableCell align="right">{user.email}</TableCell>
               <TableCell align="right">{getRoleLabel(user.role)}</TableCell>
               <TableCell align="right">{getFormattedDateTimeFromObj(user.createdAt)}</TableCell>

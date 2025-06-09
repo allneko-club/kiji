@@ -10,6 +10,10 @@ import { BaseSearch } from '@/types/requests';
 import type { Metadata } from 'next';
 import Typography from '@mui/material/Typography';
 import Grid from '@mui/material/Grid';
+import Button from '@mui/material/Button';
+import NextLink from 'next/link';
+import { paths } from '@/config/paths';
+import Box from '@mui/material/Box';
 
 export const metadata: Metadata = { title: 'ユーザー' };
 
@@ -60,7 +64,18 @@ export default async function Page(props: {
   return (
     <>
       <Typography variant="h1">ユーザー</Typography>
-      <UsersFilter defaultValues={defaultValues} />
+      <Button
+        variant="contained"
+        component={NextLink}
+        href={paths.auth.register.getHref()}
+      >
+        追加
+      </Button>
+
+      <Box sx={{ p: 2, my: 2, border: '1px dashed grey' }}>
+        <UsersFilter defaultValues={defaultValues} />
+      </Box>
+
       <Grid container spacing={2}>
         <Grid size={6}>
           <SelectSort selectItems={UserSortItems} />

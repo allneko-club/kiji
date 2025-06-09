@@ -55,7 +55,7 @@ export default function UsersFilter({ defaultValues }: Props) {
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="ja">
       <form onSubmit={handleSubmit(onSubmit)}>
-        <Typography variant="h2">フィルター</Typography>
+        <Typography variant="h5" component="h2">フィルター</Typography>
 
         <Grid container spacing={2}>
           <Grid size={6}>
