@@ -38,6 +38,9 @@ export const paths = {
       detail: {
         getHref: (id: string) => `${adminPath}/users/${id}`,
       },
+      update: {
+        getHref: (id: string) => `${adminPath}/users/${id}/update`,
+      },
     },
   },
   home: {

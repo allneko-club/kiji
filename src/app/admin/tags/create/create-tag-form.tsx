@@ -9,7 +9,7 @@ import Stack from '@mui/material/Stack';
 import TextField from '@mui/material/TextField';
 import { getFormProps, getInputProps, useForm } from '@conform-to/react';
 import { parseWithZod } from '@conform-to/zod';
-import { createTagInputSchema } from '@/app/admin/tags/schema';
+import { createTagInputSchema } from '@/schemas/tag';
 import Alert from '@mui/material/Alert';
 import { UsePreventFormReset } from '@/hooks/use-prevent-form-reset';
 

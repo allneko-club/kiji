@@ -4,7 +4,7 @@ import { useActionState } from 'react';
 import { contact } from '@/app/(misc)/contact/actions';
 import { FormProvider, useForm } from '@conform-to/react';
 import { parseWithZod } from '@conform-to/zod';
-import { contactInputSchema } from '@/app/(misc)/contact/schema';
+import { contactInputSchema } from '@/schemas/contact';
 import Button from '@mui/material/Button';
 import FormControl from '@mui/material/FormControl';
 import FormLabel from '@mui/material/FormLabel';

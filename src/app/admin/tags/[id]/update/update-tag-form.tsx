@@ -10,7 +10,7 @@ import Stack from '@mui/material/Stack';
 import TextField from '@mui/material/TextField';
 import { getFormProps, getInputProps, useForm } from '@conform-to/react';
 import { parseWithZod } from '@conform-to/zod';
-import { updateTagInputSchema } from '@/app/admin/tags/schema';
+import { updateTagInputSchema } from '@/schemas/tag';
 import { UsePreventFormReset } from '@/hooks/use-prevent-form-reset';
 import { Tag } from '@prisma/client';
 

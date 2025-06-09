@@ -4,7 +4,7 @@ import { paths } from '@/config/paths';
 import { Prisma, prisma } from '@/lib/prisma';
 import { auth } from '@/auth';
 import { parseWithZod } from '@conform-to/zod';
-import { updateUserInputSchema } from '@/app/admin/users/schema';
+import { updateUserInputSchema } from '@/schemas/user';
 
 
 export async function updateUser(prevState: unknown, formData: FormData) {

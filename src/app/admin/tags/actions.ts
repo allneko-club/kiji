@@ -3,7 +3,7 @@ import { redirect } from 'next/navigation';
 import { paths } from '@/config/paths';
 import { Prisma, prisma } from '@/lib/prisma';
 import { auth } from '@/auth';
-import { createTagInputSchema, updateTagInputSchema } from '@/app/admin/tags/schema';
+import { createTagInputSchema, updateTagInputSchema } from '@/schemas/tag';
 import { parseWithZod } from '@conform-to/zod';
 
 

@@ -32,7 +32,7 @@ export default async function Page({ params }: Props) {
     title: post.title,
     content: post.content,
     published: post.published ? 'on' : '',
-    categoryId: post.categoryId.toString(),
+    categoryId: post.categoryId ? post.categoryId.toString() : '',
     tagIds: post.tags.map(tag => tag.id),
   };
 

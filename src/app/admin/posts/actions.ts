@@ -4,7 +4,7 @@ import { paths } from '@/config/paths';
 import { prisma } from '@/lib/prisma';
 import { auth } from '@/auth';
 import { getPost } from '@/models/post';
-import { createPostInputSchema } from '@/app/admin/posts/schema';
+import { createPostInputSchema } from '@/schemas/post';
 
 type PrevState = {
   id: string;

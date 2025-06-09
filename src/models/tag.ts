@@ -15,3 +15,11 @@ export const getTag = async (id: number) => {
     },
   });
 }
+
+export const getTagBySlug = async (slug: string) => {
+  return prisma.tag.findUnique({
+    where: {
+      slug: slug,
+    },
+  });
+}

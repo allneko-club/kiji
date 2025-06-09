@@ -10,7 +10,7 @@ import Stack from '@mui/material/Stack';
 import TextField from '@mui/material/TextField';
 import { getFormProps, getInputProps, useForm } from '@conform-to/react';
 import { parseWithZod } from '@conform-to/zod';
-import { editCategoryInputSchema } from '@/app/admin/categories/schema';
+import { editCategoryInputSchema } from '@/schemas/category';
 import { Category } from '@prisma/client';
 import { UsePreventFormReset } from '@/hooks/use-prevent-form-reset';
 

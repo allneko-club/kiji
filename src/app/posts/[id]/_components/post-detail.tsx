@@ -8,7 +8,7 @@ import Chip from '@mui/material/Chip';
 
 
 type Props = {
-  post: Post & { author: User, category: Category, tags: Tag[] };
+  post: Post & { author: User, category: Category | null, tags: Tag[] };
 }
 
 export function PostDetail({ post }: Props) {
@@ -18,7 +18,7 @@ export function PostDetail({ post }: Props) {
 
       <Author author={post.author} created={getFormattedDateTimeFromObj(post.createdAt)} />
 
-      <Chip size="medium" label={post.category.name} />
+      {post.category && <Chip size="medium" label={post.category.name} />}
 
       <div>
         {post.tags.map((tag) =>

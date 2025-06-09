@@ -3,7 +3,7 @@ import { redirect } from 'next/navigation';
 import { paths } from '@/config/paths';
 import { Prisma, prisma } from '@/lib/prisma';
 import { auth } from '@/auth';
-import { createCategoryInputSchema, editCategoryInputSchema } from '@/app/admin/categories/schema';
+import { createCategoryInputSchema, editCategoryInputSchema } from '@/schemas/category';
 import { parseWithZod } from '@conform-to/zod';
 
 

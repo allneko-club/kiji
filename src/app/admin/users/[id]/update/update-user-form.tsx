@@ -11,7 +11,7 @@ import { getFormProps, getInputProps, useForm } from '@conform-to/react';
 import { parseWithZod } from '@conform-to/zod';
 import { UsePreventFormReset } from '@/hooks/use-prevent-form-reset';
 import { User } from '@prisma/client';
-import { updateUserInputSchema } from '@/app/admin/users/schema';
+import { updateUserInputSchema } from '@/schemas/user';
 import { updateUser } from '@/app/admin/users/actions';
 import Select from '@mui/material/Select';
 import { getRoleLabel, RoleFilterValues } from '@/config/consts';
