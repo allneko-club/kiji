@@ -383,8 +383,6 @@ export const inputsCustomizations: Components<Theme> = {
       root: ({ theme }) => ({
         padding: '8px 12px',
         color: (theme.vars || theme).palette.text.primary,
-        borderRadius: (theme.vars || theme).shape.borderRadius,
-        border: `1px solid ${(theme.vars || theme).palette.divider}`,
         backgroundColor: (theme.vars || theme).palette.background.default,
         transition: 'border 120ms ease-in',
         '&:hover': {
@@ -399,28 +397,7 @@ export const inputsCustomizations: Components<Theme> = {
             borderColor: gray[500],
           },
         }),
-        variants: [
-          {
-            props: {
-              size: 'small',
-            },
-            style: {
-              height: '2.25rem',
-            },
-          },
-          {
-            props: {
-              size: 'medium',
-            },
-            style: {
-              height: '2.5rem',
-            },
-          },
-        ],
       }),
-      notchedOutline: {
-        border: 'none',
-      },
     },
   },
   MuiInputAdornment: {

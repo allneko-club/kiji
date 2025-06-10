@@ -39,7 +39,7 @@ export const UpdateUserForm = ({ user }: { user: User }) => {
       {form.errors && <Alert severity="error">{form.errors}</Alert>}
 
       <Stack spacing={4} marginY={4}>
-        <input {...getInputProps(fields.id, { type: 'number' })} hidden />
+        <input {...getInputProps(fields.id, { type: 'text' })} hidden />
         <FormControl required>
           <FormLabel htmlFor={fields.name.name}>名前</FormLabel>
           <TextField
@@ -64,7 +64,7 @@ export const UpdateUserForm = ({ user }: { user: User }) => {
             helperText={fields.image.errors}
           />
         </FormControl>
-        <FormControl fullWidth>
+        <FormControl fullWidth error={!fields.image.valid}>
           <FormLabel htmlFor={fields.role.name}>権限</FormLabel>
           <Select name={fields.role.name} defaultValue={fields.role.initialValue}>
             {Object.keys(RoleFilterValues).map((role) => (
