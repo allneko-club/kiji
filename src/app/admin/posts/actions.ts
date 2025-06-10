@@ -47,7 +47,6 @@ export async function savePost(prevState: PrevState, formData: FormData) {
 
   if (!result.success && result.error) {
     const formatted = result.error.format();
-    console.log('formatted', formatted.tagIds?._errors);
 
     return {
       id: id,

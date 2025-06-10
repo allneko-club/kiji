@@ -54,14 +54,6 @@ export const UpdateTagForm = ({ tag }: { tag: Tag }) => {
           />
         </FormControl>
         <FormControl>
-          <FormLabel htmlFor={fields.image.name}>画像URL</FormLabel>
-          <TextField
-            {...getInputProps(fields.image, { type: 'url' })}
-            error={!fields.image.valid}
-            helperText={fields.image.errors}
-          />
-        </FormControl>
-        <FormControl>
           <FormLabel htmlFor={fields.description.name}>説明</FormLabel>
           <TextField
             {...getInputProps(fields.description, { type: 'text' })}

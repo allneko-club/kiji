@@ -56,7 +56,6 @@ model Tag {
   slug        String   @unique
   name        String   @default("")
   description String   @default("")
-  image       String   @default("")
   updatedAt   DateTime @updatedAt
   createdAt   DateTime @default(now())
   posts       Post[]

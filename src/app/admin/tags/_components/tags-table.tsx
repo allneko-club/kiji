@@ -12,7 +12,6 @@ import Stack from '@mui/material/Stack';
 import IconButton from '@mui/material/IconButton';
 import { paths } from '@/config/paths';
 import NextLink from 'next/link';
-import Image from 'next/image'
 import CreateIcon from '@mui/icons-material/Create';
 import { DeleteTag } from '@/app/admin/tags/_components/delete-tag';
 
@@ -49,9 +48,6 @@ export const TagsTable = ({ tags }: Props) => {
               </TableCell>
               <TableCell align="right">{tag.name}</TableCell>
               <TableCell align="right">{tag.slug}</TableCell>
-              <TableCell align="right">
-                {tag.image && <Image src={tag.image} width={30} height={30} alt="" />}
-              </TableCell>
               <TableCell align="right">{tag.description}</TableCell>
               <TableCell align="right">{getFormattedDateTimeFromObj(tag.updatedAt)}</TableCell>
               <TableCell align="right">{getFormattedDateTimeFromObj(tag.createdAt)}</TableCell>

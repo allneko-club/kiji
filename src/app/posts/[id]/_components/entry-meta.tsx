@@ -5,14 +5,17 @@ import Box from '@mui/material/Box';
 import AvatarGroup from '@mui/material/AvatarGroup';
 import Avatar from '@mui/material/Avatar';
 import Typography from '@mui/material/Typography';
+import Button from '@mui/material/Button';
+import NextLink from 'next/link';
 
 type Props = {
   author: User;
+  category?: string;
   created: string;
 }
 
 
-export function Author({ author, created }: Props) {
+export function EntryMeta({ author, created, category }: Props) {
   return (
     <Box
       sx={{
@@ -26,6 +29,10 @@ export function Author({ author, created }: Props) {
       <Box
         sx={{ display: 'flex', flexDirection: 'row', gap: 1, alignItems: 'center' }}
       >
+        <Button component={NextLink} size="small" variant="outlined" href="#">
+          {category}
+        </Button>
+
         <AvatarGroup max={3}>
           <Avatar
             alt={author.name}

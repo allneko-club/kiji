@@ -2,9 +2,12 @@
 import * as React from 'react';
 import { getFormattedDateTimeFromObj } from '@/lib/datetime';
 import { Category, Post, Tag, User } from '@prisma/client';
-import { Author } from '@/app/posts/[id]/_components/author';
+import { EntryMeta } from '@/app/posts/[id]/_components/entry-meta';
 import Typography from '@mui/material/Typography';
-import Chip from '@mui/material/Chip';
+import { paths } from '@/config/paths';
+import TagChip from '@/components/ui/tag-chip';
+import Stack from '@mui/material/Stack';
+import Container from '@mui/material/Container';
 
 
 type Props = {
@@ -14,21 +17,29 @@ type Props = {
 export function PostDetail({ post }: Props) {
   return (
     <article>
-      <Typography variant="h1">{post.title}</Typography>
+      <Container sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+        <EntryMeta
+          author={post.author}
+          created={getFormattedDateTimeFromObj(post.createdAt)}
+          category={post.category?.name}
+        />
 
-      <Author author={post.author} created={getFormattedDateTimeFromObj(post.createdAt)} />
+        <Typography variant="h1">{post.title}</Typography>
 
-      {post.category && <Chip size="medium" label={post.category.name} />}
+        <div>
+          {post.content}
+        </div>
 
-      <div>
-        {post.tags.map((tag) =>
-          <Chip key={tag.id} label={`#${tag.name}`} />,
-        )}
-      </div>
-
-      <div>
-        {post.content}
-      </div>
+        <Stack direction="row" spacing={1}>
+          {post.tags.map((tag) =>
+            <TagChip
+              key={tag.id}
+              label={tag.name}
+              href={paths.tags.detail.getHref(tag.slug)}
+            />
+          )}
+        </Stack>
+      </Container>
     </article>
   );
 }

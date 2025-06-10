@@ -7,8 +7,6 @@ import { notFound } from 'next/navigation';
 import type { Metadata } from 'next';
 import Typography from '@mui/material/Typography';
 
-// export const metadata: Metadata = { title: "タグ" };
-
 type Props = {
   params: Promise<{ slug: string }>
   searchParams?: Promise<{ page?: string; }>;
@@ -42,9 +40,9 @@ export default async function Page(props: Props) {
   }
 
   return (
-    <div>
+    <>
       <Typography variant="h1">{tag.name}</Typography>
       <PostList perPage={queryParams.perPage} posts={posts} total={total} />
-    </div>
+    </>
   );
 };

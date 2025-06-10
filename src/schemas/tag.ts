@@ -6,7 +6,6 @@ export const createTagInputSchema = z.object({
   slug: z.string({ required_error: 'スラッグを入力してください。' })
     .regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/i, '不正なスラッグです。'),
   description: z.string().max(1000, '1000文字以内にしてください。').default(''),
-  image: z.string().url('URLの形式が間違っています。').optional(),
 });
 
 export const updateTagInputSchema = createTagInputSchema.extend({

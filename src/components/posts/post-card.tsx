@@ -3,7 +3,6 @@ import * as React from 'react';
 import { useRouter } from 'next/navigation';
 import { paths } from '@/config/paths';
 import { getFormattedDateTimeFromObj } from '@/lib/datetime';
-import { Post } from '@prisma/client';
 import { styled } from '@mui/material/styles';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
@@ -13,6 +12,7 @@ import Grid from '@mui/material/Grid';
 import CardMedia from '@mui/material/CardMedia';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
+import { PostWithCategoryAuthor } from '@/types/post';
 
 
 const StyledCard = styled(Card)(({ theme }) => ({
@@ -60,6 +60,7 @@ function Author({ author, created }: { author: { name: string; avatar: string },
         gap: 2,
         alignItems: 'center',
         justifyContent: 'space-between',
+        padding: '16px',
       }}
     >
       <Box
@@ -80,7 +81,7 @@ function Author({ author, created }: { author: { name: string; avatar: string },
 }
 
 
-export function PostCard({ post }: { post: Post }) {
+export function PostCard({ post }: { post: PostWithCategoryAuthor}) {
   const router = useRouter();
   const [focusedCardIndex, setFocusedCardIndex] = React.useState<string | null>(
     null,
@@ -109,9 +110,11 @@ export function PostCard({ post }: { post: Post }) {
           }}
         />
         <StyledCardContent>
-          <Typography gutterBottom variant="caption" component="div">
-            タグ
-          </Typography>
+          {post.category &&
+            <Typography gutterBottom variant="caption" component="div">
+              {post.category.name}
+            </Typography>
+          }
           <Typography gutterBottom variant="h6" component="div">
             {post.title}
           </Typography>
@@ -120,7 +123,7 @@ export function PostCard({ post }: { post: Post }) {
           </StyledTypography>
         </StyledCardContent>
         <Author
-          author={{ name: 'Cindy Baker', avatar: '/static/images/avatar/3.jpg' }}
+          author={{ name: post.author.name, avatar: post.author.image }}
           created={getFormattedDateTimeFromObj(post.createdAt)}
         />
       </StyledCard>

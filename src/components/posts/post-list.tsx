@@ -1,12 +1,12 @@
 'use client';
 import { PaginationBasic } from '@/components/pagination-basic';
 import { PostCard } from '@/components/posts';
-import { Post } from '@prisma/client';
 import Grid from '@mui/material/Grid';
+import { PostWithCategoryAuthor } from '@/types/post';
 
 type Props = {
   perPage: number;
-  posts: Post[];
+  posts: PostWithCategoryAuthor[];
   total: number;
 }
 
