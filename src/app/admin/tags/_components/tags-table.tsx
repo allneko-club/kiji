@@ -29,7 +29,6 @@ export const TagsTable = ({ tags }: Props) => {
             <TableCell align="right">操作</TableCell>
             <TableCell align="right">名前</TableCell>
             <TableCell align="right">スラッグ</TableCell>
-            <TableCell align="right">画像</TableCell>
             <TableCell align="right">説明</TableCell>
             <TableCell align="right">更新日時</TableCell>
             <TableCell align="right">登録日時</TableCell>
