@@ -11,7 +11,7 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
-import { useRouter } from 'next/navigation';
+import { redirect } from 'next/navigation';
 import { paths } from '@/config/paths';
 
 type DeletePostProps = {
@@ -19,7 +19,6 @@ type DeletePostProps = {
 };
 
 export function DeletePost({ id }: DeletePostProps) {
-  const router = useRouter();
   const [, action, isPending] = useActionState(deletePost, null);
   const [open, setOpen] = React.useState(false);
   const handleClickOpen = () => setOpen(true);
@@ -40,7 +39,7 @@ export function DeletePost({ id }: DeletePostProps) {
           action(formData);
           handleClose();
           toast('削除しました');
-          router.push(paths.admin.getHref());
+          redirect(paths.admin.posts.getHref());
         }}>
           <input name="id" hidden defaultValue={id} />
           <DialogTitle id="delete-post">
