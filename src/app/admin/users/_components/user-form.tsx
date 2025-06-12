@@ -1,7 +1,6 @@
 'use client';
 import * as React from 'react';
 import { useActionState } from 'react';
-import { updateCategory } from '@/app/admin/categories/actions';
 import Alert from '@mui/material/Alert';
 import Button from '@mui/material/Button';
 import FormControl from '@mui/material/FormControl';
@@ -10,23 +9,27 @@ import Stack from '@mui/material/Stack';
 import TextField from '@mui/material/TextField';
 import { getFormProps, getInputProps, useForm } from '@conform-to/react';
 import { parseWithZod } from '@conform-to/zod';
-import { editCategoryInputSchema } from '@/schemas/category';
-import { Category } from '@prisma/client';
 import { UsePreventFormReset } from '@/hooks/use-prevent-form-reset';
+import { User } from '@prisma/client';
+import { updateUserInputSchema } from '@/schemas/user';
+import { updateUser } from '@/app/admin/users/actions';
+import Select from '@mui/material/Select';
+import { getRoleLabel, RoleFilterValues } from '@/config/consts';
+import MenuItem from '@mui/material/MenuItem';
 
 
-export const UpdateCategoryForm = ({ category }: { category: Category }) => {
+export const UserForm = ({ user }: { user: User }) => {
 
   const [lastResult, submitAction, isPending] = useActionState(
-    updateCategory,
+    updateUser,
     undefined,
   );
   const [form, fields] = useForm({
     lastResult,
     onValidate({ formData }) {
-      return parseWithZod(formData, { schema: editCategoryInputSchema });
+      return parseWithZod(formData, { schema: updateUserInputSchema });
     },
-    defaultValue: category,
+    defaultValue: user,
   });
 
   UsePreventFormReset({formId: form.id});
@@ -36,7 +39,7 @@ export const UpdateCategoryForm = ({ category }: { category: Category }) => {
       {form.errors && <Alert severity="error">{form.errors}</Alert>}
 
       <Stack spacing={4} marginY={4}>
-        <input {...getInputProps(fields.id, { type: 'number' })} hidden />
+        <input {...getInputProps(fields.id, { type: 'text' })} hidden />
         <FormControl required>
           <FormLabel htmlFor={fields.name.name}>名前</FormLabel>
           <TextField
@@ -46,11 +49,11 @@ export const UpdateCategoryForm = ({ category }: { category: Category }) => {
           />
         </FormControl>
         <FormControl required>
-          <FormLabel htmlFor={fields.slug.name}>スラッグ</FormLabel>
+          <FormLabel htmlFor={fields.email.name}>メールアドレス</FormLabel>
           <TextField
-            {...getInputProps(fields.slug, { type: 'text' })}
-            error={!fields.slug.valid}
-            helperText={fields.slug.errors}
+            {...getInputProps(fields.email, { type: 'text' })}
+            error={!fields.email.valid}
+            helperText={fields.email.errors}
           />
         </FormControl>
         <FormControl>
@@ -61,15 +64,15 @@ export const UpdateCategoryForm = ({ category }: { category: Category }) => {
             helperText={fields.image.errors}
           />
         </FormControl>
-        <FormControl>
-          <FormLabel htmlFor={fields.description.name}>説明</FormLabel>
-          <TextField
-            {...getInputProps(fields.description, { type: 'text' })}
-            multiline
-            rows={4}
-            error={!fields.description.valid}
-            helperText={fields.description.errors}
-          />
+        <FormControl error={!fields.role.valid}>
+          <FormLabel htmlFor={fields.role.name}>権限</FormLabel>
+          <Select name={fields.role.name} defaultValue={fields.role.initialValue}>
+            {Object.keys(RoleFilterValues).map((role) => (
+              <MenuItem key={role} value={role}>
+                {getRoleLabel(Number(role))}
+              </MenuItem>
+            ))}
+          </Select>
         </FormControl>
       </Stack>
 

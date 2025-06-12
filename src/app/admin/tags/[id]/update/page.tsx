@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import { notFound, redirect } from 'next/navigation';
 import { paths } from '@/config/paths';
 import { getTag } from '@/models/tag';
-import { UpdateTagForm } from '@/app/admin/tags/[id]/update/update-tag-form';
+import { TagForm } from '@/app/admin/tags/_components/tag-form';
 
 export const metadata: Metadata = {title: "タグの編集"};
 
@@ -24,6 +24,6 @@ export default async function Page({ params }: Props) {
   }
 
   return (
-    <UpdateTagForm tag={tag} />
+    <TagForm tag={tag} />
   );
 };

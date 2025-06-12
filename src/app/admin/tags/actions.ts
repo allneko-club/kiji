@@ -3,7 +3,7 @@ import { redirect } from 'next/navigation';
 import { paths } from '@/config/paths';
 import { Prisma, prisma } from '@/lib/prisma';
 import { auth } from '@/auth';
-import { createTagInputSchema, updateTagInputSchema } from '@/schemas/tag';
+import { TagInputSchema } from '@/schemas/tag';
 import { parseWithZod } from '@conform-to/zod';
 
 
@@ -15,7 +15,7 @@ export async function createTag(prevState: unknown, formData: FormData) {
   }
 
   const submission = parseWithZod(formData, {
-    schema: createTagInputSchema,
+    schema: TagInputSchema,
   });
 
   if (submission.status !== 'success') {
@@ -45,7 +45,7 @@ export async function updateTag(prevState: unknown, formData: FormData) {
   }
 
   const submission = parseWithZod(formData, {
-    schema: updateTagInputSchema,
+    schema: TagInputSchema,
   });
 
   if (submission.status !== 'success') {

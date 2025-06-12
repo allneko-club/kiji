@@ -3,7 +3,7 @@ import { redirect } from 'next/navigation';
 import { paths } from '@/config/paths';
 import { Prisma, prisma } from '@/lib/prisma';
 import { auth } from '@/auth';
-import { createCategoryInputSchema, editCategoryInputSchema } from '@/schemas/category';
+import { createCategoryInputSchema, updateCategoryInputSchema } from '@/schemas/category';
 import { parseWithZod } from '@conform-to/zod';
 
 
@@ -45,7 +45,7 @@ export async function updateCategory(prevState: unknown, formData: FormData) {
   }
 
   const submission = parseWithZod(formData, {
-    schema: editCategoryInputSchema,
+    schema: updateCategoryInputSchema,
   });
 
   if (submission.status !== 'success') {

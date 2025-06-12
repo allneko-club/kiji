@@ -1,127 +1,124 @@
 'use client';
-import { Category, Tag } from '@prisma/client';
+import { Category, Tag, User } from '@prisma/client';
 import * as React from 'react';
-import { useActionState, useEffect } from 'react';
-import { savePost } from '@/app/admin/posts/actions';
-import { toast } from 'react-toastify';
+import { useActionState } from 'react';
+import { createPost, updatePost } from '@/app/admin/posts/actions';
 import Button from '@mui/material/Button';
 import FormControl from '@mui/material/FormControl';
 import FormLabel from '@mui/material/FormLabel';
 import TextField from '@mui/material/TextField';
-import InputLabel from '@mui/material/InputLabel';
 import Switch from '@mui/material/Switch';
-import MenuItem from '@mui/material/MenuItem';
-import Select from '@mui/material/Select';
 import Checkbox from '@mui/material/Checkbox';
+import { FormProvider, getFormProps, getInputProps, useForm } from '@conform-to/react';
+import { parseWithZod } from '@conform-to/zod';
+import { UsePreventFormReset } from '@/hooks/use-prevent-form-reset';
+import { createPostInputSchema } from '@/schemas/post';
+import Stack from '@mui/material/Stack';
+import Alert from '@mui/material/Alert';
+import { SelectCategory } from '@/app/admin/posts/select-category';
+import { SelectUser } from '@/app/admin/posts/select-user';
 
 type Props = {
-  initialState: {
-    id: string;
-    title: string;
-    content: string;
-    published: string;
-    categoryId: string;
-    tagIds: number[];
-  };
   categories: Category[];
   tags: Tag[];
+  users: User[];
+  post?: {
+    id: string,
+    title: string,
+    content: string,
+    published: boolean,
+    authorId: string,
+    categoryId: number | null,
+    tagIds: number[],
+  };
 }
 
-export const PostForm = ({ initialState, categories, tags }: Props) => {
-  const [state, action, isPending] = useActionState(
-    savePost,
-    {
-      ...initialState,
-      message: '',
-      errors: { title: '', content: '', published: '', categoryId: '' },
-    },
+export const PostForm = ({ categories, tags, users, post }: Props) => {
+  const [lastResult, submitAction, isPending] = useActionState(
+    post ? updatePost : createPost,
+    undefined
   );
+  const [form, fields] = useForm({
+    lastResult,
+    onValidate({ formData }) {
+      return parseWithZod(formData, { schema: createPostInputSchema });
+    },
+    defaultValue: post,
+  });
 
-  useEffect(() => {
-    if (state.message) {
-      toast(state.message);
-    }
-  }, [state, state.message]);
+  UsePreventFormReset({formId: form.id});
 
   return (
-    <form action={action}>
-      <div>
-        <Button type="submit" variant="contained" loading={isPending}>保存</Button>
-      </div>
+    <FormProvider context={form.context}>
+      <form action={submitAction} {...getFormProps(form)}>
+        {form.errors && <Alert severity="error">{form.errors}</Alert>}
 
-      <div>
-        <FormControl required>
-          <TextField
-            id="title"
-            name="title"
-
-            label="タイトル"
-            defaultValue={state.title}
-            error={!!state.errors.title}
-            helperText={state?.errors.title}
-          />
-        </FormControl>
-
-        <FormControl>
-          <TextField
-            id="content"
-            name="content"
-            label="本文"
-            multiline
-            maxRows={4}
-            defaultValue={state.content}
-            error={!!state.errors.content}
-            helperText={state?.errors.content}
-          />
-        </FormControl>
-
-        <FormControl>
-          <div>
-            <FormLabel htmlFor="published">公開</FormLabel>
-            <Switch
-              id="published"
-              name="published"
-              // helperText={state?.errors.published}
+        <Stack spacing={4} marginY={4}>
+          <input {...getInputProps(fields.id, { type: 'text' })} hidden />
+          <FormControl required>
+            <FormLabel htmlFor={fields.title.name}>タイトル</FormLabel>
+            <TextField
+              {...getInputProps(fields.title, { type: 'text' })}
+              error={!fields.title.valid}
+              helperText={fields.title.errors}
             />
-          </div>
-        </FormControl>
+          </FormControl>
 
-        <FormControl>
-          <InputLabel>カテゴリー</InputLabel>
-          <Select
-            labelId="categoryId"
-            id="categoryId"
-            defaultValue={state.categoryId}
-            label="categoryId"
-          >
-            {categories.map((item) => (
-              <MenuItem key={item.id} value={item.id.toString()}>
-                {item.name}
-              </MenuItem>
-            ))}
-          </Select>
-          {/*todo エラーメッセージ*/}
-          {state?.errors?.categoryId}
-        </FormControl>
+          <FormControl>
+            <FormLabel htmlFor={fields.content.name}>本文</FormLabel>
+            <TextField
+              {...getInputProps(fields.content, { type: 'text' })}
+              multiline
+              rows={10}
+              error={!fields.content.valid}
+              helperText={fields.content.errors}
+            />
+          </FormControl>
 
-        <FormControl>
-          <div>
-            <FormLabel htmlFor="tags">タグ</FormLabel>
+          <FormControl>
+            <FormLabel htmlFor={fields.published.name}>公開</FormLabel>
+            <Switch
+              {...getInputProps(fields.published, { type: 'checkbox' })}
+              defaultChecked={fields.published.initialValue === 'on'}
+            />
+          </FormControl>
+
+          <FormControl required error={!fields.authorId.valid}>
+            <SelectUser
+              label="著者"
+              name={fields.authorId.name}
+              required={false}
+              users={users}
+            />
+          </FormControl>
+
+          <FormControl error={!fields.categoryId.valid}>
+            <SelectCategory
+              label="カテゴリー"
+              name={fields.categoryId.name}
+              required={false}
+              categories={categories}
+            />
+          </FormControl>
+
+
+          <FormControl>
+            <FormLabel htmlFor={fields.tagIds.name}>タグ</FormLabel>
             {tags.map(tag => (
               <div key={tag.id}>
                 <FormLabel>{tag.name}</FormLabel>
                 <Checkbox
                   name="tagIds"
                   value={tag.id}
-                  defaultChecked={state.tagIds.includes(tag.id)}
                 />
               </div>
             ))}
-          </div>
-          {/*todo エラーメッセージ*/}
-          {state?.errors.published}
-        </FormControl>
-      </div>
-    </form>
+          </FormControl>
+        </Stack>
+
+        <Button type="submit" variant="contained" loading={isPending}>保存</Button>
+
+      </form>
+    </FormProvider>
   );
 };

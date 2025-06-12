@@ -4,7 +4,7 @@ import SelectSort from '@/components/select-sort';
 import { Role, USERS_LIMIT_LIST } from '@/config/consts';
 import { cleanOrderBy, cleanPage, cleanPerPage } from '@/lib/query-params';
 import SelectLimit from '@/components/select-limit';
-import { getUsers } from '@/models/user';
+import { getUsersByFilter } from '@/models/user';
 import { cleanOrder, cleanRole } from '@/app/admin/users/clean';
 import { BaseSearch } from '@/types/requests';
 import type { Metadata } from 'next';
@@ -59,7 +59,7 @@ export default async function Page(props: {
     registeredTo: params.registeredTo,
   };
 
-  const { users, total } = await getUsers(params);
+  const { users, total } = await getUsersByFilter(params);
 
   return (
     <>

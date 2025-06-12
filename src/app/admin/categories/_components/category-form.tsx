@@ -1,7 +1,7 @@
 'use client';
 import * as React from 'react';
 import { useActionState } from 'react';
-import { createCategory } from '@/app/admin/categories/actions';
+import { createCategory, updateCategory } from '@/app/admin/categories/actions';
 import Button from '@mui/material/Button';
 import FormControl from '@mui/material/FormControl';
 import FormLabel from '@mui/material/FormLabel';
@@ -9,21 +9,24 @@ import Stack from '@mui/material/Stack';
 import TextField from '@mui/material/TextField';
 import { getFormProps, getInputProps, useForm } from '@conform-to/react';
 import { parseWithZod } from '@conform-to/zod';
-import { createCategoryInputSchema } from '@/schemas/category';
+import { CategoryInputSchema } from '@/schemas/category';
 import Alert from '@mui/material/Alert';
 import { UsePreventFormReset } from '@/hooks/use-prevent-form-reset';
+import { Category } from '@prisma/client';
 
 
-export const CreateCategoryForm = () => {
+export const CategoryForm = ({category}:  { category?: Category }) => {
   const [lastResult, submitAction, isPending] = useActionState(
-    createCategory,
+    category ? updateCategory : createCategory,
     undefined,
   );
+
   const [form, fields] = useForm({
     lastResult,
     onValidate({ formData }) {
-      return parseWithZod(formData, { schema: createCategoryInputSchema });
+      return parseWithZod(formData, { schema: CategoryInputSchema });
     },
+    defaultValue: category,
   });
 
   UsePreventFormReset({formId: form.id});
@@ -33,6 +36,7 @@ export const CreateCategoryForm = () => {
       {form.errors && <Alert severity="error">{form.errors}</Alert>}
 
       <Stack spacing={4} marginY={4}>
+        <input {...getInputProps(fields.id, { type: 'number' })} hidden />
         <FormControl required>
           <FormLabel htmlFor={fields.name.name}>名前</FormLabel>
           <TextField

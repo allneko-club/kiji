@@ -1,7 +1,7 @@
 'use client';
 import * as React from 'react';
 import { useActionState } from 'react';
-import { createTag } from '@/app/admin/tags/actions';
+import { createTag, updateTag } from '@/app/admin/tags/actions';
 import Button from '@mui/material/Button';
 import FormControl from '@mui/material/FormControl';
 import FormLabel from '@mui/material/FormLabel';
@@ -9,21 +9,23 @@ import Stack from '@mui/material/Stack';
 import TextField from '@mui/material/TextField';
 import { getFormProps, getInputProps, useForm } from '@conform-to/react';
 import { parseWithZod } from '@conform-to/zod';
-import { createTagInputSchema } from '@/schemas/tag';
+import { TagInputSchema } from '@/schemas/tag';
 import Alert from '@mui/material/Alert';
 import { UsePreventFormReset } from '@/hooks/use-prevent-form-reset';
+import { Tag } from '@prisma/client';
 
 
-export const CreateTagForm = () => {
+export const TagForm = ({ tag }: { tag?: Tag }) => {
   const [lastResult, submitAction, isPending] = useActionState(
-    createTag,
+    tag ? updateTag : createTag,
     undefined,
   );
   const [form, fields] = useForm({
     lastResult,
     onValidate({ formData }) {
-      return parseWithZod(formData, { schema: createTagInputSchema });
+      return parseWithZod(formData, { schema: TagInputSchema });
     },
+    defaultValue: tag,
   });
 
   UsePreventFormReset({formId: form.id});
@@ -33,6 +35,7 @@ export const CreateTagForm = () => {
       {form.errors && <Alert severity="error">{form.errors}</Alert>}
 
       <Stack spacing={4} marginY={4}>
+        <input {...getInputProps(fields.id, { type: 'number' })} hidden />
         <FormControl required>
           <FormLabel htmlFor={fields.name.name}>名前</FormLabel>
           <TextField

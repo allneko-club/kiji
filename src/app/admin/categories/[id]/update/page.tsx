@@ -1,8 +1,8 @@
 import type { Metadata } from 'next';
-import { UpdateCategoryForm } from '@/app/admin/categories/[id]/update/update-category-form';
 import { getCategory } from '@/models/category';
 import { notFound, redirect } from 'next/navigation';
 import { paths } from '@/config/paths';
+import { CategoryForm } from '@/app/admin/categories/_components/category-form';
 
 export const metadata: Metadata = {title: "カテゴリーの編集"};
 
@@ -24,6 +24,6 @@ export default async function Page({ params }: Props) {
   }
 
   return (
-    <UpdateCategoryForm category={category} />
+    <CategoryForm category={category} />
   );
 };

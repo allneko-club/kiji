@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
-import { UpdateUserForm } from '@/app/admin/users/[id]/update/update-user-form';
+import { UserForm } from '@/app/admin/users/_components/user-form';
 import { getUser } from '@/models/user';
 
 export const metadata: Metadata = {title: "タグの編集"};
@@ -20,6 +20,6 @@ export default async function Page({ params }: Props) {
   }
 
   return (
-    <UpdateUserForm user={user} />
+    <UserForm user={user} />
   );
 };

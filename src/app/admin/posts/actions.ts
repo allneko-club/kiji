@@ -1,90 +1,91 @@
 'use server';
 import { redirect } from 'next/navigation';
 import { paths } from '@/config/paths';
-import { prisma } from '@/lib/prisma';
+import { Prisma, prisma } from '@/lib/prisma';
 import { auth } from '@/auth';
 import { getPost } from '@/models/post';
-import { createPostInputSchema } from '@/schemas/post';
+import { createPostInputSchema, updatePostInputSchema } from '@/schemas/post';
+import { parseWithZod } from '@conform-to/zod';
 
-type PrevState = {
-  id: string;
-  title: string;
-  content: string;
-  published: string;
-  categoryId: string;
-  tagIds: number[];
-  message: string;
-  errors?: {
-    title?: string;
-    content?: string;
-    published?: string;
-    categoryId?: string;
-  };
-}
 
-export async function savePost(prevState: PrevState, formData: FormData) {
+export async function createPost(prevState: unknown, formData: FormData) {
   const session = await auth();
 
   if (!session?.user?.id) {
     redirect(paths.auth.login.getHref());
   }
 
-  const id = prevState.id;
-  const title = formData.get('title') as string;
-  const content = formData.get('content') as string;
-  const published = formData.get('published') as string;
-  const categoryId = formData.get('categoryId') as string;
-  const strTagIds = formData.getAll('tagIds') as string[];
-  const tagIds = strTagIds.map(id => Number(id));
-
-  const result = createPostInputSchema.safeParse({
-    title: title,
-    content: content,
-    published: published === 'on',
-    categoryId: Number(categoryId),
-    tagIds: tagIds,
+  const submission = parseWithZod(formData, {
+    schema: createPostInputSchema,
   });
 
-  if (!result.success && result.error) {
-    const formatted = result.error.format();
-
-    return {
-      id: id,
-      title: title,
-      content: content,
-      published: published,
-      categoryId: categoryId,
-      tagIds: tagIds,
-      message: '',
-      errors: {
-        title: formatted.title?._errors[0],
-        content: formatted.content?._errors[0],
-        published: formatted.published?._errors[0],
-        categoryId: formatted.categoryId?._errors[0],
-      },
-    };
+  if (submission.status !== 'success') {
+    return submission.reply();
   }
 
   const saveData = {
-    title: result.data?.title,
-    content: result.data?.content,
-    published: result.data?.published,
-    categoryId: result.data?.categoryId,
+    title: submission.value.title,
+    content: submission.value.content,
+    published: submission.value.published,
+    categoryId: submission.value.categoryId,
     tags: {
-      // 存在しないタグIDを指定した場合は例外がスローされる
-      connect: result.data?.tagIds.map(id => {
+      connect: submission.value.tagIds.map(id => {
         return { id };
       }),
     },
-    authorId: session.user.id,
+    authorId: submission.value.authorId,
   };
 
-  // todo 作成、更新エラー処理
-  if (id) {
-    const post = await getPost(id);
-    if (!post) {
-      redirect(paths.admin.getHref());
+  try {
+    await prisma.post.create({ data: saveData });
+
+  }catch (e: unknown) {
+    // todo エラー処理 存在しないタグIDを指定した場合は例外がスローされる
+    if (e instanceof Prisma.PrismaClientKnownRequestError) {
+      console.debug('error', e);
     }
+    console.error('unknown error', e);
+  }
+
+  redirect(paths.admin.posts.getHref());
+}
+
+
+export async function updatePost(prevState: unknown, formData: FormData) {
+  const session = await auth();
+
+  if (!session?.user?.id) {
+    redirect(paths.auth.login.getHref());
+  }
+
+  const submission = parseWithZod(formData, {
+    schema: updatePostInputSchema,
+  });
+
+  if (submission.status !== 'success') {
+    return submission.reply();
+  }
+
+  const saveData = {
+    title: submission.value.title,
+    content: submission.value.content,
+    published: submission.value.published,
+    categoryId: submission.value.categoryId,
+    tags: {
+      // 存在しないタグIDを指定した場合は例外がスローされる
+      connect: submission.value.tagIds.map(id => {
+        return { id };
+      }),
+    },
+    authorId: submission.value.authorId,
+  };
+
+  const id = submission.value.id;
+  const post = await getPost(id);
+  if (!post) {
+    redirect(paths.admin.getHref());
+  }
+  try {
     await prisma.$transaction([
       // 現在のタグを全て削除
       prisma.post.update({
@@ -100,20 +101,16 @@ export async function savePost(prevState: PrevState, formData: FormData) {
         data: saveData,
       }),
     ]);
-  } else {
-    await prisma.post.create({ data: saveData });
+
+  }catch (e: unknown) {
+    // todo エラー処理
+    if (e instanceof Prisma.PrismaClientKnownRequestError) {
+      console.debug('error', e);
+    }
+    console.error('unknown error', e);
   }
 
-  return {
-    id: id,
-    title: title,
-    content: content,
-    published: published,
-    categoryId: categoryId,
-    tagIds: tagIds,
-    message: '保存しました。',
-    errors: { title: '', content: '', published: '', categoryId: '' },
-  };
+  redirect(paths.admin.posts.getHref());
 }
 
 export async function deletePost(prevState: null, formData: FormData) {
