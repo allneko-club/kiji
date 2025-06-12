@@ -12,7 +12,7 @@ export default async function Page() {
 
   if (!session?.user) return null;
 
-  const params = { page: 1, perPage: POST_LIMIT, authorId: session.user.id };
+  const params = { page: 1, perPage: POST_LIMIT };
   const { posts, total } = await getPosts(params);
 
   return (

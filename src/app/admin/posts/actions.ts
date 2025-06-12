@@ -71,13 +71,13 @@ export async function updatePost(prevState: unknown, formData: FormData) {
     content: submission.value.content,
     published: submission.value.published,
     categoryId: submission.value.categoryId,
+    authorId: submission.value.authorId,
     tags: {
       // 存在しないタグIDを指定した場合は例外がスローされる
-      connect: submission.value.tagIds.map(id => {
+      set: submission.value.tagIds.map(id => {
         return { id };
       }),
     },
-    authorId: submission.value.authorId,
   };
 
   const id = submission.value.id || '';
@@ -87,15 +87,6 @@ export async function updatePost(prevState: unknown, formData: FormData) {
   }
   try {
     await prisma.$transaction([
-      // 現在のタグを全て削除
-      prisma.post.update({
-        where: { id: id },
-        data: {
-          tags: {
-            deleteMany: {},
-          },
-        },
-      }),
       prisma.post.update({
         where: { id: id },
         data: saveData,
