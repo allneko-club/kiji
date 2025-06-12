@@ -18,36 +18,24 @@ Next.jsで作ったCMSアプリ（試作）
 
 ## 開発環境構築
 
-環境構築
+1. .env.example ファイルを複製して.envファイルを作成します。
+
+2. ADMIN_USERNAME、ADMIN_EMAIL、ADMIN_PASSWORDを記入します。
+
+3. パッケージのインストールと、DBを初期化します。
 ```bash
 npm install
 npx prisma migrate dev --name init
 npx prisma db seed
 ```
 
-next.jsを起動
+4. next.jsを起動します。
+
 ```bash
 npm run dev
 ```
 
 [http://localhost:3000](http://localhost:3000) を開きます。
 
-[ユーザー登録](http://localhost:3000/auth/register)をし、[ログイン](http://localhost:3000/auth/login)します。
+[ログイン](http://localhost:3000/auth/login)すると、[管理ページ](http://localhost:3000/auth/register)にアクセスできます。
 
-ログイン後、[管理ページ](http://localhost:3000/auth/register)でデータの管理ができます。
-
-
-## スクリプト
-```bash
-# ユニットテスト
-npm run test
-
-# E2Eテスト
-npm run e2e
-
-# Storybookを起動
-npm run storybook
-
-# prisma studioを起動
-npm run prisma-web
-```
