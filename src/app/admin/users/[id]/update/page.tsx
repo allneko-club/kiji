@@ -14,12 +14,12 @@ export default async function Page({ params }: Props) {
 
   const id = (await params).id
 
-  const tag = await getUser(id)
-  if(!tag){
+  const user = await getUser(id)
+  if(!user){
     notFound()
   }
 
   return (
-    <UpdateUserForm user={tag} />
+    <UpdateUserForm user={user} />
   );
 };

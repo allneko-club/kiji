@@ -64,7 +64,7 @@ export const UpdateUserForm = ({ user }: { user: User }) => {
             helperText={fields.image.errors}
           />
         </FormControl>
-        <FormControl fullWidth error={!fields.image.valid}>
+        <FormControl error={!fields.role.valid}>
           <FormLabel htmlFor={fields.role.name}>権限</FormLabel>
           <Select name={fields.role.name} defaultValue={fields.role.initialValue}>
             {Object.keys(RoleFilterValues).map((role) => (
