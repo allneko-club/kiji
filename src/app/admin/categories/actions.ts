@@ -6,11 +6,13 @@ import { auth } from '@/auth';
 import { createCategoryInputSchema, updateCategoryInputSchema } from '@/schemas/category';
 import { parseWithZod } from '@conform-to/zod';
 
+import { isAdmin } from '@/app/admin/utils';
+
 
 export async function createCategory(prevState: unknown, formData: FormData) {
   const session = await auth();
 
-  if (!session?.user?.id) {
+  if (!isAdmin(session?.user)) {
     redirect(paths.auth.login.getHref());
   }
 
@@ -40,7 +42,7 @@ export async function createCategory(prevState: unknown, formData: FormData) {
 export async function updateCategory(prevState: unknown, formData: FormData) {
   const session = await auth();
 
-  if (!session?.user?.id) {
+  if (!isAdmin(session?.user)) {
     redirect(paths.auth.login.getHref());
   }
 
@@ -76,6 +78,12 @@ export async function updateCategory(prevState: unknown, formData: FormData) {
 
 export async function deleteCategory(prevState: unknown, formData: FormData) {
   const id = Number(formData.get('id') as string);
+  const session = await auth();
+
+  if (!isAdmin(session?.user)) {
+    redirect(paths.auth.login.getHref());
+  }
+
   try {
     await prisma.category.delete({ where: { id: id } });
   } catch {

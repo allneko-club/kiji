@@ -4,7 +4,6 @@ import CreateIcon from '@mui/icons-material/Create';
 import { PaginationBasic } from '@/components/pagination-basic';
 import { paths } from '@/config/paths';
 import { getFormattedDateTimeFromObj } from '@/lib/datetime';
-import type { Post } from '@prisma/client';
 import { DeletePost } from '@/app/admin/posts/_components/delete-post';
 import * as React from 'react';
 import Paper from '@mui/material/Paper';
@@ -16,17 +15,26 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import TableCell from '@mui/material/TableCell';
+import { PostWithCategoryAuthor } from '@/types/post';
 
-export const PostsTable = ({ perPage, posts, total }: { perPage: number, posts: Post[], total: number }) => {
 
+type Props = {
+  perPage: number,
+  posts: PostWithCategoryAuthor[],
+  total: number,
+}
+
+export const PostsTable = ({ perPage, posts, total }: Props) => {
+  console.log(posts);
   return (<>
     <TableContainer component={Paper}>
       <Table sx={{ minWidth: 650 }} aria-label="simple table">
         <TableHead>
           <TableRow>
-            <TableCell>操作</TableCell>
+            <TableCell align="right">操作</TableCell>
             <TableCell align="right">タイトル</TableCell>
-            <TableCell align="right">公開</TableCell>
+            <TableCell align="right">カテゴリー</TableCell>
+            <TableCell align="right">投稿者</TableCell>
             <TableCell align="right">日付</TableCell>
           </TableRow>
         </TableHead>
@@ -36,8 +44,8 @@ export const PostsTable = ({ perPage, posts, total }: { perPage: number, posts: 
               key={post.id}
               sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
             >
-              <TableCell component="th" scope="row">
-                <Stack spacing={1} direction="row">
+              <TableCell align="right">
+                <Stack spacing={1} direction="row" sx={{ justifyContent: "flex-end" }}>
                   <IconButton href={paths.admin.posts.update.getHref(post.id)} component={NextLink}>
                     <CreateIcon />
                   </IconButton>
@@ -45,8 +53,13 @@ export const PostsTable = ({ perPage, posts, total }: { perPage: number, posts: 
                 </Stack>
               </TableCell>
               <TableCell align="right">{post.title}</TableCell>
-              <TableCell align="right">{post.published ? '公開' : '非公開'}</TableCell>
-              <TableCell align="right">{getFormattedDateTimeFromObj(post.createdAt)}</TableCell>
+              <TableCell align="right">{post.category?.name}</TableCell>
+              <TableCell align="right">{post.author.name}</TableCell>
+              <TableCell align="right">
+                {post.published ? '公開済み' : '非公開'}
+                <br/>
+                {getFormattedDateTimeFromObj(post.createdAt)}
+              </TableCell>
             </TableRow>
           ))}
         </TableBody>

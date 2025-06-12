@@ -5,6 +5,7 @@ import { getPost } from '@/models/post';
 import { getCategories } from '@/models/category';
 import { getTags } from '@/models/tag';
 import { PostForm } from '@/app/admin/posts/_components/post-form';
+import Typography from '@mui/material/Typography';
 
 export const metadata: Metadata = {title: "投稿の編集"};
 
@@ -36,6 +37,9 @@ export default async function Page({ params }: Props) {
   const users = await getUsers();
 
   return (
-    <PostForm categories={categories} tags={tags} users={users} post={postFixed} />
+    <>
+      <Typography variant="h1">投稿の編集</Typography>
+      <PostForm categories={categories} tags={tags} users={users} post={postFixed} />
+    </>
   );
 };

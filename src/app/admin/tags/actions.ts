@@ -6,11 +6,13 @@ import { auth } from '@/auth';
 import { TagInputSchema } from '@/schemas/tag';
 import { parseWithZod } from '@conform-to/zod';
 
+import { isAdmin } from '@/app/admin/utils';
+
 
 export async function createTag(prevState: unknown, formData: FormData) {
   const session = await auth();
 
-  if (!session?.user?.id) {
+  if (!isAdmin(session?.user)) {
     redirect(paths.auth.login.getHref());
   }
 
@@ -40,7 +42,7 @@ export async function createTag(prevState: unknown, formData: FormData) {
 export async function updateTag(prevState: unknown, formData: FormData) {
   const session = await auth();
 
-  if (!session?.user?.id) {
+  if (!isAdmin(session?.user)) {
     redirect(paths.auth.login.getHref());
   }
 
@@ -76,6 +78,12 @@ export async function updateTag(prevState: unknown, formData: FormData) {
 
 export async function deleteTag(prevState: unknown, formData: FormData) {
   const id = Number(formData.get('id') as string);
+  const session = await auth();
+
+  if (!isAdmin(session?.user)) {
+    redirect(paths.auth.login.getHref());
+  }
+
   try {
     await prisma.tag.delete({ where: { id: id } });
   } catch {

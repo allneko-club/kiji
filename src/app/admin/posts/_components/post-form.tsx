@@ -12,7 +12,7 @@ import Checkbox from '@mui/material/Checkbox';
 import { FormProvider, getFormProps, getInputProps, useForm } from '@conform-to/react';
 import { parseWithZod } from '@conform-to/zod';
 import { UsePreventFormReset } from '@/hooks/use-prevent-form-reset';
-import { createPostInputSchema } from '@/schemas/post';
+import { postInputSchema } from '@/schemas/post';
 import Stack from '@mui/material/Stack';
 import Alert from '@mui/material/Alert';
 import { SelectCategory } from '@/app/admin/posts/select-category';
@@ -41,7 +41,7 @@ export const PostForm = ({ categories, tags, users, post }: Props) => {
   const [form, fields] = useForm({
     lastResult,
     onValidate({ formData }) {
-      return parseWithZod(formData, { schema: createPostInputSchema });
+      return parseWithZod(formData, { schema: postInputSchema });
     },
     defaultValue: post,
   });
@@ -85,7 +85,7 @@ export const PostForm = ({ categories, tags, users, post }: Props) => {
 
           <FormControl required error={!fields.authorId.valid}>
             <SelectUser
-              label="著者"
+              label="投稿者"
               name={fields.authorId.name}
               required={false}
               users={users}
@@ -104,15 +104,17 @@ export const PostForm = ({ categories, tags, users, post }: Props) => {
 
           <FormControl>
             <FormLabel htmlFor={fields.tagIds.name}>タグ</FormLabel>
-            {tags.map(tag => (
-              <div key={tag.id}>
-                <FormLabel>{tag.name}</FormLabel>
-                <Checkbox
-                  name="tagIds"
-                  value={tag.id}
-                />
-              </div>
-            ))}
+            <Stack spacing={2} direction="row">
+              {tags.map(tag => (
+                <div key={tag.id}>
+                  <FormLabel>{tag.name}</FormLabel>
+                  <Checkbox
+                    name="tagIds"
+                    value={tag.id}
+                  />
+                </div>
+              ))}
+            </Stack>
           </FormControl>
         </Stack>
 

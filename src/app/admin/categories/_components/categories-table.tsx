@@ -41,7 +41,7 @@ export const CategoriesTable = ({ categories }: Props) => {
           {categories.map((category) => (
             <TableRow key={category.id}>
               <TableCell>
-                <Stack spacing={1} direction="row">
+                <Stack spacing={1} direction="row" sx={{ justifyContent: "flex-end" }}>
                   <IconButton href={paths.admin.categories.update.getHref(category.id)} component={NextLink}>
                     <CreateIcon />
                   </IconButton>

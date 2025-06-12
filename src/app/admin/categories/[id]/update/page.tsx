@@ -3,6 +3,7 @@ import { getCategory } from '@/models/category';
 import { notFound, redirect } from 'next/navigation';
 import { paths } from '@/config/paths';
 import { CategoryForm } from '@/app/admin/categories/_components/category-form';
+import Typography from '@mui/material/Typography';
 
 export const metadata: Metadata = {title: "カテゴリーの編集"};
 
@@ -24,6 +25,9 @@ export default async function Page({ params }: Props) {
   }
 
   return (
-    <CategoryForm category={category} />
+    <>
+      <Typography variant="h1">カテゴリーの編集</Typography>
+      <CategoryForm category={category} />
+    </>
   );
 };

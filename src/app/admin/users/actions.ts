@@ -6,11 +6,13 @@ import { auth } from '@/auth';
 import { parseWithZod } from '@conform-to/zod';
 import { updateUserInputSchema } from '@/schemas/user';
 
+import { isAdmin } from '@/app/admin/utils';
+
 
 export async function updateUser(prevState: unknown, formData: FormData) {
   const session = await auth();
 
-  if (!session?.user?.id) {
+  if (!isAdmin(session?.user)) {
     redirect(paths.auth.login.getHref());
   }
 
@@ -48,7 +50,7 @@ export async function deleteUser(prevState: null, formData: FormData) {
   const id = formData.get('id') as string;
   const session = await auth();
 
-  if (!session?.user?.email) {
+  if (!isAdmin(session?.user)) {
     redirect(paths.auth.login.getHref());
   }
 

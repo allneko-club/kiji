@@ -6,7 +6,7 @@ import { getCategories } from '@/models/category';
 import { getTags } from '@/models/tag';
 import type { Metadata } from 'next';
 
-export const metadata: Metadata = { title: '記事の編集' };
+export const metadata: Metadata = { title: '投稿の編集' };
 
 type Props = {
   params: Promise<{ id: string }>

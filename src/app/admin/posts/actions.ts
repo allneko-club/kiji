@@ -4,7 +4,7 @@ import { paths } from '@/config/paths';
 import { Prisma, prisma } from '@/lib/prisma';
 import { auth } from '@/auth';
 import { getPost } from '@/models/post';
-import { createPostInputSchema, updatePostInputSchema } from '@/schemas/post';
+import { postInputSchema } from '@/schemas/post';
 import { parseWithZod } from '@conform-to/zod';
 
 
@@ -16,7 +16,7 @@ export async function createPost(prevState: unknown, formData: FormData) {
   }
 
   const submission = parseWithZod(formData, {
-    schema: createPostInputSchema,
+    schema: postInputSchema,
   });
 
   if (submission.status !== 'success') {
@@ -59,7 +59,7 @@ export async function updatePost(prevState: unknown, formData: FormData) {
   }
 
   const submission = parseWithZod(formData, {
-    schema: updatePostInputSchema,
+    schema: postInputSchema,
   });
 
   if (submission.status !== 'success') {
@@ -80,7 +80,7 @@ export async function updatePost(prevState: unknown, formData: FormData) {
     authorId: submission.value.authorId,
   };
 
-  const id = submission.value.id;
+  const id = submission.value.id || '';
   const post = await getPost(id);
   if (!post) {
     redirect(paths.admin.getHref());

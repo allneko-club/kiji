@@ -40,7 +40,6 @@ export default function SelectSort({ selectItems }: Props) {
         labelId="sort"
         id="sort"
         defaultValue={`${order}_${orderBy}`}
-        label="sort"
         onChange={e => handleChange(e.target.value)}
       >
         {Object.keys(selectItems).map((key) => (

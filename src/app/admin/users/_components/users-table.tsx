@@ -16,7 +16,7 @@ import * as React from 'react';
 import Stack from '@mui/material/Stack';
 import IconButton from '@mui/material/IconButton';
 import NextLink from 'next/link';
-import { DeleteUser } from '@/app/admin/users/[id]/_components/user-info';
+import { DeleteUser } from './delete-user';
 import CreateIcon from '@mui/icons-material/Create';
 
 type Props = {
@@ -44,7 +44,7 @@ export const UsersTable = ({ perPage, users, total }: Props) => {
           {users.map((user) => (
             <TableRow key={user.id}>
               <TableCell>
-                <Stack spacing={1} direction="row">
+                <Stack spacing={1} direction="row" sx={{ justifyContent: "flex-end" }}>
                   <IconButton href={paths.admin.users.update.getHref(user.id)} component={NextLink}>
                     <CreateIcon />
                   </IconButton>

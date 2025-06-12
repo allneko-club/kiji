@@ -35,7 +35,6 @@ export default function SelectLimit({ limitList }: Props) {
         labelId="perPage"
         id="perPage"
         defaultValue={defaultValue.toString()}
-        label="perPage"
         onChange={e => handleChange(e.target.value)}
       >
         {limitList.map((item) => (

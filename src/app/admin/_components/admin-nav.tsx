@@ -10,7 +10,7 @@ import TagIcon from '@mui/icons-material/Tag';
 import Button from '@mui/material/Button';
 import Stack from '@mui/material/Stack';
 
-export default function Sidebar() {
+export default function AdminNav() {
   return (
     <div>
       <Stack marginY={1} spacing={2} direction="row">

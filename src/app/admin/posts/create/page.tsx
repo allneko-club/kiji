@@ -3,9 +3,10 @@ import { getCategories } from '@/models/category';
 import { getTags } from '@/models/tag';
 import { getUsers } from '@/models/user';
 import { PostForm } from '@/app/admin/posts/_components/post-form';
+import Typography from '@mui/material/Typography';
 
 
-export const metadata: Metadata = { title: '記事の作成' };
+export const metadata: Metadata = { title: '投稿の作成' };
 
 export default async function Page() {
   const categories = await getCategories();
@@ -13,6 +14,9 @@ export default async function Page() {
   const users = await getUsers();
 
   return (
-    <PostForm categories={categories} tags={tags} users={users} />
+    <>
+      <Typography variant="h1">投稿の作成</Typography>
+      <PostForm categories={categories} tags={tags} users={users} />
+    </>
   );
 };
