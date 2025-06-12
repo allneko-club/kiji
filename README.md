@@ -20,14 +20,16 @@ Next.jsで作ったCMSアプリ（試作）
 
 1. .env.example ファイルを複製して.envファイルを作成します。
 
-2パッケージのインストールと、DBを初期化します。
+2. ADMIN_USERNAME、ADMIN_EMAIL、ADMIN_PASSWORDを記入します。
+
+3. パッケージのインストールと、DBを初期化します。
 ```bash
 npm install
 npx prisma migrate dev --name init
 npx prisma db seed
 ```
 
-3. next.jsを起動します。
+4. next.jsを起動します。
 
 ```bash
 npm run dev
