@@ -9,21 +9,21 @@ type Props = {
 
 // 参考 https://github.com/TanStack/query/discussions/7313
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const id = (await params).id
+  const id = (await params).id;
   try {
     const post = await getPost(id);
-    return { title: post ? post.title: "Not Found" }
+    return { title: post ? post.title : 'Not Found' };
   } catch {
-    return { title: "Not Found" };
+    return { title: 'Not Found' };
   }
 }
 
 export default async function Page({ params }: Props) {
-  const id = (await params).id
+  const id = (await params).id;
   const post = await getPost(id);
 
   if (!post) {
-    notFound()
+    notFound();
   }
 
   return (

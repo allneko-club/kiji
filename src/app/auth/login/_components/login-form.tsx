@@ -1,20 +1,23 @@
 'use client';
-
+import * as React from 'react';
 import { useActionState } from 'react';
-import { authenticate } from '@/lib/actions';
 import { useSearchParams } from 'next/navigation';
-import { Button } from '@/components/ui/button';
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card"
-import { Input } from "@/components/ui/input"
-import Link from 'next/link';
+import NextLink from 'next/link';
+import { authenticate } from '@/lib/actions';
 import { paths } from '@/config/paths';
-import { Label } from '@/components/ui/label';
+import GitHubIcon from '@mui/icons-material/GitHub';
+import Button from '@mui/material/Button';
+import FormControl from '@mui/material/FormControl';
+import FormLabel from '@mui/material/FormLabel';
+import TextField from '@mui/material/TextField';
+import { Card } from '@/app/auth/_components/card';
+import Typography from '@mui/material/Typography';
+import Box from '@mui/material/Box';
+import Alert from '@mui/material/Alert';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import Checkbox from '@mui/material/Checkbox';
+import Link from '@mui/material/Link';
+import Divider from '@mui/material/Divider';
 
 export default function LoginForm() {
   const searchParams = useSearchParams();
@@ -25,60 +28,97 @@ export default function LoginForm() {
   );
 
   return (
-    <Card className="mx-auto max-w-sm">
-      <CardHeader>
-        <CardTitle className="text-2xl">ログイン</CardTitle>
-        <CardDescription>
-          メールアドレスと、パスワードを入力してください。
-        </CardDescription>
-      </CardHeader>
-      <CardContent>
-        <div className="grid gap-6">
-          {errorMessage && (<p className="text-red-500">{errorMessage}</p>)}
+    <Card variant="outlined">
+      <Typography
+        component="h1"
+        variant="h4"
+        sx={{ width: '100%', fontSize: 'clamp(2rem, 10vw, 2.15rem)' }}
+      >
+        ログイン
+      </Typography>
+      <Typography>
+        メールアドレスと、パスワードを入力してください。
+      </Typography>
+      {errorMessage && <Alert severity="error">{errorMessage}</Alert>}
+      <Box
+        component="form"
+        action={formAction}
+        noValidate
+        sx={{
+          display: 'flex',
+          flexDirection: 'column',
+          width: '100%',
+          gap: 2,
+        }}
+      >
+        <FormControl required>
+          <FormLabel htmlFor="email">メールアドレス</FormLabel>
+          <TextField
+            id="email"
+            name="email"
+            type="email"
+            autoComplete="email"
+            fullWidth
+          />
+        </FormControl>
+        <FormControl required>
+          <FormLabel htmlFor="password">パスワード</FormLabel>
+          <TextField
+            id="password"
+            name="password"
+            type="password"
+            fullWidth
+          />
+        </FormControl>
 
-          <form action={formAction} className="grid gap-4">
-            <Label htmlFor="email">メールアドレス</Label>
-            <Input id="email" name="email" type="email" />
+        <FormControlLabel
+          control={<Checkbox value="remember" color="primary" />}
+          label="ログインしたままにする"
+        />
 
-            <Label htmlFor="password">パスワード</Label>
-            <Input id="password" name="password" type="password" />
-            <Link
-              href={paths.auth.resetPassword.getHref()}
-              className="ml-auto inline-block text-sm underline text-muted-foreground"
-            >
-              パスワードを忘れましたか？
-            </Link>
+        {/* Auth.jsでログイン後のリダイレクト先を設定するために必要 */}
+        <input id="redirectTo" name="redirectTo" hidden defaultValue={redirectTo} />
 
-            {/* Auth.jsでログイン後のリダイレクト先を設定するために必要 */}
-            <input id="redirectTo" name="redirectTo" hidden defaultValue={redirectTo} />
+        <Button
+          type="submit"
+          fullWidth
+          variant="contained"
+          loading={isPending}
+        >
+          ログイン
+        </Button>
 
-            <Button type="submit" className="w-full" disabled={isPending}>
-              ログイン
-            </Button>
-          </form>
-
-          <div className="relative">
-            <div className="absolute inset-0 flex items-center">
-              <span className="w-full border-t" />
-            </div>
-            <div className="relative flex justify-center text-xs uppercase">
-              <span className="bg-background px-2 text-muted-foreground">
-                または、他のアカウントでログイン
-              </span>
-            </div>
-          </div>
-
-          <Button variant="outline" className="w-full">
-            GitHub でログイン
-          </Button>
-        </div>
-        <div className="mt-4 text-center text-sm">
-          アカウントが無いですか？
-          <Link className="underline" href={paths.auth.register.getHref()}>
+        <Link
+          href={paths.auth.resetPassword.getHref()}
+          component={NextLink}
+          type="button"
+          variant="body2"
+          sx={{ alignSelf: 'center' }}
+        >
+          パスワードを忘れましたか？
+        </Link>
+      </Box>
+      <Divider>または</Divider>
+      <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+        <Button
+          fullWidth
+          onClick={() => alert('Sign in with GitHub')}
+          startIcon={<GitHubIcon />}
+        >
+          GitHub でログイン
+        </Button>
+        <Typography sx={{ textAlign: 'center' }}>
+          アカウントが無いですか？{' '}
+          <Link
+            href={paths.auth.register.getHref()}
+            component={NextLink}
+            variant="body2"
+            sx={{ alignSelf: 'center' }}
+          >
             登録する
           </Link>
-        </div>
-      </CardContent>
+        </Typography>
+      </Box>
     </Card>
-)
+  );
 }

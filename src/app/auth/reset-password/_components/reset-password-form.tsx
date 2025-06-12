@@ -1,31 +1,54 @@
 'use client';
-import { Button } from '@/components/ui/button';
-import { resetPassword } from '@/app/auth/reset-password/actions';
+import * as React from 'react';
 import { useActionState } from 'react';
-import { FormItem, FormMessage } from '@/components/form';
-import { Label } from '@/components/ui/label';
-import { Input } from '@/components/ui/input';
+import { resetPassword } from '@/app/auth/reset-password/actions';
+import { FormProvider, useForm } from '@conform-to/react';
+import { parseWithZod } from '@conform-to/zod';
+import { resetPasswordInputSchema } from '@/app/auth/reset-password/schema';
+import Typography from '@mui/material/Typography';
+import Button from '@mui/material/Button';
+import FormControl from '@mui/material/FormControl';
+import FormLabel from '@mui/material/FormLabel';
+import Stack from '@mui/material/Stack';
+import TextField from '@mui/material/TextField';
 
 export default function ResetPasswordForm() {
-  const [state, submitAction, isPending] = useActionState(
-    resetPassword,
-    {email:'', errors: { email: '' }}
-  );
+  const [lastResult, submitAction, isPending] = useActionState(resetPassword, undefined);
+  const [form, fields] = useForm({
+    lastResult,
+    onValidate({ formData }) {
+      return parseWithZod(formData, { schema: resetPasswordInputSchema });
+    },
+  });
 
   return (
-    <div className="w-full max-w-md">
-      <h1 className="text-2xl">パスワードリセット</h1>
-      <p>メールアドレスを入力してください。</p>
+    <div>
+      <Typography variant="h1">パスワードリセット</Typography>
+      <Typography>メールアドレスを入力してください。</Typography>
 
-      <form className="grid gap-4 py-6" action={submitAction}>
-        <FormItem>
-          <Label htmlFor="email">メールアドレス</Label>
-          <Input id="email" name="email" defaultValue={state.email} />
-          <FormMessage>{state?.errors.email}</FormMessage>
-        </FormItem>
+      <FormProvider context={form.context}>
+        <form
+          id={form.id}
+          onSubmit={form.onSubmit}
+          action={submitAction}
+          noValidate
+        >
+          <Stack spacing={4} marginY={4}>
+            <FormControl required>
+              <FormLabel htmlFor={fields.email.name}>メールアドレス</FormLabel>
+              <TextField
+                id={fields.email.id}
+                name={fields.email.name}
+                defaultValue={fields.email.initialValue}
+                error={!fields.email.valid}
+                helperText={fields.email.errors}
+              />
+            </FormControl>
 
-        <Button loading={isPending}>送信</Button>
-      </form>
+            <Button type="submit" variant="contained" loading={isPending}>送信</Button>
+          </Stack>
+        </form>
+      </FormProvider>
     </div>
   );
 };

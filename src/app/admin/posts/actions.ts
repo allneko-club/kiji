@@ -1,0 +1,124 @@
+'use server';
+import { redirect } from 'next/navigation';
+import { paths } from '@/config/paths';
+import { Prisma, prisma } from '@/lib/prisma';
+import { auth } from '@/auth';
+import { getPost } from '@/models/post';
+import { postInputSchema } from '@/schemas/post';
+import { parseWithZod } from '@conform-to/zod';
+
+
+export async function createPost(prevState: unknown, formData: FormData) {
+  const session = await auth();
+
+  if (!session?.user?.id) {
+    redirect(paths.auth.login.getHref());
+  }
+
+  const submission = parseWithZod(formData, {
+    schema: postInputSchema,
+  });
+
+  if (submission.status !== 'success') {
+    return submission.reply();
+  }
+
+  const saveData = {
+    title: submission.value.title,
+    content: submission.value.content,
+    published: submission.value.published,
+    categoryId: submission.value.categoryId,
+    tags: {
+      connect: submission.value.tagIds.map(id => {
+        return { id };
+      }),
+    },
+    authorId: submission.value.authorId,
+  };
+
+  try {
+    await prisma.post.create({ data: saveData });
+
+  }catch (e: unknown) {
+    // todo エラー処理 存在しないタグIDを指定した場合は例外がスローされる
+    if (e instanceof Prisma.PrismaClientKnownRequestError) {
+      console.debug('error', e);
+    }
+    console.error('unknown error', e);
+  }
+
+  redirect(paths.admin.posts.getHref());
+}
+
+
+export async function updatePost(prevState: unknown, formData: FormData) {
+  const session = await auth();
+
+  if (!session?.user?.id) {
+    redirect(paths.auth.login.getHref());
+  }
+
+  const submission = parseWithZod(formData, {
+    schema: postInputSchema,
+  });
+
+  if (submission.status !== 'success') {
+    return submission.reply();
+  }
+
+  const saveData = {
+    title: submission.value.title,
+    content: submission.value.content,
+    published: submission.value.published,
+    categoryId: submission.value.categoryId,
+    tags: {
+      // 存在しないタグIDを指定した場合は例外がスローされる
+      connect: submission.value.tagIds.map(id => {
+        return { id };
+      }),
+    },
+    authorId: submission.value.authorId,
+  };
+
+  const id = submission.value.id || '';
+  const post = await getPost(id);
+  if (!post) {
+    redirect(paths.admin.getHref());
+  }
+  try {
+    await prisma.$transaction([
+      // 現在のタグを全て削除
+      prisma.post.update({
+        where: { id: id },
+        data: {
+          tags: {
+            deleteMany: {},
+          },
+        },
+      }),
+      prisma.post.update({
+        where: { id: id },
+        data: saveData,
+      }),
+    ]);
+
+  }catch (e: unknown) {
+    // todo エラー処理
+    if (e instanceof Prisma.PrismaClientKnownRequestError) {
+      console.debug('error', e);
+    }
+    console.error('unknown error', e);
+  }
+
+  redirect(paths.admin.posts.getHref());
+}
+
+export async function deletePost(prevState: null, formData: FormData) {
+  const id = formData.get('id') as string;
+  try {
+    await prisma.post.delete({ where: { id: id } });
+  } catch {
+    /* RecordNotFound 例外が発生しても無視する */
+  }
+  return Promise.resolve(null);
+}

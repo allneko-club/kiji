@@ -1,32 +1,45 @@
-'use client'
-import * as React from "react"
+'use client';
+import * as React from 'react';
 import { getFormattedDateTimeFromObj } from '@/lib/datetime';
-import { ScrollToTop } from '@/components/layouts/scroll-to-top';
 import { Category, Post, Tag, User } from '@prisma/client';
-import TagBadge from '@/components/tag-badge';
-import { Author } from '@/app/posts/[id]/_components/author';
+import { EntryMeta } from '@/app/posts/[id]/_components/entry-meta';
+import Typography from '@mui/material/Typography';
+import { paths } from '@/config/paths';
+import TagChip from '@/components/ui/tag-chip';
+import Stack from '@mui/material/Stack';
+import Container from '@mui/material/Container';
+
 
 type Props = {
-  post: Post & { author: User, category: Category, tags: Tag[] };
+  post: Post & { author: User, category: Category | null, tags: Tag[] };
 }
 
 export function PostDetail({ post }: Props) {
-
   return (
     <article>
-      <h1>{post.title}</h1>
-      <div className="text-muted-foreground">{getFormattedDateTimeFromObj(post.createdAt)}</div>
-      <div className="space-x-2">{post.category.name}</div>
-      <div className="space-x-2">
-        {post.tags.map((tag) => <TagBadge key={tag.id} name={tag.name} />)}
-      </div>
+      <Container sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+        <EntryMeta
+          author={post.author}
+          created={getFormattedDateTimeFromObj(post.createdAt)}
+          category={post.category?.name}
+        />
 
-      <Author user={post.author} />
-      <div className="p-4 bg-white dark:bg-slate-900 rounded-md">
-        <p>{post.content}</p>
-      </div>
+        <Typography variant="h1">{post.title}</Typography>
 
-      <ScrollToTop/>
+        <div>
+          {post.content}
+        </div>
+
+        <Stack direction="row" spacing={1}>
+          {post.tags.map((tag) =>
+            <TagChip
+              key={tag.id}
+              label={tag.name}
+              href={paths.tags.detail.getHref(tag.slug)}
+            />
+          )}
+        </Stack>
+      </Container>
     </article>
-  )
+  );
 }

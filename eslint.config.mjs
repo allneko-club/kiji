@@ -11,14 +11,20 @@ const compat = new FlatCompat({
 /** @type {import('eslint').Linter.Config[]} */
 export default [
   {files: ["**/*.{js,mjs,cjs,ts,jsx,tsx}"]},
-  {ignores: ['.lintstagedrc.js', 'tailwind.config.ts']},
-  {languageOptions: { globals: globals.browser }},
+  {ignores: ['.lintstagedrc.js']},
+  {languageOptions: {globals: globals.browser}},
   pluginJs.configs.recommended,
   ...tseslint.configs.recommended,
   ...compat.config({
     extends: ['next', 'prettier'],
     "rules": {
-      "@typescript-eslint/no-explicit-any": 1
+      "@typescript-eslint/no-explicit-any": 1,
+      "no-restricted-imports": [
+        "error",
+        {
+          "patterns": [{ "regex": "^@mui/[^/]+$" }]
+        }
+      ]
     }
   }),
 ];

@@ -1,38 +1,43 @@
 import { ReactNode } from 'react';
-import type { Metadata } from "next";
-import { ThemeProvider } from 'next-themes';
+import type { Metadata } from 'next';
 import { AppProvider } from '@/app/provider';
+import { AppRouterCacheProvider } from '@mui/material-nextjs/v15-appRouter';
+import CssBaseline from '@mui/material/CssBaseline';
+import Container from '@mui/material/Container';
 import Header from '@/components/layouts/header';
 import Footer from '@/components/layouts/footer';
-import "@/styles/globals.css";
-
+import { ThemeProvider } from '@mui/material/styles';
+import theme from '@/theme';
+import { auth } from '@/auth';
 
 export const metadata: Metadata = {
-  title: "Kiji",
-  description: "Next.jsで作成したCMSアプリケーション",
+  title: 'Kiji',
+  description: 'Next.jsで作成したCMSアプリケーション',
 };
 
-export default async function RootLayout ({ children }: { children: ReactNode }) {
+export default async function RootLayout({ children }: { children: ReactNode }) {
+  const session = await auth()
+  const user = session?.user
   return (
     <html lang="ja" suppressHydrationWarning>
-      <body>
-        <AppProvider>
-          <ThemeProvider
-            attribute="class"
-            defaultTheme="light"
-            enableSystem
-            disableTransitionOnChange
+    <body>
+    <AppRouterCacheProvider>
+      <AppProvider>
+        <ThemeProvider theme={theme}>
+          <CssBaseline enableColorScheme />
+          <Header logInUser={user ? {name: user.name, email: user.email, image: user.image } : null} />
+          <Container
+            maxWidth="lg"
+            component="main"
+            sx={{ display: 'flex', flexDirection: 'column', py: 4, gap: 4 }}
           >
-            <div className="flex h-full min-h-screen w-full flex-col justify-between">
-              <Header />
-              <main className="w-full flex-auto px-4 py-4 sm:px-6 md:py-6 bg-slate-100 dark:bg-black">
-                {children}
-              </main>
-              <Footer />
-            </div>
-          </ThemeProvider>
-        </AppProvider>
-      </body>
+            {children}
+          </Container>
+          <Footer />
+        </ThemeProvider>
+      </AppProvider>
+    </AppRouterCacheProvider>
+    </body>
     </html>
   );
 }

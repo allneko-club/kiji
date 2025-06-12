@@ -1,22 +1,23 @@
 'use client';
 import { PaginationBasic } from '@/components/pagination-basic';
 import { PostCard } from '@/components/posts';
-import { Post } from '@prisma/client';
+import Grid from '@mui/material/Grid';
+import { PostWithCategoryAuthor } from '@/types/post';
 
 type Props = {
   perPage: number;
-  posts: Post[];
+  posts: PostWithCategoryAuthor[];
   total: number;
 }
 
 export const PostList = ({ perPage, posts, total }: Props) => {
 
   return (<>
-    <div className="grid gap-3 sm:grid-cols-2">
+    <Grid container spacing={2} columns={12}>
       {posts.map(post => (
         <PostCard key={post.id} post={post} />
       ))}
-    </div>
+    </Grid>
 
     <PaginationBasic perPage={perPage} total={total} />
   </>);

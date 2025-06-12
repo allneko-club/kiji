@@ -1,41 +1,17 @@
 'use server';
 import { redirect } from 'next/navigation';
-import { z } from 'zod';
 import { paths } from '@/config/paths';
+import { parseWithZod } from '@conform-to/zod';
+import { contactInputSchema } from '@/schemas/contact';
 
-const contactInputSchema = z
-  .object({
-    email: z.string().min(1, 'メールアドレスを入力してください。').email('メールアドレスの形式が間違っています。'),
-    content: z.string().min(1, '内容を入力してください。'),
+export async function contact(prevState: unknown, formData: FormData) {
+  const submission = parseWithZod(formData, {
+    schema: contactInputSchema,
   });
 
-type PrevState = {
-  email: string;
-  content: string;
-  errors?: {
-    email?: string;
-    content?: string;
-  };
-}
-
-export async function contact(prevState: PrevState, formData: FormData) {
-  const email = formData.get('email') as string;
-  const content = formData.get('content') as string;
-  const result = contactInputSchema.safeParse({
-    email: email,
-    content: content,
-  });
-
-  if (!result.success && result.error) {
-    const formatted = result.error.format();
-    return {
-      email: email,
-      content: content,
-      errors: {
-        email: formatted.email?._errors[0],
-        content: formatted.content?._errors[0],
-      },
-    };
+  if (submission.status !== 'success') {
+    return submission.reply();
   }
+
   redirect(paths.contactDone.getHref());
 }

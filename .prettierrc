@@ -5,5 +5,5 @@
   "singleQuote": true,
   "jsxSingleQuote": false,
   "printWidth": 100,
-  "plugins": ["prettier-plugin-tailwindcss"]
+  "plugins": []
 }

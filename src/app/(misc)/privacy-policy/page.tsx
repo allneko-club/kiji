@@ -1,9 +1,15 @@
+import type { Metadata } from 'next';
+import Typography from '@mui/material/Typography';
+
+export const metadata: Metadata = { title: 'プライバシーポリシー' };
 
 export default function Page() {
 
   return (
     <div>
-      <h1>プライバシーポリシー</h1>
+      <Typography variant="h1">
+        プライバシーポリシー
+      </Typography>
     </div>
   );
 };

@@ -1,4 +1,48 @@
+const adminPath = '/admin';
+
 export const paths = {
+  admin:{
+    getHref: () => adminPath,
+    categories: {
+      getHref: () => `${adminPath}/categories`,
+      create: {
+        getHref: () => `${adminPath}/categories/create`,
+      },
+      update: {
+        getHref: (id: number) => `${adminPath}/categories/${id}/update`,
+      },
+    },
+    posts: {
+      getHref: () => `${adminPath}/posts`,
+      detail: {
+        getHref:(id: string) => `${adminPath}/posts/${id}`,
+      },
+      create: {
+        getHref: () => `${adminPath}/posts/create`,
+      },
+      update: {
+        getHref: (id: string) => `${adminPath}/posts/${id}/update`,
+      },
+    },
+    tags: {
+      getHref: () => `${adminPath}/tags`,
+      create: {
+        getHref: () => `${adminPath}/tags/create`,
+      },
+      update: {
+        getHref: (id: number) => `${adminPath}/tags/${id}/update`,
+      },
+    },
+    users:{
+      getHref: () => `${adminPath}/users`,
+      detail: {
+        getHref: (id: string) => `${adminPath}/users/${id}`,
+      },
+      update: {
+        getHref: (id: string) => `${adminPath}/users/${id}/update`,
+      },
+    },
+  },
   home: {
     getHref: () => '/',
   },
@@ -14,17 +58,17 @@ export const paths = {
   contactDone: {
     getHref: () => '/contact-done',
   },
-  post: {
-    getHref: (id: string) => `/posts/${id}`,
+  posts:{
+    getHref: () => '/posts',
+    detail: {
+      getHref: (id: string) => `/posts/${id}`,
+    },
   },
   tags: {
     getHref: () => '/tags',
-    tag: {
+    detail: {
       getHref: (name: string) => `/tags/${name}`,
     }
-  },
-  search: {
-    getHref: () => '/search',
   },
   auth: {
     register: {
@@ -35,9 +79,6 @@ export const paths = {
       getHref: (redirectTo?: string | null | undefined) =>
         `/auth/login${redirectTo ? `?redirectTo=${encodeURIComponent(redirectTo)}` : ''}`,
     },
-    deleteAccountDone: {
-      getHref: () => '/auth/delete-account-done',
-    },
     resetPassword: {
       getHref: () => '/auth/reset-password',
     },
@@ -45,34 +86,4 @@ export const paths = {
       getHref: () => '/auth/reset-password-done',
     },
   },
-  my:{
-    getHref: () => '/my',
-    post: {
-      getHref: (id: string) => `/my/posts/${id}`,
-    },
-    posts: {
-      getHref: () => '/my/posts',
-    },
-    createPost: {
-      getHref: () => '/my/posts/create',
-    },
-    editPost: {
-      getHref: (id: string) => `/my/posts/${id}`,
-    },
-    profile: {
-      getHref: () => '/my/profile',
-    },
-    settings: {
-      getHref: () => '/my/settings',
-      deleteAccount: {
-        getHref: () => '/my/settings/delete-account',
-      },
-    },
-  },
-  users:{
-      getHref: () => '/users',
-    user: {
-      getHref: (id: string) => `/users/${id}`,
-    },
-  }
 } as const;

@@ -13,7 +13,7 @@ type GetUsersProps = {
   orderBy: OrderBy;
 }
 
-export const getUsers = async (params: GetUsersProps) => {
+export const getUsersByFilter = async (params: GetUsersProps) => {
   const where = {
     id: {
       contains: params.id
@@ -47,6 +47,9 @@ export const getUsers = async (params: GetUsersProps) => {
     prisma.user.count({where}),
   ])
   return {users, total}
+}
+export const getUsers = async () => {
+  return prisma.user.findMany()
 }
 
 export const getUser = async (id: string) => {

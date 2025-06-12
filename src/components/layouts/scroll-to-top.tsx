@@ -1,19 +1,15 @@
-'use client'
-import { Button } from '@/components/ui/button';
+'use client';
+import * as React from 'react';
+import Button from '@mui/material/Button';
 
 export const ScrollToTop = () => {
   const onScrollToTop = () => window.scrollTo({
     top: 0,
-    behavior: "smooth",
+    behavior: 'smooth',
   });
 
   // todo 現在のy座標に応じてボタンの表示を切り替えたい
   return (
-    <Button
-      onClick={onScrollToTop}
-      className="!fixed bottom-5 end-5 rounded-full bg-slate-400 p-3 uppercase leading-tight text-white shadow-md transition duration-150 ease-in-out hover:bg-slate-500 focus:bg-slate-500"
-    >
-      Top
-    </Button>
-  )
-}
+    <Button variant="contained" onClick={onScrollToTop}>Top</Button>
+  );
+};

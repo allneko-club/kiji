@@ -1,15 +1,10 @@
 'use client';
-import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectLabel,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { cleanPerPage } from '@/lib/query-params';
+import FormControl from '@mui/material/FormControl';
+import FormLabel from '@mui/material/FormLabel';
+import Select from '@mui/material/Select';
+import MenuItem from '@mui/material/MenuItem';
 
 type Props = {
   limitList: number[],
@@ -20,7 +15,7 @@ type Props = {
  * 表示件数を変更すると、クエリパラメーターのperPageを更新する
  * @param limitList 表示件数の選択肢
  */
-export default function SelectLimit({limitList}: Props) {
+export default function SelectLimit({ limitList }: Props) {
 
   const router = useRouter();
   const pathname = usePathname();
@@ -29,25 +24,25 @@ export default function SelectLimit({limitList}: Props) {
 
   const handleChange = (v: string) => {
     const params = new URLSearchParams(Array.from(searchParams.entries()));
-    params.set("perPage", v);
+    params.set('perPage', v);
     router.push(`${pathname}?${params.toString()}`);
-  }
+  };
 
   return (
-    <Select onValueChange={handleChange} defaultValue={defaultValue.toString()}>
-      <SelectTrigger id="perPage" aria-label="perPage">
-        <SelectValue />
-      </SelectTrigger>
-      <SelectContent>
-        <SelectGroup>
-          <SelectLabel>表示件数</SelectLabel>
-          {limitList.map((item) => (
-            <SelectItem key={item} value={item.toString()}>
-              {item}
-            </SelectItem>
-          ))}
-        </SelectGroup>
-      </SelectContent>
-    </Select>
-  )
+    <FormControl fullWidth>
+      <FormLabel>表示件数</FormLabel>
+      <Select
+        labelId="perPage"
+        id="perPage"
+        defaultValue={defaultValue.toString()}
+        onChange={e => handleChange(e.target.value)}
+      >
+        {limitList.map((item) => (
+          <MenuItem key={item} value={item.toString()}>
+            {item}
+          </MenuItem>
+        ))}
+      </Select>
+    </FormControl>
+  );
 }

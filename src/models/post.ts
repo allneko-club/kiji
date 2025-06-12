@@ -23,6 +23,7 @@ export const getPosts = async (params: GetPostsParams) => {
       skip: params.perPage * (params.page - 1),
       include: {
         author: true,
+        category: true,
       },
       orderBy: {
         createdAt: 'desc',
@@ -56,6 +57,7 @@ export const getPostsByTag = async (params: GetPostsByTagParams) => {
       skip: params.perPage * (params.page - 1),
       include: {
         author: true,
+        category: true,
       },
       orderBy: {
         createdAt: 'desc',
