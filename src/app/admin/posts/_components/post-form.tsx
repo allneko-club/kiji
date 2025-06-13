@@ -102,7 +102,7 @@ export const PostForm = ({ categories, tags, users, post }: Props) => {
           </FormControl>
 
 
-          <FormControl>
+          <FormControl error={!fields.tagIds.valid}>
             <FormLabel htmlFor={fields.tagIds.name}>タグ</FormLabel>
             <Stack spacing={2} direction="row">
               {tags.map(tag => (
@@ -111,6 +111,12 @@ export const PostForm = ({ categories, tags, users, post }: Props) => {
                   <Checkbox
                     name="tagIds"
                     value={tag.id}
+                    defaultChecked={
+                      fields.tagIds.initialValue &&
+                      Array.isArray(fields.tagIds.initialValue)
+                        ? fields.tagIds.initialValue.includes(tag.id.toString())
+                        : fields.tagIds.initialValue === tag.id.toString()
+                    }
                   />
                 </div>
               ))}

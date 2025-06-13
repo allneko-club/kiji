@@ -1,7 +1,6 @@
 import { PrismaClient } from '@prisma/client'
 import * as dotenv from 'dotenv'
-import { hash } from '@/lib/utils';
-import { Role } from '@/config/consts';
+import { hash } from '../src/lib/utils';
 
 const prisma = new PrismaClient()
 
@@ -24,7 +23,7 @@ async function main() {
       name: name,
       email: email,
       password: hash(password),
-      role: Role.ADMIN,
+      role: 0,
     },
   })
 
