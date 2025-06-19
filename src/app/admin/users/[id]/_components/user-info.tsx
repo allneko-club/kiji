@@ -1,7 +1,7 @@
 'use client';
 
-import { getRoleLabel } from '@/config/consts';
 import { getFormattedDateTimeFromObj } from '@/lib/datetime';
+import { getRoleLabel } from '@/lib/users';
 import Avatar from '@mui/material/Avatar';
 import Typography from '@mui/material/Typography';
 import { User } from '@prisma/client';

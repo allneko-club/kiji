@@ -1,9 +1,9 @@
 'use server';
 
 import { registerInputSchema } from '@/app/auth/register/schema';
-import { Role } from '@/config/consts';
 import { paths } from '@/config/paths';
 import { prisma } from '@/lib/prisma';
+import { Role } from '@/lib/users';
 import { hash } from '@/lib/utils';
 import { parseWithZod } from '@conform-to/zod';
 import { redirect } from 'next/navigation';

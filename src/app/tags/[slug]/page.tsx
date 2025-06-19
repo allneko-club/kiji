@@ -1,5 +1,5 @@
 import { PostList } from '@/components/posts';
-import { POST_LIMIT } from '@/config/consts';
+import { POST_LIMIT } from '@/lib/consts';
 import { getPostsByTag } from '@/models/post';
 import { getTagBySlug } from '@/models/tag';
 import Typography from '@mui/material/Typography';

@@ -1,4 +1,4 @@
-import { RoleFilterValues } from '@/config/consts';
+import { RoleFilterValues } from '@/lib/users';
 import { z } from 'zod';
 
 export const updateUserInputSchema = z.object({

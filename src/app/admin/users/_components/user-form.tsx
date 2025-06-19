@@ -1,8 +1,8 @@
 'use client';
 
 import { updateUser } from '@/app/admin/users/actions';
-import { RoleFilterValues, getRoleLabel } from '@/config/consts';
 import { UsePreventFormReset } from '@/hooks/use-prevent-form-reset';
+import { RoleFilterValues, getRoleLabel } from '@/lib/users';
 import { updateUserInputSchema } from '@/schemas/user';
 import { getFormProps, getInputProps, useForm } from '@conform-to/react';
 import { parseWithZod } from '@conform-to/zod';

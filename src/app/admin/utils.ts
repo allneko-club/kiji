@@ -1,4 +1,4 @@
-import { Role } from '@/config/consts';
+import { Role } from '@/lib/users';
 import { User } from 'next-auth';
 
 export function isAdmin(user: User | undefined) {

@@ -1,8 +1,8 @@
 import { Search } from '@/app/posts/search';
 import { PostList } from '@/components/posts';
 import TagChip from '@/components/ui/tag-chip';
-import { POST_LIMIT } from '@/config/consts';
 import { paths } from '@/config/paths';
+import { POST_LIMIT } from '@/lib/consts';
 import { getPosts } from '@/models/post';
 import { getTags } from '@/models/tag';
 import Typography from '@mui/material/Typography';

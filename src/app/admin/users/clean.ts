@@ -1,4 +1,4 @@
-import { Role, RoleFilterValues } from '@/config/consts';
+import { Role, RoleFilterValues } from '@/lib/users';
 
 export const cleanOrder = (order: string | null | undefined) => {
   if (order === 'name') {

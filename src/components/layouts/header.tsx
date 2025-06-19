@@ -1,6 +1,5 @@
 'use client';
 
-import { mainMenu } from '@/config/consts';
 import { paths } from '@/config/paths';
 import CloseRoundedIcon from '@mui/icons-material/CloseRounded';
 import MenuIcon from '@mui/icons-material/Menu';
@@ -19,6 +18,13 @@ import NextLink from 'next/link';
 import * as React from 'react';
 import Logo from './logo';
 import ModeToggle from './mode-toggle';
+
+// ヘッダーのメニューに表示するリンク
+const mainMenu = [
+  { href: paths.posts.getHref(), label: 'Posts' },
+  { href: paths.tags.getHref(), label: 'Tags' },
+  { href: paths.contact.getHref(), label: 'Contact' },
+];
 
 const StyledToolbar = styled(Toolbar)(({ theme }) => ({
   display: 'flex',
