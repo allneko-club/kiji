@@ -1,11 +1,12 @@
 'use client';
-import { useDebouncedCallback } from 'use-debounce';
+
+import SearchRoundedIcon from '@mui/icons-material/SearchRounded';
+import FormControl from '@mui/material/FormControl';
+import InputAdornment from '@mui/material/InputAdornment';
+import OutlinedInput from '@mui/material/OutlinedInput';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import * as React from 'react';
-import OutlinedInput from '@mui/material/OutlinedInput';
-import InputAdornment from '@mui/material/InputAdornment';
-import FormControl from '@mui/material/FormControl';
-import SearchRoundedIcon from '@mui/icons-material/SearchRounded';
+import { useDebouncedCallback } from 'use-debounce';
 
 export function Search() {
   const searchParams = useSearchParams();

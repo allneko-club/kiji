@@ -1,5 +1,7 @@
 'use client';
-import * as React from 'react';
+
+import RssFeedRoundedIcon from '@mui/icons-material/RssFeedRounded';
+import SearchRoundedIcon from '@mui/icons-material/SearchRounded';
 import Avatar from '@mui/material/Avatar';
 import AvatarGroup from '@mui/material/AvatarGroup';
 import Box from '@mui/material/Box';
@@ -7,15 +9,14 @@ import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
 import Chip from '@mui/material/Chip';
+import FormControl from '@mui/material/FormControl';
 import Grid from '@mui/material/Grid';
 import IconButton from '@mui/material/IconButton';
-import Typography from '@mui/material/Typography';
-import FormControl from '@mui/material/FormControl';
 import InputAdornment from '@mui/material/InputAdornment';
 import OutlinedInput from '@mui/material/OutlinedInput';
+import Typography from '@mui/material/Typography';
 import { styled } from '@mui/material/styles';
-import SearchRoundedIcon from '@mui/icons-material/SearchRounded';
-import RssFeedRoundedIcon from '@mui/icons-material/RssFeedRounded';
+import * as React from 'react';
 
 const cardData = [
   {
@@ -120,24 +121,14 @@ function Author({ authors }: { authors: { name: string; avatar: string }[] }) {
         alignItems: 'center',
         justifyContent: 'space-between',
         padding: '16px',
-      }}
-    >
-      <Box
-        sx={{ display: 'flex', flexDirection: 'row', gap: 1, alignItems: 'center' }}
-      >
+      }}>
+      <Box sx={{ display: 'flex', flexDirection: 'row', gap: 1, alignItems: 'center' }}>
         <AvatarGroup max={3}>
           {authors.map((author, index) => (
-            <Avatar
-              key={index}
-              alt={author.name}
-              src={author.avatar}
-              sx={{ width: 24, height: 24 }}
-            />
+            <Avatar key={index} alt={author.name} src={author.avatar} sx={{ width: 24, height: 24 }} />
           ))}
         </AvatarGroup>
-        <Typography variant="caption">
-          {authors.map((author) => author.name).join(', ')}
-        </Typography>
+        <Typography variant="caption">{authors.map((author) => author.name).join(', ')}</Typography>
       </Box>
       <Typography variant="caption">July 14, 2021</Typography>
     </Box>
@@ -166,9 +157,7 @@ export function Search() {
 }
 
 export default function MainContent() {
-  const [focusedCardIndex, setFocusedCardIndex] = React.useState<number | null>(
-    null,
-  );
+  const [focusedCardIndex, setFocusedCardIndex] = React.useState<number | null>(null);
 
   const handleFocus = (index: number) => {
     setFocusedCardIndex(index);
@@ -197,8 +186,7 @@ export default function MainContent() {
           gap: 1,
           width: { xs: '100%', md: 'fit-content' },
           overflow: 'auto',
-        }}
-      >
+        }}>
         <Search />
         <IconButton size="small" aria-label="RSS feed">
           <RssFeedRoundedIcon />
@@ -213,16 +201,14 @@ export default function MainContent() {
           alignItems: { xs: 'start', md: 'center' },
           gap: 4,
           overflow: 'auto',
-        }}
-      >
+        }}>
         <Box
           sx={{
             display: 'inline-flex',
             flexDirection: 'row',
             gap: 3,
             overflow: 'auto',
-          }}
-        >
+          }}>
           <Chip onClick={handleClick} size="medium" label="All categories" />
           <Chip
             onClick={handleClick}
@@ -268,8 +254,7 @@ export default function MainContent() {
             gap: 1,
             width: { xs: '100%', md: 'fit-content' },
             overflow: 'auto',
-          }}
-        >
+          }}>
           <Search />
           <IconButton size="small" aria-label="RSS feed">
             <RssFeedRoundedIcon />
@@ -283,8 +268,7 @@ export default function MainContent() {
             onFocus={() => handleFocus(0)}
             onBlur={handleBlur}
             tabIndex={0}
-            className={focusedCardIndex === 0 ? 'Mui-focused' : ''}
-          >
+            className={focusedCardIndex === 0 ? 'Mui-focused' : ''}>
             <CardMedia
               component="img"
               alt="green iguana"
@@ -315,8 +299,7 @@ export default function MainContent() {
             onFocus={() => handleFocus(1)}
             onBlur={handleBlur}
             tabIndex={0}
-            className={focusedCardIndex === 1 ? 'Mui-focused' : ''}
-          >
+            className={focusedCardIndex === 1 ? 'Mui-focused' : ''}>
             <CardMedia
               component="img"
               alt="green iguana"
@@ -348,8 +331,7 @@ export default function MainContent() {
             onBlur={handleBlur}
             tabIndex={0}
             className={focusedCardIndex === 2 ? 'Mui-focused' : ''}
-            sx={{ height: '100%' }}
-          >
+            sx={{ height: '100%' }}>
             <CardMedia
               component="img"
               alt="green iguana"
@@ -374,25 +356,21 @@ export default function MainContent() {
           </SyledCard>
         </Grid>
         <Grid size={{ xs: 12, md: 4 }}>
-          <Box
-            sx={{ display: 'flex', flexDirection: 'column', gap: 2, height: '100%' }}
-          >
+          <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2, height: '100%' }}>
             <SyledCard
               variant="outlined"
               onFocus={() => handleFocus(3)}
               onBlur={handleBlur}
               tabIndex={0}
               className={focusedCardIndex === 3 ? 'Mui-focused' : ''}
-              sx={{ height: '100%' }}
-            >
+              sx={{ height: '100%' }}>
               <SyledCardContent
                 sx={{
                   display: 'flex',
                   flexDirection: 'column',
                   justifyContent: 'space-between',
                   height: '100%',
-                }}
-              >
+                }}>
                 <div>
                   <Typography gutterBottom variant="caption" component="div">
                     {cardData[3].tag}
@@ -400,11 +378,7 @@ export default function MainContent() {
                   <Typography gutterBottom variant="h6" component="div">
                     {cardData[3].title}
                   </Typography>
-                  <StyledTypography
-                    variant="body2"
-                    color="text.secondary"
-                    gutterBottom
-                  >
+                  <StyledTypography variant="body2" color="text.secondary" gutterBottom>
                     {cardData[3].description}
                   </StyledTypography>
                 </div>
@@ -417,16 +391,14 @@ export default function MainContent() {
               onBlur={handleBlur}
               tabIndex={0}
               className={focusedCardIndex === 4 ? 'Mui-focused' : ''}
-              sx={{ height: '100%' }}
-            >
+              sx={{ height: '100%' }}>
               <SyledCardContent
                 sx={{
                   display: 'flex',
                   flexDirection: 'column',
                   justifyContent: 'space-between',
                   height: '100%',
-                }}
-              >
+                }}>
                 <div>
                   <Typography gutterBottom variant="caption" component="div">
                     {cardData[4].tag}
@@ -434,11 +406,7 @@ export default function MainContent() {
                   <Typography gutterBottom variant="h6" component="div">
                     {cardData[4].title}
                   </Typography>
-                  <StyledTypography
-                    variant="body2"
-                    color="text.secondary"
-                    gutterBottom
-                  >
+                  <StyledTypography variant="body2" color="text.secondary" gutterBottom>
                     {cardData[4].description}
                   </StyledTypography>
                 </div>
@@ -454,8 +422,7 @@ export default function MainContent() {
             onBlur={handleBlur}
             tabIndex={0}
             className={focusedCardIndex === 5 ? 'Mui-focused' : ''}
-            sx={{ height: '100%' }}
-          >
+            sx={{ height: '100%' }}>
             <CardMedia
               component="img"
               alt="green iguana"

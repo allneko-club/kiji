@@ -5,4 +5,4 @@ export const metadata: Metadata = { title: 'アカウント登録' };
 
 export default function Page() {
   return <RegisterForm />;
-};
+}

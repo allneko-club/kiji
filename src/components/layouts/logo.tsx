@@ -1,7 +1,7 @@
-import * as React from 'react';
-import Link from 'next/link';
-import SvgIcon from '@mui/material/SvgIcon';
 import { paths } from '@/config/paths';
+import SvgIcon from '@mui/material/SvgIcon';
+import Link from 'next/link';
+import * as React from 'react';
 
 export default function Logo() {
   return (

@@ -1,8 +1,9 @@
 'use server';
-import { redirect } from 'next/navigation';
+
+import { resetPasswordInputSchema } from '@/app/auth/reset-password/schema';
 import { paths } from '@/config/paths';
 import { parseWithZod } from '@conform-to/zod';
-import { resetPasswordInputSchema } from '@/app/auth/reset-password/schema';
+import { redirect } from 'next/navigation';
 
 export async function resetPassword(prevState: unknown, formData: FormData) {
   const submission = parseWithZod(formData, {

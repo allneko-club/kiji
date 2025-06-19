@@ -1,5 +1,5 @@
-import * as z from 'zod';
 import 'dotenv/config';
+import * as z from 'zod';
 
 const createEnv = () => {
   const EnvSchema = z.object({

@@ -3,4 +3,4 @@
  */
 export type valueOf<T> = T[keyof T];
 
-export type OrderBy = "asc" | "desc";
+export type OrderBy = 'asc' | 'desc';

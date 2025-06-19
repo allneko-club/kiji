@@ -1,19 +1,20 @@
 'use client';
-import * as React from 'react';
-import { useActionState } from 'react';
+
+import { Card } from '@/app/auth/_components/card';
 import { register } from '@/app/auth/register/actions';
-import { useForm } from '@conform-to/react';
 import { registerInputSchema } from '@/app/auth/register/schema';
+import { useForm } from '@conform-to/react';
 import { parseWithZod } from '@conform-to/zod';
-import { toast } from 'react-toastify';
+import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import FormControl from '@mui/material/FormControl';
+import FormHelperText from '@mui/material/FormHelperText';
 import FormLabel from '@mui/material/FormLabel';
 import TextField from '@mui/material/TextField';
-import { Card } from '@/app/auth/_components/card';
 import Typography from '@mui/material/Typography';
-import Box from '@mui/material/Box';
-import FormHelperText from '@mui/material/FormHelperText';
+import * as React from 'react';
+import { useActionState } from 'react';
+import { toast } from 'react-toastify';
 
 export default function RegisterForm() {
   const [lastResult, action, isPending] = useActionState(register, undefined);
@@ -26,11 +27,7 @@ export default function RegisterForm() {
 
   return (
     <Card variant="outlined">
-      <Typography
-        component="h1"
-        variant="h4"
-        sx={{ width: '100%', fontSize: 'clamp(2rem, 10vw, 2.15rem)' }}
-      >
+      <Typography component="h1" variant="h4" sx={{ width: '100%', fontSize: 'clamp(2rem, 10vw, 2.15rem)' }}>
         ユーザー登録
       </Typography>
       <Typography>以下のフォームに入力してください。</Typography>
@@ -38,7 +35,7 @@ export default function RegisterForm() {
         id={form.id}
         component="form"
         onSubmit={form.onSubmit}
-        action={formData => {
+        action={(formData) => {
           action(formData);
           toast('登録しました');
         }}
@@ -48,8 +45,7 @@ export default function RegisterForm() {
           flexDirection: 'column',
           width: '100%',
           gap: 2,
-        }}
-      >
+        }}>
         <FormControl required>
           <FormLabel htmlFor={fields.name.name}>ユーザー名</FormLabel>
           <TextField
@@ -90,8 +86,10 @@ export default function RegisterForm() {
           />
         </FormControl>
 
-        <Button type="submit" variant="contained" loading={isPending}>登録</Button>
+        <Button type="submit" variant="contained" loading={isPending}>
+          登録
+        </Button>
       </Box>
     </Card>
   );
-};
+}

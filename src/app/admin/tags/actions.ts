@@ -1,13 +1,12 @@
 'use server';
-import { redirect } from 'next/navigation';
-import { paths } from '@/config/paths';
-import { Prisma, prisma } from '@/lib/prisma';
-import { auth } from '@/auth';
-import { TagInputSchema } from '@/schemas/tag';
-import { parseWithZod } from '@conform-to/zod';
 
 import { isAdmin } from '@/app/admin/utils';
-
+import { auth } from '@/auth';
+import { paths } from '@/config/paths';
+import { Prisma, prisma } from '@/lib/prisma';
+import { TagInputSchema } from '@/schemas/tag';
+import { parseWithZod } from '@conform-to/zod';
+import { redirect } from 'next/navigation';
 
 export async function createTag(prevState: unknown, formData: FormData) {
   const session = await auth();
@@ -26,7 +25,6 @@ export async function createTag(prevState: unknown, formData: FormData) {
 
   try {
     await prisma.tag.create({ data: submission.value });
-
   } catch (e: unknown) {
     if (e instanceof Prisma.PrismaClientKnownRequestError) {
       if (e.code === 'P2002') {
@@ -61,12 +59,11 @@ export async function updateTag(prevState: unknown, formData: FormData) {
       where: { id: id },
       data: submission.value,
     });
-
   } catch (e: unknown) {
     if (e instanceof Prisma.PrismaClientKnownRequestError) {
       if (e.code === 'P2002') {
         return submission.reply({ formErrors: ['スラッグの値は一意にして下さい。'] });
-      }else if (e.code === 'P2025') {
+      } else if (e.code === 'P2025') {
         return submission.reply({ formErrors: ['このタグは既に削除されています。'] });
       }
     }

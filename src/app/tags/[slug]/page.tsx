@@ -1,16 +1,16 @@
 import { PostList } from '@/components/posts';
-import { getPostsByTag } from '@/models/post';
-import * as React from 'react';
 import { POST_LIMIT } from '@/config/consts';
+import { getPostsByTag } from '@/models/post';
 import { getTagBySlug } from '@/models/tag';
-import { notFound } from 'next/navigation';
-import type { Metadata } from 'next';
 import Typography from '@mui/material/Typography';
+import type { Metadata } from 'next';
+import { notFound } from 'next/navigation';
+import * as React from 'react';
 
 type Props = {
-  params: Promise<{ slug: string }>
-  searchParams?: Promise<{ page?: string; }>;
-}
+  params: Promise<{ slug: string }>;
+  searchParams?: Promise<{ page?: string }>;
+};
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const slug = (await params).slug;
@@ -45,4 +45,4 @@ export default async function Page(props: Props) {
       <PostList perPage={queryParams.perPage} posts={posts} total={total} />
     </>
   );
-};
+}

@@ -1,11 +1,11 @@
-import type { Metadata } from 'next';
 import { PostDetail } from '@/app/posts/[id]/_components/post-detail';
 import { getPost } from '@/models/post';
+import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 
 type Props = {
-  params: Promise<{ id: string }>
-}
+  params: Promise<{ id: string }>;
+};
 
 // 参考 https://github.com/TanStack/query/discussions/7313
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
@@ -26,7 +26,5 @@ export default async function Page({ params }: Props) {
     notFound();
   }
 
-  return (
-    <PostDetail post={post} />
-  );
-};
+  return <PostDetail post={post} />;
+}

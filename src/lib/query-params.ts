@@ -1,18 +1,18 @@
 /**
  * クエリパラメーターや、フォームの値をクリーンする機能を定義するためのファイル
  */
-import { z } from 'zod';
 import { getFormattedDateFromObj } from '@/lib/datetime';
 import { OrderBy } from '@/types/utils';
+import { z } from 'zod';
 
 /**
  * クエリパラメーターの page をクリーンする
  * @param page
  */
 export const cleanPage = (page: number | string | undefined | null) => {
-  const result = Number(page)
+  const result = Number(page);
   return 1 < result ? result : 1;
-}
+};
 
 /**
  * クエリパラメーターの perPage をクリーンする
@@ -20,19 +20,18 @@ export const cleanPage = (page: number | string | undefined | null) => {
  * @param values
  */
 export const cleanPerPage = (perPage: number | string | undefined | null, values: number[]) => {
-  if(!perPage || !values.includes(Number(perPage))){
+  if (!perPage || !values.includes(Number(perPage))) {
     return values[0];
   }
 
   return Number(perPage);
-}
+};
 
 export const cleanOrderBy = (orderBy: string | null | undefined): OrderBy => {
-  return orderBy === "desc" ? "desc" : "asc";
-}
+  return orderBy === 'desc' ? 'desc' : 'asc';
+};
 
 export function updateQueryParams<T extends z.ZodTypeAny>(params: URLSearchParams, data: z.infer<T>) {
-
   for (const [key, value] of Object.entries(data)) {
     if (!value) {
       params.delete(key);

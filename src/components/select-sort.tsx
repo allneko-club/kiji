@@ -1,15 +1,16 @@
 'use client';
-import { usePathname, useRouter, useSearchParams } from 'next/navigation';
-import { cleanOrderBy, parseSortValue } from '@/lib/query-params';
+
 import { cleanOrder } from '@/app/admin/users/clean';
+import { cleanOrderBy, parseSortValue } from '@/lib/query-params';
 import FormControl from '@mui/material/FormControl';
 import FormLabel from '@mui/material/FormLabel';
-import Select from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
+import Select from '@mui/material/Select';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 
 type Props = {
-  selectItems: { [key: string]: string; },
-}
+  selectItems: { [key: string]: string };
+};
 
 /**
  * リストデータの並び順を変更するためのコンポーネント
@@ -18,7 +19,6 @@ type Props = {
  * @constructor
  */
 export default function SelectSort({ selectItems }: Props) {
-
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
@@ -40,8 +40,7 @@ export default function SelectSort({ selectItems }: Props) {
         labelId="sort"
         id="sort"
         defaultValue={`${order}_${orderBy}`}
-        onChange={e => handleChange(e.target.value)}
-      >
+        onChange={(e) => handleChange(e.target.value)}>
         {Object.keys(selectItems).map((key) => (
           <MenuItem key={key} value={key}>
             {selectItems[key]}

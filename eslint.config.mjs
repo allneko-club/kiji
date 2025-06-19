@@ -8,7 +8,6 @@ const compat = new FlatCompat({
 
 const eslintConfig = [
   { files: ['**/*.{js,mjs,cjs,ts,jsx,tsx}'] },
-  { ignores: ['.lintstagedrc.js'] },
   { languageOptions: { globals: globals.browser } },
   ...compat.config({
     extends: ['next', 'next/typescript', 'prettier'],

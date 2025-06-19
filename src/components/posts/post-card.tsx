@@ -1,19 +1,19 @@
 'use client';
-import * as React from 'react';
-import { useRouter } from 'next/navigation';
+
 import { paths } from '@/config/paths';
 import { getFormattedDateTimeFromObj } from '@/lib/datetime';
-import { styled } from '@mui/material/styles';
-import Typography from '@mui/material/Typography';
-import Box from '@mui/material/Box';
-import AvatarGroup from '@mui/material/AvatarGroup';
+import { PostWithCategoryAuthor } from '@/types/post';
 import Avatar from '@mui/material/Avatar';
-import Grid from '@mui/material/Grid';
-import CardMedia from '@mui/material/CardMedia';
+import AvatarGroup from '@mui/material/AvatarGroup';
+import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
-import { PostWithCategoryAuthor } from '@/types/post';
-
+import CardMedia from '@mui/material/CardMedia';
+import Grid from '@mui/material/Grid';
+import Typography from '@mui/material/Typography';
+import { styled } from '@mui/material/styles';
+import { useRouter } from 'next/navigation';
+import * as React from 'react';
 
 const StyledCard = styled(Card)(({ theme }) => ({
   display: 'flex',
@@ -51,7 +51,7 @@ const StyledTypography = styled(Typography)({
   textOverflow: 'ellipsis',
 });
 
-function Author({ author, created }: { author: { name: string; avatar: string }, created: string }) {
+function Author({ author, created }: { author: { name: string; avatar: string }; created: string }) {
   return (
     <Box
       sx={{
@@ -61,17 +61,10 @@ function Author({ author, created }: { author: { name: string; avatar: string },
         alignItems: 'center',
         justifyContent: 'space-between',
         padding: '16px',
-      }}
-    >
-      <Box
-        sx={{ display: 'flex', flexDirection: 'row', gap: 1, alignItems: 'center' }}
-      >
+      }}>
+      <Box sx={{ display: 'flex', flexDirection: 'row', gap: 1, alignItems: 'center' }}>
         <AvatarGroup max={3}>
-          <Avatar
-            alt={author.name}
-            src={author.avatar}
-            sx={{ width: 24, height: 24 }}
-          />
+          <Avatar alt={author.name} src={author.avatar} sx={{ width: 24, height: 24 }} />
         </AvatarGroup>
         <Typography variant="caption">{author.name}</Typography>
       </Box>
@@ -80,12 +73,9 @@ function Author({ author, created }: { author: { name: string; avatar: string },
   );
 }
 
-
-export function PostCard({ post }: { post: PostWithCategoryAuthor}) {
+export function PostCard({ post }: { post: PostWithCategoryAuthor }) {
   const router = useRouter();
-  const [focusedCardIndex, setFocusedCardIndex] = React.useState<string | null>(
-    null,
-  );
+  const [focusedCardIndex, setFocusedCardIndex] = React.useState<string | null>(null);
   const handleFocus = (index: string) => setFocusedCardIndex(index);
   const handleBlur = () => setFocusedCardIndex(null);
 
@@ -97,8 +87,7 @@ export function PostCard({ post }: { post: PostWithCategoryAuthor}) {
         onBlur={handleBlur}
         tabIndex={0}
         className={focusedCardIndex === post.id ? 'Mui-focused' : ''}
-        onClick={() => router.push(paths.posts.detail.getHref(post.id))}
-      >
+        onClick={() => router.push(paths.posts.detail.getHref(post.id))}>
         <CardMedia
           component="img"
           alt="green iguana"
@@ -110,11 +99,11 @@ export function PostCard({ post }: { post: PostWithCategoryAuthor}) {
           }}
         />
         <StyledCardContent>
-          {post.category &&
+          {post.category && (
             <Typography gutterBottom variant="caption" component="div">
               {post.category.name}
             </Typography>
-          }
+          )}
           <Typography gutterBottom variant="h6" component="div">
             {post.title}
           </Typography>

@@ -6,4 +6,4 @@ export default async function Page() {
       <Typography variant="h1">ダッシュボード</Typography>
     </div>
   );
-};
+}

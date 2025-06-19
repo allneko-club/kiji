@@ -1,11 +1,11 @@
-import NextLink from 'next/link';
-import Typography from '@mui/material/Typography';
-import { auth } from '@/auth';
-import { getPosts } from '@/models/post';
-import { paths } from '@/config/paths';
 import { PostsTable } from '@/app/admin/posts/_components/posts-table';
+import { auth } from '@/auth';
 import { POST_LIMIT } from '@/config/consts';
+import { paths } from '@/config/paths';
+import { getPosts } from '@/models/post';
 import Button from '@mui/material/Button';
+import Typography from '@mui/material/Typography';
+import NextLink from 'next/link';
 
 export default async function Page() {
   const session = await auth();
@@ -26,4 +26,4 @@ export default async function Page() {
       <PostsTable posts={posts} total={total} perPage={100} />
     </div>
   );
-};
+}

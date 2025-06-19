@@ -1,9 +1,9 @@
-import type { NextAuthConfig } from 'next-auth';
-import Credentials from 'next-auth/providers/credentials';
-import { z } from 'zod';
-import GitHub from 'next-auth/providers/github';
 import { prisma } from '@/lib/prisma';
 import { hash } from '@/lib/utils';
+import type { NextAuthConfig } from 'next-auth';
+import Credentials from 'next-auth/providers/credentials';
+import GitHub from 'next-auth/providers/github';
+import { z } from 'zod';
 
 export const loginInputSchema = z.object({
   email: z.string().min(1).email(),
@@ -20,7 +20,7 @@ export const authConfig = {
       const isOnAdmin = nextUrl.pathname.startsWith('/admin');
       const isOnMy = nextUrl.pathname.startsWith('/my');
       if (isOnAdmin || isOnMy) {
-         // 未認証のユーザーはログインページにリダイレクトされる
+        // 未認証のユーザーはログインページにリダイレクトされる
         return isLoggedIn;
       }
 
@@ -28,19 +28,19 @@ export const authConfig = {
     },
 
     jwt({ token, user }) {
-
-      if (user) { // User is available during sign-in
-        token.id = user.id || ""
-        token.role = user.role
+      if (user) {
+        // User is available during sign-in
+        token.id = user.id || '';
+        token.role = user.role;
       }
 
-      return token
+      return token;
     },
 
     session({ session, token }) {
-      session.user.id = token.id
-      session.user.role = token.role
-      return session
+      session.user.id = token.id;
+      session.user.role = token.role;
+      return session;
     },
   },
   providers: [
@@ -53,15 +53,15 @@ export const authConfig = {
       },
       async authorize(credentials) {
         try {
-          const { email, password } = await loginInputSchema.parseAsync(credentials)
+          const { email, password } = await loginInputSchema.parseAsync(credentials);
           const user = await prisma.user.findFirst({
             where: {
               email: email,
               password: hash(password),
-            }
+            },
           });
 
-          if(!user) return null;
+          if (!user) return null;
 
           // return JSON object with the user data
           return {
@@ -73,7 +73,7 @@ export const authConfig = {
           };
         } catch {
           // Return `null` to indicate that the credentials are invalid
-          return null
+          return null;
         }
       },
     }),

@@ -1,11 +1,11 @@
 import { UserInfo } from '@/app/admin/users/[id]/_components/user-info';
 import { getUser } from '@/models/user';
-import { notFound } from 'next/navigation';
 import type { Metadata } from 'next';
+import { notFound } from 'next/navigation';
 
 type Props = {
-  params: Promise<{ id: string }>
-}
+  params: Promise<{ id: string }>;
+};
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   try {
@@ -25,7 +25,5 @@ export default async function Page({ params }: Props) {
     notFound();
   }
 
-  return (
-    <UserInfo user={user} />
-  );
-};
+  return <UserInfo user={user} />;
+}

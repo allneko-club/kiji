@@ -1,25 +1,22 @@
 'use client';
-import * as React from 'react';
-import { useActionState } from 'react';
+
 import { createTag, updateTag } from '@/app/admin/tags/actions';
+import { UsePreventFormReset } from '@/hooks/use-prevent-form-reset';
+import { TagInputSchema } from '@/schemas/tag';
+import { getFormProps, getInputProps, useForm } from '@conform-to/react';
+import { parseWithZod } from '@conform-to/zod';
+import Alert from '@mui/material/Alert';
 import Button from '@mui/material/Button';
 import FormControl from '@mui/material/FormControl';
 import FormLabel from '@mui/material/FormLabel';
 import Stack from '@mui/material/Stack';
 import TextField from '@mui/material/TextField';
-import { getFormProps, getInputProps, useForm } from '@conform-to/react';
-import { parseWithZod } from '@conform-to/zod';
-import { TagInputSchema } from '@/schemas/tag';
-import Alert from '@mui/material/Alert';
-import { UsePreventFormReset } from '@/hooks/use-prevent-form-reset';
 import { Tag } from '@prisma/client';
-
+import * as React from 'react';
+import { useActionState } from 'react';
 
 export const TagForm = ({ tag }: { tag?: Tag }) => {
-  const [lastResult, submitAction, isPending] = useActionState(
-    tag ? updateTag : createTag,
-    undefined,
-  );
+  const [lastResult, submitAction, isPending] = useActionState(tag ? updateTag : createTag, undefined);
   const [form, fields] = useForm({
     lastResult,
     onValidate({ formData }) {
@@ -28,7 +25,7 @@ export const TagForm = ({ tag }: { tag?: Tag }) => {
     defaultValue: tag,
   });
 
-  UsePreventFormReset({formId: form.id});
+  UsePreventFormReset({ formId: form.id });
 
   return (
     <form action={submitAction} {...getFormProps(form)}>
@@ -64,8 +61,9 @@ export const TagForm = ({ tag }: { tag?: Tag }) => {
         </FormControl>
       </Stack>
 
-      <Button type="submit" variant="contained" loading={isPending}>保存</Button>
-
+      <Button type="submit" variant="contained" loading={isPending}>
+        保存
+      </Button>
     </form>
   );
 };

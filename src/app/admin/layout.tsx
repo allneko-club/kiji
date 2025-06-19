@@ -1,11 +1,10 @@
-import { ReactNode } from 'react';
 import AdminNav from '@/app/admin/_components/admin-nav';
+import { isAdmin } from '@/app/admin/utils';
 import { auth } from '@/auth';
-import { redirect } from 'next/navigation';
 import { paths } from '@/config/paths';
 import Typography from '@mui/material/Typography';
-import { isAdmin } from '@/app/admin/utils';
-
+import { redirect } from 'next/navigation';
+import { ReactNode } from 'react';
 
 export default async function Layout({ children }: { children: ReactNode }) {
   const session = await auth();
@@ -16,12 +15,10 @@ export default async function Layout({ children }: { children: ReactNode }) {
     return (
       <>
         <AdminNav />
-        <div>
-          {children}
-        </div>
+        <div>{children}</div>
       </>
     );
   } else {
-    return <Typography>権限がありません</Typography>
+    return <Typography>権限がありません</Typography>;
   }
 }

@@ -1,6 +1,6 @@
-import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { cleanPage } from '@/lib/query-params';
 import Pagination from '@mui/material/Pagination';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 
 export interface Props {
   perPage: number;
@@ -19,11 +19,5 @@ export function PaginationBasic({ perPage, total }: Props) {
     router.push(`${pathname}?${params.toString()}`);
   };
 
-  return (
-    <Pagination
-      count={Math.ceil(total / perPage)}
-      page={page}
-      onChange={() => handleChange(page)}
-    />
-  );
+  return <Pagination count={Math.ceil(total / perPage)} page={page} onChange={() => handleChange(page)} />;
 }

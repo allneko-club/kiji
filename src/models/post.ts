@@ -5,7 +5,7 @@ type GetPostsParams = {
   authorId?: string;
   published?: boolean;
   title?: string;
-} & BaseSearch
+} & BaseSearch;
 
 export const getPosts = async (params: GetPostsParams) => {
   const where = {
@@ -14,7 +14,7 @@ export const getPosts = async (params: GetPostsParams) => {
     title: {
       contains: params.title,
     },
-  }
+  };
 
   const [posts, total] = await Promise.all([
     prisma.post.findMany({
@@ -27,28 +27,28 @@ export const getPosts = async (params: GetPostsParams) => {
       },
       orderBy: {
         createdAt: 'desc',
-      }
+      },
     }),
-    prisma.post.count({where}),
-  ])
+    prisma.post.count({ where }),
+  ]);
 
-  return {posts, total}
-}
+  return { posts, total };
+};
 
 type GetPostsByTagParams = {
   slug?: string;
   published?: boolean;
-} & BaseSearch
+} & BaseSearch;
 
 export const getPostsByTag = async (params: GetPostsByTagParams) => {
   const where = {
     published: params.published,
     tags: {
       some: {
-        slug: params.slug
-      }
+        slug: params.slug,
+      },
     },
-  }
+  };
 
   const [posts, total] = await Promise.all([
     prisma.post.findMany({
@@ -61,13 +61,13 @@ export const getPostsByTag = async (params: GetPostsByTagParams) => {
       },
       orderBy: {
         createdAt: 'desc',
-      }
+      },
     }),
-    prisma.post.count({where}),
-  ])
+    prisma.post.count({ where }),
+  ]);
 
-  return {posts, total}
-}
+  return { posts, total };
+};
 
 // todo 非公開の投稿は投稿したユーザーのみ取得可能にするために、公開済みのみに絞り込むためのフラグ用引数を追加する
 export const getPost = async (id: string) => {
@@ -79,6 +79,6 @@ export const getPost = async (id: string) => {
     },
     where: {
       id: id,
-    }
-  })
-}
+    },
+  });
+};

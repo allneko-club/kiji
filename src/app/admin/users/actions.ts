@@ -1,13 +1,12 @@
 'use server';
-import { redirect } from 'next/navigation';
-import { paths } from '@/config/paths';
-import { Prisma, prisma } from '@/lib/prisma';
-import { auth } from '@/auth';
-import { parseWithZod } from '@conform-to/zod';
-import { updateUserInputSchema } from '@/schemas/user';
 
 import { isAdmin } from '@/app/admin/utils';
-
+import { auth } from '@/auth';
+import { paths } from '@/config/paths';
+import { Prisma, prisma } from '@/lib/prisma';
+import { updateUserInputSchema } from '@/schemas/user';
+import { parseWithZod } from '@conform-to/zod';
+import { redirect } from 'next/navigation';
 
 export async function updateUser(prevState: unknown, formData: FormData) {
   const session = await auth();
@@ -29,14 +28,13 @@ export async function updateUser(prevState: unknown, formData: FormData) {
 
     await prisma.user.update({
       where: { id: submission.value.id },
-      data: {...submission.value, role: role},
+      data: { ...submission.value, role: role },
     });
-
   } catch (e: unknown) {
     if (e instanceof Prisma.PrismaClientKnownRequestError) {
       if (e.code === 'P2002') {
         return submission.reply({ formErrors: ['このメールアドレスは使用されています。'] });
-      }else if (e.code === 'P2025') {
+      } else if (e.code === 'P2025') {
         return submission.reply({ formErrors: ['このユーザーは既に削除されています。'] });
       }
     }

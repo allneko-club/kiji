@@ -1,10 +1,10 @@
-import { User as DefaultUser } from '@auth/core/src/types';
 // The `JWT` interface can be found in the `next-auth/jwt` submodule
-import { JWT as DefaultJWT } from "next-auth/jwt"
+import { User as DefaultUser } from '@auth/core/src/types';
+import { JWT as DefaultJWT } from 'next-auth/jwt';
 
 // https://authjs.dev/getting-started/typescript?framework=express
 
-declare module "next-auth" {
+declare module 'next-auth' {
   /**
    * The shape of the user object returned in the OAuth providers' `profile` callback,
    * or the second parameter of the `session` callback, when using a database.
@@ -21,8 +21,8 @@ declare module "next-auth" {
   }
 }
 
-declare module "next-auth/jwt" {
-  interface JWT extends DefaultJWT{
+declare module 'next-auth/jwt' {
+  interface JWT extends DefaultJWT {
     id: string;
     role: number;
   }

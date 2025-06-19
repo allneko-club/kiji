@@ -1,8 +1,8 @@
 import { FieldName, useField, useInputControl } from '@conform-to/react';
-import { User } from '@prisma/client';
 import FormLabel from '@mui/material/FormLabel';
-import TextField from '@mui/material/TextField';
 import MenuItem from '@mui/material/MenuItem';
+import TextField from '@mui/material/TextField';
+import { User } from '@prisma/client';
 import * as React from 'react';
 
 type Field<Schema> = {
@@ -27,8 +27,7 @@ export function SelectUser({ label, required, name, users }: Field<string>) {
         error={!meta.valid}
         helperText={meta.errors}
         select
-        required={required}
-      >
+        required={required}>
         {users.map((item) => (
           <MenuItem key={item.id} value={item.id}>
             {item.name}

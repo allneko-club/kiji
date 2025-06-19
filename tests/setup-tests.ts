@@ -1,4 +1,4 @@
-import { afterAll, beforeAll, beforeEach, vi } from 'vitest'
+import { afterAll, beforeAll, beforeEach, vi } from 'vitest';
 
 vi.mock('zustand');
 

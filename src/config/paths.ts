@@ -1,7 +1,7 @@
 const adminPath = '/admin';
 
 export const paths = {
-  admin:{
+  admin: {
     getHref: () => adminPath,
     categories: {
       getHref: () => `${adminPath}/categories`,
@@ -15,7 +15,7 @@ export const paths = {
     posts: {
       getHref: () => `${adminPath}/posts`,
       detail: {
-        getHref:(id: string) => `${adminPath}/posts/${id}`,
+        getHref: (id: string) => `${adminPath}/posts/${id}`,
       },
       create: {
         getHref: () => `${adminPath}/posts/create`,
@@ -33,7 +33,7 @@ export const paths = {
         getHref: (id: number) => `${adminPath}/tags/${id}/update`,
       },
     },
-    users:{
+    users: {
       getHref: () => `${adminPath}/users`,
       detail: {
         getHref: (id: string) => `${adminPath}/users/${id}`,
@@ -58,7 +58,7 @@ export const paths = {
   contactDone: {
     getHref: () => '/contact-done',
   },
-  posts:{
+  posts: {
     getHref: () => '/posts',
     detail: {
       getHref: (id: string) => `/posts/${id}`,
@@ -68,7 +68,7 @@ export const paths = {
     getHref: () => '/tags',
     detail: {
       getHref: (name: string) => `/tags/${name}`,
-    }
+    },
   },
   auth: {
     register: {

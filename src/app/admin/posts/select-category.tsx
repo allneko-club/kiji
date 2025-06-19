@@ -1,8 +1,8 @@
 import { FieldName, useField, useInputControl } from '@conform-to/react';
-import { Category } from '@prisma/client';
 import FormLabel from '@mui/material/FormLabel';
-import TextField from '@mui/material/TextField';
 import MenuItem from '@mui/material/MenuItem';
+import TextField from '@mui/material/TextField';
+import { Category } from '@prisma/client';
 import * as React from 'react';
 
 type Field<Schema> = {
@@ -27,8 +27,7 @@ export function SelectCategory({ label, required, name, categories }: Field<numb
         error={!meta.valid}
         helperText={meta.errors}
         select
-        required={required}
-      >
+        required={required}>
         {categories.map((item) => (
           <MenuItem key={item.id} value={item.id.toString()}>
             {item.name}
