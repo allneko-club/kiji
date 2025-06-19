@@ -1,9 +1,23 @@
 {
+  "bracketSpacing": true,
+  "bracketSameLine": true,
+  "jsxSingleQuote": false,
   "trailingComma": "all",
   "tabWidth": 2,
+  "printWidth": 110,
+  "plugins": [
+    "@trivago/prettier-plugin-sort-imports"
+  ],
   "semi": true,
   "singleQuote": true,
-  "jsxSingleQuote": false,
-  "printWidth": 100,
-  "plugins": []
+  "arrowParens": "always",
+  "importOrder": [
+    "(.*)/__mocks__/(.*)",
+    "server-only",
+    "<THIRD_PARTY_MODULES>",
+    "^~/(.*)$",
+    "^[./]"
+  ],
+  "importOrderSeparation": false,
+  "importOrderSortSpecifiers": true
 }

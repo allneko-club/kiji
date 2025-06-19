@@ -1,30 +1,27 @@
-import globals from "globals";
-import pluginJs from "@eslint/js";
-import tseslint from "typescript-eslint";
-import { FlatCompat } from '@eslint/eslintrc'
+import { FlatCompat } from '@eslint/eslintrc';
+import globals from 'globals';
 
 const compat = new FlatCompat({
   // import.meta.dirname is available after Node.js v20.11.0
   baseDirectory: import.meta.dirname,
-})
+});
 
-/** @type {import('eslint').Linter.Config[]} */
-export default [
-  {files: ["**/*.{js,mjs,cjs,ts,jsx,tsx}"]},
-  {ignores: ['.lintstagedrc.js']},
-  {languageOptions: {globals: globals.browser}},
-  pluginJs.configs.recommended,
-  ...tseslint.configs.recommended,
+const eslintConfig = [
+  { files: ['**/*.{js,mjs,cjs,ts,jsx,tsx}'] },
+  { ignores: ['.lintstagedrc.js'] },
+  { languageOptions: { globals: globals.browser } },
   ...compat.config({
-    extends: ['next', 'prettier'],
-    "rules": {
-      "@typescript-eslint/no-explicit-any": 1,
-      "no-restricted-imports": [
-        "error",
+    extends: ['next', 'next/typescript', 'prettier'],
+    rules: {
+      '@typescript-eslint/no-explicit-any': 1,
+      'no-restricted-imports': [
+        'error',
         {
-          "patterns": [{ "regex": "^@mui/[^/]+$" }]
-        }
-      ]
-    }
+          patterns: [{ regex: '^@mui/[^/]+$' }],
+        },
+      ],
+    },
   }),
 ];
+
+export default eslintConfig;
