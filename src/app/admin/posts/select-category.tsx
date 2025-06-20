@@ -18,7 +18,9 @@ export function SelectCategory({ label, required, name, categories }: Field<numb
 
   return (
     <>
-      <FormLabel htmlFor={meta.name}>{label}</FormLabel>
+      <FormLabel htmlFor={meta.name} required={required}>
+        {label}
+      </FormLabel>
       <TextField
         name={meta.name}
         value={control.value ?? ''}

@@ -3,8 +3,13 @@
 import { isAdmin } from '@/app/admin/utils';
 import { auth } from '@/auth';
 import { paths } from '@/config/paths';
+import { InvalidInputError } from '@/lib/errors';
 import { Prisma, prisma } from '@/lib/prisma';
-import { createCategoryInputSchema, updateCategoryInputSchema } from '@/schemas/category';
+import {
+  createCategoryInputSchema,
+  deleteCategoryInputSchema,
+  updateCategoryInputSchema,
+} from '@/schemas/category';
 import { parseWithZod } from '@conform-to/zod';
 import { redirect } from 'next/navigation';
 
@@ -81,10 +86,22 @@ export async function deleteCategory(prevState: unknown, formData: FormData) {
     redirect(paths.auth.login.getHref());
   }
 
+  const submission = parseWithZod(formData, {
+    schema: deleteCategoryInputSchema,
+  });
+
+  if (submission.status !== 'success' || submission.value.id === 1) {
+    return submission.reply();
+  }
+
+  if (id === 1) {
+    throw new InvalidInputError('Cannot delete default category.');
+  }
+
   try {
     await prisma.category.delete({ where: { id: id } });
   } catch {
     /* RecordNotFound 例外が発生しても無視する */
   }
-  return Promise.resolve(null);
+  return Promise.resolve({ status: 'success' });
 }

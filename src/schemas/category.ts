@@ -22,3 +22,7 @@ export const CategoryInputSchema = z.object({
   description: z.string().max(1000, '1000文字以内にしてください。').default(''),
   image: z.string().url('URLの形式が間違っています。').optional(),
 });
+
+export const deleteCategoryInputSchema = z.object({
+  id: z.number().min(1),
+});

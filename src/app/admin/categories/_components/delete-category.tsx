@@ -12,22 +12,33 @@ import DialogTitle from '@mui/material/DialogTitle';
 import IconButton from '@mui/material/IconButton';
 import { redirect } from 'next/navigation';
 import * as React from 'react';
-import { useActionState } from 'react';
+import { useActionState, useEffect } from 'react';
 import { toast } from 'react-toastify';
 
 type DeleteCategoryProps = {
   id: number;
+  disabled: boolean;
 };
 
-export function DeleteCategory({ id }: DeleteCategoryProps) {
-  const [, action, isPending] = useActionState(deleteCategory, null);
+export function DeleteCategory({ id, disabled = false }: DeleteCategoryProps) {
+  const [lastResult, submitAction, isPending] = useActionState(deleteCategory, undefined);
   const [open, setOpen] = React.useState(false);
   const handleClickOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
+  useEffect(() => {
+    if (lastResult?.status === 'error') {
+      toast.error('削除できませんでした');
+    } else if (lastResult?.status === 'success') {
+      toast('削除しました');
+    }
+    handleClose();
+    redirect(paths.admin.categories.getHref());
+  }, [lastResult]);
+
   return (
     <div>
-      <IconButton aria-label="delete" onClick={handleClickOpen}>
+      <IconButton aria-label="delete" onClick={handleClickOpen} disabled={disabled}>
         <DeleteIcon />
       </IconButton>
       <Dialog
@@ -35,13 +46,7 @@ export function DeleteCategory({ id }: DeleteCategoryProps) {
         onClose={handleClose}
         aria-labelledby="alert-delete-category"
         aria-describedby="alert-delete-category">
-        <form
-          action={(formData) => {
-            action(formData);
-            handleClose();
-            toast('削除しました');
-            redirect(paths.admin.categories.getHref());
-          }}>
+        <form action={submitAction}>
           <input name="id" hidden defaultValue={id} />
           <DialogTitle id="delete-category">削除確認</DialogTitle>
           <DialogContent>

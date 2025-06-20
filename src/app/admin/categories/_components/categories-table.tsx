@@ -48,7 +48,7 @@ export const CategoriesTable = ({ categories }: Props) => {
                       component={NextLink}>
                       <CreateIcon />
                     </IconButton>
-                    <DeleteCategory id={category.id} />
+                    <DeleteCategory id={category.id} disabled={category.id === 1} />
                   </Stack>
                 </TableCell>
                 <TableCell align="right">{category.name}</TableCell>

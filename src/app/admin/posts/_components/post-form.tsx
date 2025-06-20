@@ -29,7 +29,7 @@ type Props = {
     content: string;
     published: boolean;
     authorId: string;
-    categoryId: number | null;
+    categoryId: number;
     tagIds: number[];
   };
 };
@@ -89,7 +89,7 @@ export const PostForm = ({ categories, tags, users, post }: Props) => {
             <SelectCategory
               label="カテゴリー"
               name={fields.categoryId.name}
-              required={false}
+              required
               categories={categories}
             />
           </FormControl>
