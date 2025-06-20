@@ -3,7 +3,7 @@
 import { isAdmin } from '@/app/admin/utils';
 import { auth } from '@/auth';
 import { paths } from '@/config/paths';
-import { InvalidInputError } from '@/lib/errors';
+import { DatabaseError, InvalidInputError } from '@/lib/errors';
 import { Prisma, prisma } from '@/lib/prisma';
 import {
   createCategoryInputSchema,
@@ -30,13 +30,15 @@ export async function createCategory(prevState: unknown, formData: FormData) {
 
   try {
     await prisma.category.create({ data: submission.value });
-  } catch (e: unknown) {
+  } catch (e) {
     if (e instanceof Prisma.PrismaClientKnownRequestError) {
       if (e.code === 'P2002') {
         return submission.reply({ formErrors: ['スラッグの値は一意にして下さい。'] });
+      } else {
+        throw new DatabaseError(e.message);
       }
     }
-    console.error('unknown error', e);
+    throw e;
   }
 
   redirect(paths.admin.categories.getHref());
@@ -64,15 +66,17 @@ export async function updateCategory(prevState: unknown, formData: FormData) {
       where: { id: id },
       data: submission.value,
     });
-  } catch (e: unknown) {
+  } catch (e) {
     if (e instanceof Prisma.PrismaClientKnownRequestError) {
       if (e.code === 'P2002') {
         return submission.reply({ formErrors: ['スラッグの値は一意にして下さい。'] });
       } else if (e.code === 'P2025') {
         return submission.reply({ formErrors: ['このカテゴリーは既に削除されています。'] });
+      } else {
+        throw new DatabaseError(e.message);
       }
     }
-    console.error('unknown error', e);
+    throw e;
   }
 
   redirect(paths.admin.categories.getHref());

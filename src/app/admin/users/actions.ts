@@ -3,6 +3,7 @@
 import { isAdmin } from '@/app/admin/utils';
 import { auth } from '@/auth';
 import { paths } from '@/config/paths';
+import { DatabaseError } from '@/lib/errors';
 import { Prisma, prisma } from '@/lib/prisma';
 import { updateUserInputSchema } from '@/schemas/user';
 import { parseWithZod } from '@conform-to/zod';
@@ -30,15 +31,17 @@ export async function updateUser(prevState: unknown, formData: FormData) {
       where: { id: submission.value.id },
       data: { ...submission.value, role: role },
     });
-  } catch (e: unknown) {
+  } catch (e) {
     if (e instanceof Prisma.PrismaClientKnownRequestError) {
       if (e.code === 'P2002') {
         return submission.reply({ formErrors: ['このメールアドレスは使用されています。'] });
       } else if (e.code === 'P2025') {
         return submission.reply({ formErrors: ['このユーザーは既に削除されています。'] });
+      } else {
+        throw new DatabaseError(e.message);
       }
     }
-    console.error('unknown error', e);
+    throw e;
   }
 
   redirect(paths.admin.users.getHref());

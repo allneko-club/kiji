@@ -1,5 +1,5 @@
-import { prisma } from '@/lib/prisma';
-import { hash } from '@/lib/utils';
+import { SESSION_MAX_AGE } from '@/lib/consts';
+import { getUserByCredentials } from '@/module/auth/lib/user';
 import type { NextAuthConfig } from 'next-auth';
 import Credentials from 'next-auth/providers/credentials';
 import GitHub from 'next-auth/providers/github';
@@ -13,6 +13,12 @@ export const loginInputSchema = z.object({
 export const authConfig = {
   pages: {
     signIn: '/auth/login',
+    signOut: '/',
+    error: '/auth/login', // Error code passed in query string as ?error=
+  },
+  session: {
+    maxAge: SESSION_MAX_AGE,
+    strategy: 'jwt',
   },
   callbacks: {
     authorized: async ({ auth, request: { nextUrl } }) => {
@@ -28,13 +34,15 @@ export const authConfig = {
     },
 
     jwt({ token, user }) {
-      if (user) {
-        // User is available during sign-in
-        token.id = user.id || '';
-        token.role = user.role;
+      if (!user) {
+        return token;
       }
 
-      return token;
+      return {
+        ...token,
+        id: user.id!,
+        role: user.role,
+      };
     },
 
     session({ session, token }) {
@@ -45,32 +53,27 @@ export const authConfig = {
   },
   providers: [
     Credentials({
+      id: 'credentials',
       // You can specify which fields should be submitted, by adding keys to the `credentials` object.
       // e.g. domain, username, password, 2FA token, etc.
       credentials: {
-        email: {},
-        password: {},
+        email: {
+          label: 'Email Address',
+          type: 'email',
+          placeholder: 'Your email address',
+        },
+        password: {
+          label: 'Password',
+          type: 'password',
+          placeholder: 'Your password',
+        },
       },
       async authorize(credentials) {
         try {
           const { email, password } = await loginInputSchema.parseAsync(credentials);
-          const user = await prisma.user.findFirst({
-            where: {
-              email: email,
-              password: hash(password),
-            },
-          });
 
-          if (!user) return null;
-
-          // return JSON object with the user data
-          return {
-            id: user.id,
-            name: user.name,
-            email: user.email,
-            role: user.role,
-            image: user.image,
-          };
+          // ユーザーが存在しない場合はnull, 存在する場合はユーザーデータのオブジェクトを返す
+          return await getUserByCredentials(email, password);
         } catch {
           // Return `null` to indicate that the credentials are invalid
           return null;

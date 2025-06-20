@@ -2,6 +2,7 @@
 
 import { auth } from '@/auth';
 import { paths } from '@/config/paths';
+import { DatabaseError } from '@/lib/errors';
 import { Prisma, prisma } from '@/lib/prisma';
 import { getPost } from '@/models/post';
 import { postInputSchema } from '@/schemas/post';
@@ -38,12 +39,12 @@ export async function createPost(prevState: unknown, formData: FormData) {
 
   try {
     await prisma.post.create({ data: saveData });
-  } catch (e: unknown) {
+  } catch (e) {
     // todo エラー処理 存在しないタグIDを指定した場合は例外がスローされる
     if (e instanceof Prisma.PrismaClientKnownRequestError) {
-      console.debug('error', e);
+      throw new DatabaseError(e.message);
     }
-    console.error('unknown error', e);
+    throw e;
   }
 
   redirect(paths.admin.posts.getHref());
@@ -90,12 +91,11 @@ export async function updatePost(prevState: unknown, formData: FormData) {
         data: saveData,
       }),
     ]);
-  } catch (e: unknown) {
-    // todo エラー処理
+  } catch (e) {
     if (e instanceof Prisma.PrismaClientKnownRequestError) {
-      console.debug('error', e);
+      throw new DatabaseError(e.message);
     }
-    console.error('unknown error', e);
+    throw e;
   }
 
   redirect(paths.admin.posts.getHref());

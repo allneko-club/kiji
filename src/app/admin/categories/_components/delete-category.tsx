@@ -29,11 +29,13 @@ export function DeleteCategory({ id, disabled = false }: DeleteCategoryProps) {
   useEffect(() => {
     if (lastResult?.status === 'error') {
       toast.error('削除できませんでした');
+      handleClose();
+      redirect(paths.admin.categories.getHref());
     } else if (lastResult?.status === 'success') {
       toast('削除しました');
+      handleClose();
+      redirect(paths.admin.categories.getHref());
     }
-    handleClose();
-    redirect(paths.admin.categories.getHref());
   }, [lastResult]);
 
   return (

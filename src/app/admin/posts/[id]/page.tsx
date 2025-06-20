@@ -35,7 +35,7 @@ export default async function Page({ params }: Props) {
     content: post.content,
     published: post.published,
     authorId: post.authorId,
-    categoryId: post.categoryId ? post.categoryId : null,
+    categoryId: post.categoryId,
     tagIds: post.tags.map((tag) => tag.id),
   };
 
