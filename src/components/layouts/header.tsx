@@ -22,6 +22,7 @@ import ModeToggle from './mode-toggle';
 // ヘッダーのメニューに表示するリンク
 const mainMenu = [
   { href: paths.posts.getHref(), label: 'Posts' },
+  { href: paths.categories.getHref(), label: 'Categories' },
   { href: paths.tags.getHref(), label: 'Tags' },
   { href: paths.contact.getHref(), label: 'Contact' },
 ];

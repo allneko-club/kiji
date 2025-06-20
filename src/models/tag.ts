@@ -5,6 +5,11 @@ export const getTags = async () => {
     orderBy: {
       name: 'asc',
     },
+    include: {
+      _count: {
+        select: { posts: true },
+      },
+    },
   });
 };
 

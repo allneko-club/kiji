@@ -5,6 +5,11 @@ export const getCategories = async () => {
     orderBy: {
       id: 'asc',
     },
+    include: {
+      _count: {
+        select: { posts: true },
+      },
+    },
   });
 };
 
@@ -12,6 +17,14 @@ export const getCategory = async (id: number) => {
   return prisma.category.findUnique({
     where: {
       id: id,
+    },
+  });
+};
+
+export const getCategoryBySlug = async (slug: string) => {
+  return prisma.category.findUnique({
+    where: {
+      slug: slug,
     },
   });
 };

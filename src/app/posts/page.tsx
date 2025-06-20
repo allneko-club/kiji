@@ -1,10 +1,7 @@
 import { Search } from '@/app/posts/search';
 import { PostList } from '@/components/posts';
-import TagChip from '@/components/ui/tag-chip';
-import { paths } from '@/config/paths';
 import { POST_LIMIT } from '@/lib/consts';
 import { getPosts } from '@/models/post';
-import { getTags } from '@/models/tag';
 import Typography from '@mui/material/Typography';
 import type { Metadata } from 'next';
 import * as React from 'react';
@@ -22,7 +19,6 @@ export default async function Page(props: { searchParams?: Promise<SearchParams>
   const query = searchParams?.query;
   const params = { perPage: POST_LIMIT, page, title: query, published: true };
   const { posts, total } = await getPosts(params);
-  const tags = await getTags();
 
   return (
     <>
@@ -31,11 +27,6 @@ export default async function Page(props: { searchParams?: Promise<SearchParams>
 
       <div>
         <Search />
-      </div>
-      <div>
-        {tags.map((tag) => (
-          <TagChip key={tag.id} label={tag.name} href={paths.tags.detail.getHref(tag.slug)} />
-        ))}
       </div>
       <PostList perPage={params.perPage} posts={posts} total={total} />
     </>

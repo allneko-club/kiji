@@ -1,3 +1,4 @@
+import { paths } from '@/config/paths';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Container from '@mui/material/Container';
@@ -12,11 +13,7 @@ import * as React from 'react';
 function Copyright() {
   return (
     <Typography variant="body2" sx={{ color: 'text.secondary', mt: 1 }}>
-      {'Copyright © '}
-      <Link color="text.secondary" href="https://mui.com/">
-        Kiji
-      </Link>
-      &nbsp;
+      {'Copyright © Kiji '}
       {new Date().getFullYear()}
     </Typography>
   );
@@ -87,7 +84,7 @@ export default function Footer() {
             <Typography variant="body2" sx={{ fontWeight: 'medium' }}>
               Product
             </Typography>
-            <Link color="text.secondary" variant="body2" href="/contact">
+            <Link color="text.secondary" variant="body2" href={paths.contact.getHref()}>
               Contact
             </Link>
           </Box>
@@ -100,7 +97,7 @@ export default function Footer() {
             <Typography variant="body2" sx={{ fontWeight: 'medium' }}>
               Company
             </Typography>
-            <Link color="text.secondary" variant="body2" href="/about">
+            <Link color="text.secondary" variant="body2" href={paths.about.getHref()}>
               About us
             </Link>
           </Box>
@@ -113,8 +110,11 @@ export default function Footer() {
             <Typography variant="body2" sx={{ fontWeight: 'medium' }}>
               Legal
             </Typography>
-            <Link color="text.secondary" variant="body2" href="/privacy-policy">
-              Privacy
+            <Link color="text.secondary" variant="body2" href={paths.categories.getHref()}>
+              Categories
+            </Link>
+            <Link color="text.secondary" variant="body2" href={paths.tags.getHref()}>
+              Tags
             </Link>
           </Box>
         </Box>

@@ -49,9 +49,6 @@ export const paths = {
   about: {
     getHref: () => '/about',
   },
-  privacyPolicy: {
-    getHref: () => '/privacy-policy',
-  },
   contact: {
     getHref: () => '/contact',
   },
@@ -64,10 +61,16 @@ export const paths = {
       getHref: (id: string) => `/posts/${id}`,
     },
   },
+  categories: {
+    getHref: () => '/categories',
+    detail: {
+      getHref: (slug: string) => `/categories/${slug}`,
+    },
+  },
   tags: {
     getHref: () => '/tags',
     detail: {
-      getHref: (name: string) => `/tags/${name}`,
+      getHref: (slug: string) => `/tags/${slug}`,
     },
   },
   auth: {

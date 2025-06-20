@@ -16,7 +16,11 @@ export default async function Page() {
       <Typography variant="h1">タグ</Typography>
       <Stack direction="row" spacing={1}>
         {tags.map((tag) => (
-          <TagChip key={tag.id} label={tag.name} href={paths.tags.detail.getHref(tag.slug)} />
+          <TagChip
+            key={tag.id}
+            label={`${tag.name} (${tag._count.posts})`}
+            href={paths.tags.detail.getHref(tag.slug)}
+          />
         ))}
       </Stack>
     </>

@@ -35,6 +35,20 @@ export const getPosts = async (params: GetPostsParams) => {
   return { posts, total };
 };
 
+// todo 非公開の投稿は投稿したユーザーのみ取得可能にするために、公開済みのみに絞り込むためのフラグ用引数を追加する
+export const getPost = async (id: string) => {
+  return prisma.post.findUnique({
+    include: {
+      author: true,
+      category: true,
+      tags: true,
+    },
+    where: {
+      id: id,
+    },
+  });
+};
+
 type GetPostsByTagParams = {
   slug?: string;
   published?: boolean;
@@ -69,16 +83,36 @@ export const getPostsByTag = async (params: GetPostsByTagParams) => {
   return { posts, total };
 };
 
-// todo 非公開の投稿は投稿したユーザーのみ取得可能にするために、公開済みのみに絞り込むためのフラグ用引数を追加する
-export const getPost = async (id: string) => {
-  return prisma.post.findUnique({
-    include: {
-      author: true,
-      category: true,
-      tags: true,
+type GetPostsByCategoryParams = {
+  slug: string;
+  published?: boolean;
+} & BaseSearch;
+
+export const getPostsByCategory = async (params: GetPostsByCategoryParams) => {
+  const where = {
+    published: params.published,
+    category: {
+      is: {
+        slug: params.slug,
+      },
     },
-    where: {
-      id: id,
-    },
-  });
+  };
+
+  const [posts, total] = await Promise.all([
+    prisma.post.findMany({
+      where,
+      take: params.perPage,
+      skip: params.perPage * (params.page - 1),
+      include: {
+        author: true,
+        category: true,
+      },
+      orderBy: {
+        createdAt: 'desc',
+      },
+    }),
+    prisma.post.count({ where }),
+  ]);
+
+  return { posts, total };
 };
