@@ -5,7 +5,7 @@ import { paths } from '@/config/paths';
 import { DatabaseError } from '@/lib/errors';
 import { Prisma, prisma } from '@/lib/prisma';
 import { getPost } from '@/models/post';
-import { postInputSchema } from '@/schemas/post';
+import { ZPost } from '@/schemas/post';
 import { parseWithZod } from '@conform-to/zod';
 import { redirect } from 'next/navigation';
 
@@ -17,7 +17,7 @@ export async function createPost(prevState: unknown, formData: FormData) {
   }
 
   const submission = parseWithZod(formData, {
-    schema: postInputSchema,
+    schema: ZPost,
   });
 
   if (submission.status !== 'success') {
@@ -58,7 +58,7 @@ export async function updatePost(prevState: unknown, formData: FormData) {
   }
 
   const submission = parseWithZod(formData, {
-    schema: postInputSchema,
+    schema: ZPost,
   });
 
   if (submission.status !== 'success') {

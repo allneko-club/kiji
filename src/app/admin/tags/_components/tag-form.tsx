@@ -2,7 +2,7 @@
 
 import { createTag, updateTag } from '@/app/admin/tags/actions';
 import { UsePreventFormReset } from '@/hooks/use-prevent-form-reset';
-import { TagInputSchema } from '@/schemas/tag';
+import { ZTag } from '@/schemas/tag';
 import { getFormProps, getInputProps, useForm } from '@conform-to/react';
 import { parseWithZod } from '@conform-to/zod';
 import Alert from '@mui/material/Alert';
@@ -20,7 +20,7 @@ export const TagForm = ({ tag }: { tag?: Tag }) => {
   const [form, fields] = useForm({
     lastResult,
     onValidate({ formData }) {
-      return parseWithZod(formData, { schema: TagInputSchema });
+      return parseWithZod(formData, { schema: ZTag });
     },
     defaultValue: tag,
   });

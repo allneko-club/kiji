@@ -1,16 +1,16 @@
 'use server';
 
-import { registerInputSchema } from '@/app/auth/register/schema';
 import { paths } from '@/config/paths';
 import { prisma } from '@/lib/prisma';
 import { Role } from '@/lib/users';
 import { hash } from '@/lib/utils';
+import { ZRegister } from '@/schemas/user';
 import { parseWithZod } from '@conform-to/zod';
 import { redirect } from 'next/navigation';
 
 export async function register(prevState: unknown, formData: FormData) {
   const submission = parseWithZod(formData, {
-    schema: registerInputSchema,
+    schema: ZRegister,
   });
 
   if (submission.status !== 'success') {

@@ -1,7 +1,7 @@
 'use client';
 
 import { resetPassword } from '@/app/auth/reset-password/actions';
-import { resetPasswordInputSchema } from '@/app/auth/reset-password/schema';
+import { ZResetPassword } from '@/schemas/user';
 import { FormProvider, useForm } from '@conform-to/react';
 import { parseWithZod } from '@conform-to/zod';
 import Button from '@mui/material/Button';
@@ -18,7 +18,7 @@ export default function ResetPasswordForm() {
   const [form, fields] = useForm({
     lastResult,
     onValidate({ formData }) {
-      return parseWithZod(formData, { schema: resetPasswordInputSchema });
+      return parseWithZod(formData, { schema: ZResetPassword });
     },
   });
 

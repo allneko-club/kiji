@@ -2,7 +2,7 @@
 
 import { Card } from '@/app/auth/_components/card';
 import { register } from '@/app/auth/register/actions';
-import { registerInputSchema } from '@/app/auth/register/schema';
+import { ZRegister } from '@/schemas/user';
 import { useForm } from '@conform-to/react';
 import { parseWithZod } from '@conform-to/zod';
 import Box from '@mui/material/Box';
@@ -21,7 +21,7 @@ export default function RegisterForm() {
   const [form, fields] = useForm({
     lastResult,
     onValidate({ formData }) {
-      return parseWithZod(formData, { schema: registerInputSchema });
+      return parseWithZod(formData, { schema: ZRegister });
     },
   });
 

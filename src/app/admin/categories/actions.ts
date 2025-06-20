@@ -5,11 +5,7 @@ import { auth } from '@/auth';
 import { paths } from '@/config/paths';
 import { DatabaseError, InvalidInputError } from '@/lib/errors';
 import { Prisma, prisma } from '@/lib/prisma';
-import {
-  createCategoryInputSchema,
-  deleteCategoryInputSchema,
-  updateCategoryInputSchema,
-} from '@/schemas/category';
+import { ZCategory, ZDeleteCategory } from '@/schemas/category';
 import { parseWithZod } from '@conform-to/zod';
 import { redirect } from 'next/navigation';
 
@@ -21,7 +17,7 @@ export async function createCategory(prevState: unknown, formData: FormData) {
   }
 
   const submission = parseWithZod(formData, {
-    schema: createCategoryInputSchema,
+    schema: ZCategory,
   });
 
   if (submission.status !== 'success') {
@@ -52,7 +48,7 @@ export async function updateCategory(prevState: unknown, formData: FormData) {
   }
 
   const submission = parseWithZod(formData, {
-    schema: updateCategoryInputSchema,
+    schema: ZCategory,
   });
 
   if (submission.status !== 'success') {
@@ -91,7 +87,7 @@ export async function deleteCategory(prevState: unknown, formData: FormData) {
   }
 
   const submission = parseWithZod(formData, {
-    schema: deleteCategoryInputSchema,
+    schema: ZDeleteCategory,
   });
 
   if (submission.status !== 'success' || submission.value.id === 1) {

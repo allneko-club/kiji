@@ -1,7 +1,7 @@
 'use client';
 
 import { contact } from '@/app/(misc)/contact/actions';
-import { contactInputSchema } from '@/schemas/contact';
+import { ZContact } from '@/schemas/contact';
 import { FormProvider, useForm } from '@conform-to/react';
 import { parseWithZod } from '@conform-to/zod';
 import Button from '@mui/material/Button';
@@ -18,7 +18,7 @@ export default function ContactForm() {
   const [form, fields] = useForm({
     lastResult,
     onValidate({ formData }) {
-      return parseWithZod(formData, { schema: contactInputSchema });
+      return parseWithZod(formData, { schema: ZContact });
     },
   });
 

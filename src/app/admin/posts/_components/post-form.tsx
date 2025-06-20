@@ -4,7 +4,7 @@ import { createPost, updatePost } from '@/app/admin/posts/actions';
 import { SelectCategory } from '@/app/admin/posts/select-category';
 import { SelectUser } from '@/app/admin/posts/select-user';
 import { UsePreventFormReset } from '@/hooks/use-prevent-form-reset';
-import { postInputSchema } from '@/schemas/post';
+import { ZPost } from '@/schemas/post';
 import { FormProvider, getFormProps, getInputProps, useForm } from '@conform-to/react';
 import { parseWithZod } from '@conform-to/zod';
 import Alert from '@mui/material/Alert';
@@ -39,7 +39,7 @@ export const PostForm = ({ categories, tags, users, post }: Props) => {
   const [form, fields] = useForm({
     lastResult,
     onValidate({ formData }) {
-      return parseWithZod(formData, { schema: postInputSchema });
+      return parseWithZod(formData, { schema: ZPost });
     },
     defaultValue: post,
   });

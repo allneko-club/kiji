@@ -5,7 +5,7 @@ import { auth } from '@/auth';
 import { paths } from '@/config/paths';
 import { DatabaseError } from '@/lib/errors';
 import { Prisma, prisma } from '@/lib/prisma';
-import { updateUserInputSchema } from '@/schemas/user';
+import { ZUpdateUser } from '@/schemas/user';
 import { parseWithZod } from '@conform-to/zod';
 import { redirect } from 'next/navigation';
 
@@ -17,7 +17,7 @@ export async function updateUser(prevState: unknown, formData: FormData) {
   }
 
   const submission = parseWithZod(formData, {
-    schema: updateUserInputSchema,
+    schema: ZUpdateUser,
   });
 
   if (submission.status !== 'success') {

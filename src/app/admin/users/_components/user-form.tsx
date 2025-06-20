@@ -3,7 +3,7 @@
 import { updateUser } from '@/app/admin/users/actions';
 import { UsePreventFormReset } from '@/hooks/use-prevent-form-reset';
 import { RoleFilterValues, getRoleLabel } from '@/lib/users';
-import { updateUserInputSchema } from '@/schemas/user';
+import { ZUpdateUser } from '@/schemas/user';
 import { getFormProps, getInputProps, useForm } from '@conform-to/react';
 import { parseWithZod } from '@conform-to/zod';
 import Alert from '@mui/material/Alert';
@@ -23,7 +23,7 @@ export const UserForm = ({ user }: { user: User }) => {
   const [form, fields] = useForm({
     lastResult,
     onValidate({ formData }) {
-      return parseWithZod(formData, { schema: updateUserInputSchema });
+      return parseWithZod(formData, { schema: ZUpdateUser });
     },
     defaultValue: user,
   });

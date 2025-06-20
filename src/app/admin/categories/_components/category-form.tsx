@@ -2,7 +2,7 @@
 
 import { createCategory, updateCategory } from '@/app/admin/categories/actions';
 import { UsePreventFormReset } from '@/hooks/use-prevent-form-reset';
-import { CategoryInputSchema } from '@/schemas/category';
+import { ZCategory } from '@/schemas/category';
 import { getFormProps, getInputProps, useForm } from '@conform-to/react';
 import { parseWithZod } from '@conform-to/zod';
 import Alert from '@mui/material/Alert';
@@ -24,7 +24,7 @@ export const CategoryForm = ({ category }: { category?: Category }) => {
   const [form, fields] = useForm({
     lastResult,
     onValidate({ formData }) {
-      return parseWithZod(formData, { schema: CategoryInputSchema });
+      return parseWithZod(formData, { schema: ZCategory });
     },
     defaultValue: category,
   });
