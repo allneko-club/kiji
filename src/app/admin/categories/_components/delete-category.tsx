@@ -27,6 +27,7 @@ export function DeleteCategory({ id, disabled = false }: DeleteCategoryProps) {
   const handleClose = () => setOpen(false);
 
   useEffect(() => {
+    console.log(lastResult);
     if (lastResult?.status === 'error') {
       toast.error('削除できませんでした');
       handleClose();

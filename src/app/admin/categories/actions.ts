@@ -3,7 +3,8 @@
 import { isAdmin } from '@/app/admin/utils';
 import { auth } from '@/auth';
 import { paths } from '@/config/paths';
-import { DatabaseError, InvalidInputError } from '@/lib/errors';
+import { DEFAULT_CATEGORY_ID } from '@/lib/consts';
+import { DatabaseError } from '@/lib/errors';
 import { Prisma, prisma } from '@/lib/prisma';
 import { ZCategory, ZDeleteCategory } from '@/schemas/category';
 import { parseWithZod } from '@conform-to/zod';
@@ -90,16 +91,18 @@ export async function deleteCategory(prevState: unknown, formData: FormData) {
     schema: ZDeleteCategory,
   });
 
-  if (submission.status !== 'success' || submission.value.id === 1) {
+  if (submission.status !== 'success') {
     return submission.reply();
-  }
-
-  if (id === 1) {
-    throw new InvalidInputError('Cannot delete default category.');
+  } else if (submission.value.id === DEFAULT_CATEGORY_ID) {
+    // todo 動的にスキーマを作った方が良いかも
+    return submission.reply({ formErrors: ['デフォルトのカテゴリーは削除できません。'] });
   }
 
   try {
-    await prisma.category.delete({ where: { id: id } });
+    await prisma.$transaction([
+      prisma.post.updateMany({ where: { categoryId: id }, data: { categoryId: DEFAULT_CATEGORY_ID } }),
+      prisma.category.delete({ where: { id: id } }),
+    ]);
   } catch {
     /* RecordNotFound 例外が発生しても無視する */
   }

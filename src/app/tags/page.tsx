@@ -14,6 +14,9 @@ export default async function Page() {
   return (
     <>
       <Typography variant="h1">タグ</Typography>
+
+      {tags.length === 0 && <Typography>タグはありあません。</Typography>}
+
       <Stack direction="row" spacing={1}>
         {tags.map((tag) => (
           <TagChip
