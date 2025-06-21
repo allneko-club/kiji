@@ -8,7 +8,7 @@ export default function Logo() {
   return (
     <Link href={paths.home.getHref()}>
       <Icon sx={{ height: 32, width: 32, mr: 1 }}>
-        <Image src="/favicon/favicon-32x32.png" width={32} height={32} alt="" />
+        <Image src="/logo.svg" width={32} height={32} alt="" />
       </Icon>
     </Link>
   );
