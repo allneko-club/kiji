@@ -1,18 +1,19 @@
 'use client';
-import * as React from 'react';
-import { useActionState } from 'react';
-import { toast } from 'react-toastify';
-import IconButton from '@mui/material/IconButton';
-import DeleteIcon from '@mui/icons-material/Delete';
+
 import { deletePost } from '@/app/admin/posts/actions';
+import { paths } from '@/config/paths';
+import DeleteIcon from '@mui/icons-material/Delete';
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
+import IconButton from '@mui/material/IconButton';
 import { redirect } from 'next/navigation';
-import { paths } from '@/config/paths';
+import * as React from 'react';
+import { useActionState } from 'react';
+import { toast } from 'react-toastify';
 
 type DeletePostProps = {
   id: string;
@@ -33,26 +34,24 @@ export function DeletePost({ id }: DeletePostProps) {
         open={open}
         onClose={handleClose}
         aria-labelledby="alert-delete-post"
-        aria-describedby="alert-delete-post"
-      >
-        <form action={(formData) => {
-          action(formData);
-          handleClose();
-          toast('削除しました');
-          redirect(paths.admin.posts.getHref());
-        }}>
+        aria-describedby="alert-delete-post">
+        <form
+          action={(formData) => {
+            action(formData);
+            handleClose();
+            toast('削除しました');
+            redirect(paths.admin.posts.getHref());
+          }}>
           <input name="id" hidden defaultValue={id} />
-          <DialogTitle id="delete-post">
-            削除確認
-          </DialogTitle>
+          <DialogTitle id="delete-post">削除確認</DialogTitle>
           <DialogContent>
-            <DialogContentText id="alert-delete-post">
-              投稿を削除してもよろしいですか？
-            </DialogContentText>
+            <DialogContentText id="alert-delete-post">投稿を削除してもよろしいですか？</DialogContentText>
           </DialogContent>
           <DialogActions>
             <Button onClick={handleClose}>キャンセル</Button>
-            <Button type="submit" color="error" loading={isPending} autoFocus>削除</Button>
+            <Button type="submit" color="error" loading={isPending} autoFocus>
+              削除
+            </Button>
           </DialogActions>
         </form>
       </Dialog>

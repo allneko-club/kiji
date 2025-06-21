@@ -1,7 +1,7 @@
-import type { Preview } from "@storybook/react";
-import { withThemeByClassName } from "@storybook/addon-themes";
-import { ThemeProvider } from "next-themes";
 import '@/styles/globals.css';
+import { withThemeByClassName } from '@storybook/addon-themes';
+import type { Preview } from '@storybook/react';
+import { ThemeProvider } from 'next-themes';
 
 const preview: Preview = {
   parameters: {
@@ -34,10 +34,10 @@ const preview: Preview = {
         dark: 'dark',
       },
       defaultTheme: 'light',
-    })
+    }),
   ],
 
-  tags: ['autodocs']
+  tags: ['autodocs'],
 };
 
 export default preview;

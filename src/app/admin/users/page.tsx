@@ -1,41 +1,40 @@
-import { UsersTable } from '@/app/admin/users/_components/users-table';
 import UsersFilter from '@/app/admin/users/_components/users-filter';
-import SelectSort from '@/components/select-sort';
-import { Role, USERS_LIMIT_LIST } from '@/config/consts';
-import { cleanOrderBy, cleanPage, cleanPerPage } from '@/lib/query-params';
-import SelectLimit from '@/components/select-limit';
-import { getUsersByFilter } from '@/models/user';
+import { UsersTable } from '@/app/admin/users/_components/users-table';
 import { cleanOrder, cleanRole } from '@/app/admin/users/clean';
-import { BaseSearch } from '@/types/requests';
-import type { Metadata } from 'next';
-import Typography from '@mui/material/Typography';
-import Grid from '@mui/material/Grid';
-import Button from '@mui/material/Button';
-import NextLink from 'next/link';
+import SelectLimit from '@/components/select-limit';
+import SelectSort from '@/components/select-sort';
 import { paths } from '@/config/paths';
+import { USERS_LIMIT_LIST } from '@/lib/consts';
+import { cleanOrderBy, cleanPage, cleanPerPage } from '@/lib/query-params';
+import { Role } from '@/lib/users';
+import { getUsersByFilter } from '@/models/user';
+import { BaseSearch } from '@/types/requests';
 import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
+import Grid from '@mui/material/Grid';
+import Typography from '@mui/material/Typography';
+import type { Metadata } from 'next';
+import NextLink from 'next/link';
 
 export const metadata: Metadata = { title: 'ユーザー' };
 
 const UserSortItems = {
-  'registered_asc': '登録日(昇順)',
-  'registered_desc': '登録日(降順)',
-  'name_asc': '名前(昇順)',
-  'name_desc': '名前(降順)',
+  registered_asc: '登録日(昇順)',
+  registered_desc: '登録日(降順)',
+  name_asc: '名前(昇順)',
+  name_desc: '名前(降順)',
 } as const;
 
 interface SearchParams extends BaseSearch {
   id?: string;
-  name?: string,
-  email?: string,
-  role?: Role,
-  registeredFrom?: string,
-  registeredTo?: string,
+  name?: string;
+  email?: string;
+  role?: Role;
+  registeredFrom?: string;
+  registeredTo?: string;
 }
 
-export default async function Page(props: {
-  searchParams?: Promise<SearchParams>;
-}) {
+export default async function Page(props: { searchParams?: Promise<SearchParams> }) {
   const searchParams = await props.searchParams;
   const params = {
     page: cleanPage(searchParams?.page),
@@ -64,11 +63,7 @@ export default async function Page(props: {
   return (
     <>
       <Typography variant="h1">ユーザー</Typography>
-      <Button
-        variant="contained"
-        component={NextLink}
-        href={paths.auth.register.getHref()}
-      >
+      <Button variant="contained" component={NextLink} href={paths.auth.register.getHref()}>
         追加
       </Button>
 
@@ -87,4 +82,4 @@ export default async function Page(props: {
       <UsersTable perPage={params.perPage} users={users} total={total} />
     </>
   );
-};
+}

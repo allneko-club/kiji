@@ -1,38 +1,34 @@
 'use client';
-import * as React from 'react';
-import { useActionState } from 'react';
+
+import { updateUser } from '@/app/admin/users/actions';
+import { UsePreventFormReset } from '@/hooks/use-prevent-form-reset';
+import { RoleFilterValues, getRoleLabel } from '@/lib/users';
+import { ZUpdateUser } from '@/schemas/user';
+import { getFormProps, getInputProps, useForm } from '@conform-to/react';
+import { parseWithZod } from '@conform-to/zod';
 import Alert from '@mui/material/Alert';
 import Button from '@mui/material/Button';
 import FormControl from '@mui/material/FormControl';
 import FormLabel from '@mui/material/FormLabel';
+import MenuItem from '@mui/material/MenuItem';
+import Select from '@mui/material/Select';
 import Stack from '@mui/material/Stack';
 import TextField from '@mui/material/TextField';
-import { getFormProps, getInputProps, useForm } from '@conform-to/react';
-import { parseWithZod } from '@conform-to/zod';
-import { UsePreventFormReset } from '@/hooks/use-prevent-form-reset';
 import { User } from '@prisma/client';
-import { updateUserInputSchema } from '@/schemas/user';
-import { updateUser } from '@/app/admin/users/actions';
-import Select from '@mui/material/Select';
-import { getRoleLabel, RoleFilterValues } from '@/config/consts';
-import MenuItem from '@mui/material/MenuItem';
-
+import * as React from 'react';
+import { useActionState } from 'react';
 
 export const UserForm = ({ user }: { user: User }) => {
-
-  const [lastResult, submitAction, isPending] = useActionState(
-    updateUser,
-    undefined,
-  );
+  const [lastResult, submitAction, isPending] = useActionState(updateUser, undefined);
   const [form, fields] = useForm({
     lastResult,
     onValidate({ formData }) {
-      return parseWithZod(formData, { schema: updateUserInputSchema });
+      return parseWithZod(formData, { schema: ZUpdateUser });
     },
     defaultValue: user,
   });
 
-  UsePreventFormReset({formId: form.id});
+  UsePreventFormReset({ formId: form.id });
 
   return (
     <form action={submitAction} {...getFormProps(form)}>
@@ -76,8 +72,9 @@ export const UserForm = ({ user }: { user: User }) => {
         </FormControl>
       </Stack>
 
-      <Button type="submit" variant="contained" loading={isPending}>保存</Button>
-
+      <Button type="submit" variant="contained" loading={isPending}>
+        保存
+      </Button>
     </form>
   );
 };

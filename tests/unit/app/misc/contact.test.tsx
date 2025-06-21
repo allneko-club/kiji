@@ -1,8 +1,8 @@
-import { expect, test } from 'vitest'
+import Page from '@/app/(misc)/contact/page';
 import { renderApp, screen } from '@/tests/test-utils';
-import Page from '@/app/(misc)/contact/page'
+import { expect, test } from 'vitest';
 
 test('Page', async () => {
-  await renderApp(<Page />)
-  expect(screen.getByRole('heading', { level: 1, name: 'お問い合わせ' })).toBeDefined()
-})
+  await renderApp(<Page />);
+  expect(screen.getByRole('heading', { level: 1, name: 'お問い合わせ' })).toBeDefined();
+});

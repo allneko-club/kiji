@@ -1,10 +1,11 @@
 'use client';
+
+import { getQueryClient } from '@/lib/react-query';
 import { QueryClientProvider } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
+import { SessionProvider } from 'next-auth/react';
 import * as React from 'react';
-import { getQueryClient } from '@/lib/react-query';
 import { ToastContainer } from 'react-toastify';
-import { SessionProvider } from "next-auth/react"
 
 type AppProviderProps = {
   children: React.ReactNode;
@@ -16,9 +17,9 @@ export const AppProvider = ({ children }: AppProviderProps) => {
   return (
     <QueryClientProvider client={queryClient}>
       <SessionProvider>
-        {process.env.NODE_ENV === "development" && <ReactQueryDevtools buttonPosition='bottom-left' />}
+        {process.env.NODE_ENV === 'development' && <ReactQueryDevtools buttonPosition="bottom-left" />}
         {children}
-        <ToastContainer autoClose={2000}/>
+        <ToastContainer autoClose={2000} />
       </SessionProvider>
     </QueryClientProvider>
   );

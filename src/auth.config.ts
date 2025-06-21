@@ -1,9 +1,9 @@
+import { SESSION_MAX_AGE } from '@/lib/consts';
+import { getUserByCredentials } from '@/module/auth/lib/user';
 import type { NextAuthConfig } from 'next-auth';
 import Credentials from 'next-auth/providers/credentials';
-import { z } from 'zod';
 import GitHub from 'next-auth/providers/github';
-import { prisma } from '@/lib/prisma';
-import { hash } from '@/lib/utils';
+import { z } from 'zod';
 
 export const loginInputSchema = z.object({
   email: z.string().min(1).email(),
@@ -13,6 +13,12 @@ export const loginInputSchema = z.object({
 export const authConfig = {
   pages: {
     signIn: '/auth/login',
+    signOut: '/',
+    error: '/auth/login', // Error code passed in query string as ?error=
+  },
+  session: {
+    maxAge: SESSION_MAX_AGE,
+    strategy: 'jwt',
   },
   callbacks: {
     authorized: async ({ auth, request: { nextUrl } }) => {
@@ -20,7 +26,7 @@ export const authConfig = {
       const isOnAdmin = nextUrl.pathname.startsWith('/admin');
       const isOnMy = nextUrl.pathname.startsWith('/my');
       if (isOnAdmin || isOnMy) {
-         // 未認証のユーザーはログインページにリダイレクトされる
+        // 未認証のユーザーはログインページにリダイレクトされる
         return isLoggedIn;
       }
 
@@ -28,52 +34,49 @@ export const authConfig = {
     },
 
     jwt({ token, user }) {
-
-      if (user) { // User is available during sign-in
-        token.id = user.id || ""
-        token.role = user.role
+      if (!user) {
+        return token;
       }
 
-      return token
+      return {
+        ...token,
+        id: user.id!,
+        role: user.role,
+      };
     },
 
     session({ session, token }) {
-      session.user.id = token.id
-      session.user.role = token.role
-      return session
+      session.user.id = token.id;
+      session.user.role = token.role;
+      return session;
     },
   },
   providers: [
     Credentials({
+      id: 'credentials',
       // You can specify which fields should be submitted, by adding keys to the `credentials` object.
       // e.g. domain, username, password, 2FA token, etc.
       credentials: {
-        email: {},
-        password: {},
+        email: {
+          label: 'Email Address',
+          type: 'email',
+          placeholder: 'Your email address',
+        },
+        password: {
+          label: 'Password',
+          type: 'password',
+          placeholder: 'Your password',
+        },
       },
       async authorize(credentials) {
         try {
-          const { email, password } = await loginInputSchema.parseAsync(credentials)
-          const user = await prisma.user.findFirst({
-            where: {
-              email: email,
-              password: hash(password),
-            }
-          });
+          const { email, password } = await loginInputSchema.parseAsync(credentials);
 
-          if(!user) return null;
-
-          // return JSON object with the user data
-          return {
-            id: user.id,
-            name: user.name,
-            email: user.email,
-            role: user.role,
-            image: user.image,
-          };
+          // ユーザーが存在しない場合はnull, 存在する場合はユーザーデータのオブジェクトを返す
+          return await getUserByCredentials(email, password);
         } catch {
           // Return `null` to indicate that the credentials are invalid
-          return null
+          return null;
         }
       },
     }),

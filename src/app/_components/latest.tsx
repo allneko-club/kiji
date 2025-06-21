@@ -1,5 +1,6 @@
 'use client';
-import * as React from 'react';
+
+import NavigateNextRoundedIcon from '@mui/icons-material/NavigateNextRounded';
 import Avatar from '@mui/material/Avatar';
 import AvatarGroup from '@mui/material/AvatarGroup';
 import Box from '@mui/material/Box';
@@ -7,7 +8,7 @@ import Grid from '@mui/material/Grid';
 import Pagination from '@mui/material/Pagination';
 import Typography from '@mui/material/Typography';
 import { styled } from '@mui/material/styles';
-import NavigateNextRoundedIcon from '@mui/icons-material/NavigateNextRounded';
+import * as React from 'react';
 
 const articleInfo = [
   {
@@ -145,24 +146,14 @@ function Author({ authors }: { authors: { name: string; avatar: string }[] }) {
         gap: 2,
         alignItems: 'center',
         justifyContent: 'space-between',
-      }}
-    >
-      <Box
-        sx={{ display: 'flex', flexDirection: 'row', gap: 1, alignItems: 'center' }}
-      >
+      }}>
+      <Box sx={{ display: 'flex', flexDirection: 'row', gap: 1, alignItems: 'center' }}>
         <AvatarGroup max={3}>
           {authors.map((author, index) => (
-            <Avatar
-              key={index}
-              alt={author.name}
-              src={author.avatar}
-              sx={{ width: 24, height: 24 }}
-            />
+            <Avatar key={index} alt={author.name} src={author.avatar} sx={{ width: 24, height: 24 }} />
           ))}
         </AvatarGroup>
-        <Typography variant="caption">
-          {authors.map((author) => author.name).join(', ')}
-        </Typography>
+        <Typography variant="caption">{authors.map((author) => author.name).join(', ')}</Typography>
       </Box>
       <Typography variant="caption">July 14, 2021</Typography>
     </Box>
@@ -170,9 +161,7 @@ function Author({ authors }: { authors: { name: string; avatar: string }[] }) {
 }
 
 export default function Latest() {
-  const [focusedCardIndex, setFocusedCardIndex] = React.useState<number | null>(
-    null,
-  );
+  const [focusedCardIndex, setFocusedCardIndex] = React.useState<number | null>(null);
 
   const handleFocus = (index: number) => {
     setFocusedCardIndex(index);
@@ -197,8 +186,7 @@ export default function Latest() {
                 justifyContent: 'space-between',
                 gap: 1,
                 height: '100%',
-              }}
-            >
+              }}>
               <Typography gutterBottom variant="caption" component="div">
                 {article.tag}
               </Typography>
@@ -208,13 +196,9 @@ export default function Latest() {
                 onFocus={() => handleFocus(index)}
                 onBlur={handleBlur}
                 tabIndex={0}
-                className={focusedCardIndex === index ? 'Mui-focused' : ''}
-              >
+                className={focusedCardIndex === index ? 'Mui-focused' : ''}>
                 {article.title}
-                <NavigateNextRoundedIcon
-                  className="arrow"
-                  sx={{ fontSize: '1rem' }}
-                />
+                <NavigateNextRoundedIcon className="arrow" sx={{ fontSize: '1rem' }} />
               </TitleTypography>
               <StyledTypography variant="body2" color="text.secondary" gutterBottom>
                 {article.description}

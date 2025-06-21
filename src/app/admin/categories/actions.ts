@@ -1,13 +1,14 @@
 'use server';
-import { redirect } from 'next/navigation';
-import { paths } from '@/config/paths';
-import { Prisma, prisma } from '@/lib/prisma';
-import { auth } from '@/auth';
-import { createCategoryInputSchema, updateCategoryInputSchema } from '@/schemas/category';
-import { parseWithZod } from '@conform-to/zod';
 
 import { isAdmin } from '@/app/admin/utils';
-
+import { auth } from '@/auth';
+import { paths } from '@/config/paths';
+import { DEFAULT_CATEGORY_ID } from '@/lib/consts';
+import { DatabaseError } from '@/lib/errors';
+import { Prisma, prisma } from '@/lib/prisma';
+import { ZCategory, ZDeleteCategory } from '@/schemas/category';
+import { parseWithZod } from '@conform-to/zod';
+import { redirect } from 'next/navigation';
 
 export async function createCategory(prevState: unknown, formData: FormData) {
   const session = await auth();
@@ -17,7 +18,7 @@ export async function createCategory(prevState: unknown, formData: FormData) {
   }
 
   const submission = parseWithZod(formData, {
-    schema: createCategoryInputSchema,
+    schema: ZCategory,
   });
 
   if (submission.status !== 'success') {
@@ -26,14 +27,15 @@ export async function createCategory(prevState: unknown, formData: FormData) {
 
   try {
     await prisma.category.create({ data: submission.value });
-
-  } catch (e: unknown) {
+  } catch (e) {
     if (e instanceof Prisma.PrismaClientKnownRequestError) {
       if (e.code === 'P2002') {
         return submission.reply({ formErrors: ['スラッグの値は一意にして下さい。'] });
+      } else {
+        throw new DatabaseError(e.message);
       }
     }
-    console.error('unknown error', e);
+    throw e;
   }
 
   redirect(paths.admin.categories.getHref());
@@ -47,7 +49,7 @@ export async function updateCategory(prevState: unknown, formData: FormData) {
   }
 
   const submission = parseWithZod(formData, {
-    schema: updateCategoryInputSchema,
+    schema: ZCategory,
   });
 
   if (submission.status !== 'success') {
@@ -61,16 +63,17 @@ export async function updateCategory(prevState: unknown, formData: FormData) {
       where: { id: id },
       data: submission.value,
     });
-
-  } catch (e: unknown) {
+  } catch (e) {
     if (e instanceof Prisma.PrismaClientKnownRequestError) {
       if (e.code === 'P2002') {
         return submission.reply({ formErrors: ['スラッグの値は一意にして下さい。'] });
-      }else if (e.code === 'P2025') {
+      } else if (e.code === 'P2025') {
         return submission.reply({ formErrors: ['このカテゴリーは既に削除されています。'] });
+      } else {
+        throw new DatabaseError(e.message);
       }
     }
-    console.error('unknown error', e);
+    throw e;
   }
 
   redirect(paths.admin.categories.getHref());
@@ -84,10 +87,24 @@ export async function deleteCategory(prevState: unknown, formData: FormData) {
     redirect(paths.auth.login.getHref());
   }
 
+  const submission = parseWithZod(formData, {
+    schema: ZDeleteCategory,
+  });
+
+  if (submission.status !== 'success') {
+    return submission.reply();
+  } else if (submission.value.id === DEFAULT_CATEGORY_ID) {
+    // todo 動的にスキーマを作った方が良いかも
+    return submission.reply({ formErrors: ['デフォルトのカテゴリーは削除できません。'] });
+  }
+
   try {
-    await prisma.category.delete({ where: { id: id } });
+    await prisma.$transaction([
+      prisma.post.updateMany({ where: { categoryId: id }, data: { categoryId: DEFAULT_CATEGORY_ID } }),
+      prisma.category.delete({ where: { id: id } }),
+    ]);
   } catch {
     /* RecordNotFound 例外が発生しても無視する */
   }
-  return Promise.resolve(null);
+  return Promise.resolve({ status: 'success' });
 }

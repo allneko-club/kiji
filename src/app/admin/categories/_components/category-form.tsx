@@ -1,21 +1,21 @@
 'use client';
-import * as React from 'react';
-import { useActionState } from 'react';
+
 import { createCategory, updateCategory } from '@/app/admin/categories/actions';
+import { UsePreventFormReset } from '@/hooks/use-prevent-form-reset';
+import { ZCategory } from '@/schemas/category';
+import { getFormProps, getInputProps, useForm } from '@conform-to/react';
+import { parseWithZod } from '@conform-to/zod';
+import Alert from '@mui/material/Alert';
 import Button from '@mui/material/Button';
 import FormControl from '@mui/material/FormControl';
 import FormLabel from '@mui/material/FormLabel';
 import Stack from '@mui/material/Stack';
 import TextField from '@mui/material/TextField';
-import { getFormProps, getInputProps, useForm } from '@conform-to/react';
-import { parseWithZod } from '@conform-to/zod';
-import { CategoryInputSchema } from '@/schemas/category';
-import Alert from '@mui/material/Alert';
-import { UsePreventFormReset } from '@/hooks/use-prevent-form-reset';
 import { Category } from '@prisma/client';
+import * as React from 'react';
+import { useActionState } from 'react';
 
-
-export const CategoryForm = ({category}:  { category?: Category }) => {
+export const CategoryForm = ({ category }: { category?: Category }) => {
   const [lastResult, submitAction, isPending] = useActionState(
     category ? updateCategory : createCategory,
     undefined,
@@ -24,12 +24,12 @@ export const CategoryForm = ({category}:  { category?: Category }) => {
   const [form, fields] = useForm({
     lastResult,
     onValidate({ formData }) {
-      return parseWithZod(formData, { schema: CategoryInputSchema });
+      return parseWithZod(formData, { schema: ZCategory });
     },
     defaultValue: category,
   });
 
-  UsePreventFormReset({formId: form.id});
+  UsePreventFormReset({ formId: form.id });
 
   return (
     <form action={submitAction} {...getFormProps(form)}>
@@ -73,8 +73,9 @@ export const CategoryForm = ({category}:  { category?: Category }) => {
         </FormControl>
       </Stack>
 
-      <Button type="submit" variant="contained" loading={isPending}>保存</Button>
-
+      <Button type="submit" variant="contained" loading={isPending}>
+        保存
+      </Button>
     </form>
   );
 };

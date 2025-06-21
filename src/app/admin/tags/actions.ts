@@ -1,13 +1,13 @@
 'use server';
-import { redirect } from 'next/navigation';
-import { paths } from '@/config/paths';
-import { Prisma, prisma } from '@/lib/prisma';
-import { auth } from '@/auth';
-import { TagInputSchema } from '@/schemas/tag';
-import { parseWithZod } from '@conform-to/zod';
 
 import { isAdmin } from '@/app/admin/utils';
-
+import { auth } from '@/auth';
+import { paths } from '@/config/paths';
+import { DatabaseError } from '@/lib/errors';
+import { Prisma, prisma } from '@/lib/prisma';
+import { ZTag } from '@/schemas/tag';
+import { parseWithZod } from '@conform-to/zod';
+import { redirect } from 'next/navigation';
 
 export async function createTag(prevState: unknown, formData: FormData) {
   const session = await auth();
@@ -17,7 +17,7 @@ export async function createTag(prevState: unknown, formData: FormData) {
   }
 
   const submission = parseWithZod(formData, {
-    schema: TagInputSchema,
+    schema: ZTag,
   });
 
   if (submission.status !== 'success') {
@@ -26,14 +26,15 @@ export async function createTag(prevState: unknown, formData: FormData) {
 
   try {
     await prisma.tag.create({ data: submission.value });
-
-  } catch (e: unknown) {
+  } catch (e) {
     if (e instanceof Prisma.PrismaClientKnownRequestError) {
       if (e.code === 'P2002') {
         return submission.reply({ formErrors: ['スラッグの値は一意にして下さい。'] });
+      } else {
+        throw new DatabaseError(e.message);
       }
     }
-    console.error('unknown error', e);
+    throw e;
   }
 
   redirect(paths.admin.tags.getHref());
@@ -47,7 +48,7 @@ export async function updateTag(prevState: unknown, formData: FormData) {
   }
 
   const submission = parseWithZod(formData, {
-    schema: TagInputSchema,
+    schema: ZTag,
   });
 
   if (submission.status !== 'success') {
@@ -61,16 +62,17 @@ export async function updateTag(prevState: unknown, formData: FormData) {
       where: { id: id },
       data: submission.value,
     });
-
-  } catch (e: unknown) {
+  } catch (e) {
     if (e instanceof Prisma.PrismaClientKnownRequestError) {
       if (e.code === 'P2002') {
         return submission.reply({ formErrors: ['スラッグの値は一意にして下さい。'] });
-      }else if (e.code === 'P2025') {
+      } else if (e.code === 'P2025') {
         return submission.reply({ formErrors: ['このタグは既に削除されています。'] });
+      } else {
+        throw new DatabaseError(e.message);
       }
     }
-    console.error('unknown error', e);
+    throw e;
   }
 
   redirect(paths.admin.tags.getHref());

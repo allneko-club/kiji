@@ -1,14 +1,15 @@
 'use client';
-import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+
 import { cleanPerPage } from '@/lib/query-params';
 import FormControl from '@mui/material/FormControl';
 import FormLabel from '@mui/material/FormLabel';
-import Select from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
+import Select from '@mui/material/Select';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 
 type Props = {
-  limitList: number[],
-}
+  limitList: number[];
+};
 
 /**
  * リストデータの表示件数を変更するためのコンポーネント
@@ -16,7 +17,6 @@ type Props = {
  * @param limitList 表示件数の選択肢
  */
 export default function SelectLimit({ limitList }: Props) {
-
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
@@ -35,8 +35,7 @@ export default function SelectLimit({ limitList }: Props) {
         labelId="perPage"
         id="perPage"
         defaultValue={defaultValue.toString()}
-        onChange={e => handleChange(e.target.value)}
-      >
+        onChange={(e) => handleChange(e.target.value)}>
         {limitList.map((item) => (
           <MenuItem key={item} value={item.toString()}>
             {item}

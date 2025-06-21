@@ -1,52 +1,50 @@
 'use client';
+
+import { createPost, updatePost } from '@/app/admin/posts/actions';
+import { SelectCategory } from '@/app/admin/posts/select-category';
+import { SelectUser } from '@/app/admin/posts/select-user';
+import { UsePreventFormReset } from '@/hooks/use-prevent-form-reset';
+import { ZPost } from '@/schemas/post';
+import { FormProvider, getFormProps, getInputProps, useForm } from '@conform-to/react';
+import { parseWithZod } from '@conform-to/zod';
+import Alert from '@mui/material/Alert';
+import Button from '@mui/material/Button';
+import Checkbox from '@mui/material/Checkbox';
+import FormControl from '@mui/material/FormControl';
+import FormLabel from '@mui/material/FormLabel';
+import Stack from '@mui/material/Stack';
+import Switch from '@mui/material/Switch';
+import TextField from '@mui/material/TextField';
 import { Category, Tag, User } from '@prisma/client';
 import * as React from 'react';
 import { useActionState } from 'react';
-import { createPost, updatePost } from '@/app/admin/posts/actions';
-import Button from '@mui/material/Button';
-import FormControl from '@mui/material/FormControl';
-import FormLabel from '@mui/material/FormLabel';
-import TextField from '@mui/material/TextField';
-import Switch from '@mui/material/Switch';
-import Checkbox from '@mui/material/Checkbox';
-import { FormProvider, getFormProps, getInputProps, useForm } from '@conform-to/react';
-import { parseWithZod } from '@conform-to/zod';
-import { UsePreventFormReset } from '@/hooks/use-prevent-form-reset';
-import { postInputSchema } from '@/schemas/post';
-import Stack from '@mui/material/Stack';
-import Alert from '@mui/material/Alert';
-import { SelectCategory } from '@/app/admin/posts/select-category';
-import { SelectUser } from '@/app/admin/posts/select-user';
 
 type Props = {
   categories: Category[];
   tags: Tag[];
   users: User[];
   post?: {
-    id: string,
-    title: string,
-    content: string,
-    published: boolean,
-    authorId: string,
-    categoryId: number | null,
-    tagIds: number[],
+    id: string;
+    title: string;
+    content: string;
+    published: boolean;
+    authorId: string;
+    categoryId: number;
+    tagIds: number[];
   };
-}
+};
 
 export const PostForm = ({ categories, tags, users, post }: Props) => {
-  const [lastResult, submitAction, isPending] = useActionState(
-    post ? updatePost : createPost,
-    undefined
-  );
+  const [lastResult, submitAction, isPending] = useActionState(post ? updatePost : createPost, undefined);
   const [form, fields] = useForm({
     lastResult,
     onValidate({ formData }) {
-      return parseWithZod(formData, { schema: postInputSchema });
+      return parseWithZod(formData, { schema: ZPost });
     },
     defaultValue: post,
   });
 
-  UsePreventFormReset({formId: form.id});
+  UsePreventFormReset({ formId: form.id });
 
   return (
     <FormProvider context={form.context}>
@@ -84,36 +82,29 @@ export const PostForm = ({ categories, tags, users, post }: Props) => {
           </FormControl>
 
           <FormControl required error={!fields.authorId.valid}>
-            <SelectUser
-              label="投稿者"
-              name={fields.authorId.name}
-              required={false}
-              users={users}
-            />
+            <SelectUser label="投稿者" name={fields.authorId.name} required={false} users={users} />
           </FormControl>
 
           <FormControl error={!fields.categoryId.valid}>
             <SelectCategory
               label="カテゴリー"
               name={fields.categoryId.name}
-              required={false}
+              required
               categories={categories}
             />
           </FormControl>
 
-
           <FormControl error={!fields.tagIds.valid}>
             <FormLabel htmlFor={fields.tagIds.name}>タグ</FormLabel>
             <Stack spacing={2} direction="row">
-              {tags.map(tag => (
+              {tags.map((tag) => (
                 <div key={tag.id}>
                   <FormLabel>{tag.name}</FormLabel>
                   <Checkbox
                     name="tagIds"
                     value={tag.id}
                     defaultChecked={
-                      fields.tagIds.initialValue &&
-                      Array.isArray(fields.tagIds.initialValue)
+                      fields.tagIds.initialValue && Array.isArray(fields.tagIds.initialValue)
                         ? fields.tagIds.initialValue.includes(tag.id.toString())
                         : fields.tagIds.initialValue === tag.id.toString()
                     }
@@ -124,8 +115,9 @@ export const PostForm = ({ categories, tags, users, post }: Props) => {
           </FormControl>
         </Stack>
 
-        <Button type="submit" variant="contained" loading={isPending}>保存</Button>
-
+        <Button type="submit" variant="contained" loading={isPending}>
+          保存
+        </Button>
       </form>
     </FormProvider>
   );

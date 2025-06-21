@@ -1,18 +1,18 @@
 'use client';
-import * as React from 'react';
-import { getFormattedDateTimeFromObj } from '@/lib/datetime';
-import { Category, Post, Tag, User } from '@prisma/client';
-import { EntryMeta } from '@/app/posts/[id]/_components/entry-meta';
-import Typography from '@mui/material/Typography';
-import { paths } from '@/config/paths';
-import TagChip from '@/components/ui/tag-chip';
-import Stack from '@mui/material/Stack';
-import Container from '@mui/material/Container';
 
+import { EntryMeta } from '@/app/posts/[id]/_components/entry-meta';
+import TagChip from '@/components/ui/tag-chip';
+import { paths } from '@/config/paths';
+import { getFormattedDateTimeFromObj } from '@/lib/datetime';
+import Container from '@mui/material/Container';
+import Stack from '@mui/material/Stack';
+import Typography from '@mui/material/Typography';
+import { Category, Post, Tag, User } from '@prisma/client';
+import * as React from 'react';
 
 type Props = {
-  post: Post & { author: User, category: Category | null, tags: Tag[] };
-}
+  post: Post & { author: User; category: Category | null; tags: Tag[] };
+};
 
 export function PostDetail({ post }: Props) {
   return (
@@ -26,18 +26,12 @@ export function PostDetail({ post }: Props) {
 
         <Typography variant="h1">{post.title}</Typography>
 
-        <div>
-          {post.content}
-        </div>
+        <div>{post.content}</div>
 
         <Stack direction="row" spacing={1}>
-          {post.tags.map((tag) =>
-            <TagChip
-              key={tag.id}
-              label={tag.name}
-              href={paths.tags.detail.getHref(tag.slug)}
-            />
-          )}
+          {post.tags.map((tag) => (
+            <TagChip key={tag.id} label={tag.name} href={paths.tags.detail.getHref(tag.slug)} />
+          ))}
         </Stack>
       </Container>
     </article>

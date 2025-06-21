@@ -1,7 +1,6 @@
-import { Theme, alpha, Components } from '@mui/material/styles';
+import { Components, Theme, alpha } from '@mui/material/styles';
 import { gray, orange } from '../theme-primitives';
 
- 
 export const feedbackCustomizations: Components<Theme> = {
   MuiAlert: {
     styleOverrides: {

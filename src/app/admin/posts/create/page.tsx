@@ -1,10 +1,9 @@
-import type { Metadata } from 'next';
+import { PostForm } from '@/app/admin/posts/_components/post-form';
 import { getCategories } from '@/models/category';
 import { getTags } from '@/models/tag';
 import { getUsers } from '@/models/user';
-import { PostForm } from '@/app/admin/posts/_components/post-form';
 import Typography from '@mui/material/Typography';
-
+import type { Metadata } from 'next';
 
 export const metadata: Metadata = { title: '投稿の作成' };
 
@@ -19,4 +18,4 @@ export default async function Page() {
       <PostForm categories={categories} tags={tags} users={users} />
     </>
   );
-};
+}

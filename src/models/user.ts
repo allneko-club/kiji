@@ -11,30 +11,30 @@ type GetUsersProps = {
   perPage: number;
   order: string;
   orderBy: OrderBy;
-}
+};
 
 export const getUsersByFilter = async (params: GetUsersProps) => {
   const where = {
     id: {
-      contains: params.id
+      contains: params.id,
     },
     name: {
-      contains: params.name
+      contains: params.name,
     },
     email: {
-      contains: params.email
+      contains: params.email,
     },
     createdAt: {
       gte: params.registeredFrom,
-      lte: params.registeredTo
+      lte: params.registeredTo,
     },
-  }
-  const orderBy:{[key: string]: string} = {}
+  };
+  const orderBy: { [key: string]: string } = {};
 
-  if(params.order === 'name'){
-    orderBy['name'] = params.orderBy
-  }else if(params.order === 'registered'){
-    orderBy['createdAt'] = params.orderBy
+  if (params.order === 'name') {
+    orderBy['name'] = params.orderBy;
+  } else if (params.order === 'registered') {
+    orderBy['createdAt'] = params.orderBy;
   }
 
   const [users, total] = await Promise.all([
@@ -44,18 +44,18 @@ export const getUsersByFilter = async (params: GetUsersProps) => {
       skip: params.perPage * (params.page - 1),
       orderBy: orderBy,
     }),
-    prisma.user.count({where}),
-  ])
-  return {users, total}
-}
+    prisma.user.count({ where }),
+  ]);
+  return { users, total };
+};
 export const getUsers = async () => {
-  return prisma.user.findMany()
-}
+  return prisma.user.findMany();
+};
 
 export const getUser = async (id: string) => {
   return prisma.user.findUnique({
     where: {
       id: id,
-    }
+    },
   });
-}
+};

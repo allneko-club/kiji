@@ -1,24 +1,31 @@
 'use client';
-import * as React from 'react';
-import { alpha, styled } from '@mui/material/styles';
-import Box from '@mui/material/Box';
+
+import { paths } from '@/config/paths';
+import CloseRoundedIcon from '@mui/icons-material/CloseRounded';
+import MenuIcon from '@mui/icons-material/Menu';
 import AppBar from '@mui/material/AppBar';
-import Toolbar from '@mui/material/Toolbar';
+import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
-import IconButton from '@mui/material/IconButton';
 import Container from '@mui/material/Container';
 import Divider from '@mui/material/Divider';
-import MenuItem from '@mui/material/MenuItem';
 import Drawer from '@mui/material/Drawer';
-import MenuIcon from '@mui/icons-material/Menu';
-import CloseRoundedIcon from '@mui/icons-material/CloseRounded';
-import ModeToggle from './mode-toggle';
-import Logo from './logo';
-import { mainMenu } from '@/config/consts';
-import NextLink from 'next/link';
-import { paths } from '@/config/paths';
+import IconButton from '@mui/material/IconButton';
+import MenuItem from '@mui/material/MenuItem';
+import Toolbar from '@mui/material/Toolbar';
+import { alpha, styled } from '@mui/material/styles';
 import { signOut } from 'next-auth/react';
+import NextLink from 'next/link';
+import * as React from 'react';
+import Logo from './logo';
+import ModeToggle from './mode-toggle';
 
+// ヘッダーのメニューに表示するリンク
+const mainMenu = [
+  { href: paths.posts.getHref(), label: 'Posts' },
+  { href: paths.categories.getHref(), label: 'Categories' },
+  { href: paths.tags.getHref(), label: 'Tags' },
+  { href: paths.contact.getHref(), label: 'Contact' },
+];
 
 const StyledToolbar = styled(Toolbar)(({ theme }) => ({
   display: 'flex',
@@ -48,8 +55,7 @@ function LogInButton() {
       variant="text"
       size="small"
       component={NextLink}
-      href={paths.auth.login.getHref()}
-    >
+      href={paths.auth.login.getHref()}>
       ログイン
     </Button>
   );
@@ -62,8 +68,7 @@ function SignUpButton() {
       variant="contained"
       size="small"
       component={NextLink}
-      href={paths.auth.login.getHref()}
-    >
+      href={paths.auth.login.getHref()}>
       登録
     </Button>
   );
@@ -73,7 +78,7 @@ type User = {
   name: string | null | undefined;
   email: string | null | undefined;
   image: string | null | undefined;
-}
+};
 
 export default function Header({ logInUser }: { logInUser: User | null }) {
   const [open, setOpen] = React.useState(false);
@@ -84,11 +89,7 @@ export default function Header({ logInUser }: { logInUser: User | null }) {
 
   return (
     <header>
-      <AppBar
-        position="static"
-        enableColorOnDark
-        sx={{ boxShadow: 0, bgcolor: 'transparent' }}
-      >
+      <AppBar position="static" enableColorOnDark sx={{ boxShadow: 0, bgcolor: 'transparent' }}>
         <Container maxWidth="lg" disableGutters>
           <StyledToolbar variant="dense" disableGutters>
             <Box sx={{ flexGrow: 1, display: 'flex', alignItems: 'center', px: 0 }}>
@@ -101,8 +102,7 @@ export default function Header({ logInUser }: { logInUser: User | null }) {
                     color="info"
                     size="small"
                     href={menu.href}
-                    component={NextLink}
-                  >
+                    component={NextLink}>
                     {menu.label}
                   </Button>
                 ))}
@@ -113,14 +113,15 @@ export default function Header({ logInUser }: { logInUser: User | null }) {
                 display: { xs: 'none', md: 'flex' },
                 gap: 1,
                 alignItems: 'center',
-              }}
-            >
-              {logInUser ? <LogOutButton /> :
+              }}>
+              {logInUser ? (
+                <LogOutButton />
+              ) : (
                 <>
                   <LogInButton />
                   <SignUpButton />
                 </>
-              }
+              )}
               <ModeToggle />
             </Box>
             <Box sx={{ display: { xs: 'flex', md: 'none' }, gap: 1 }}>
@@ -136,15 +137,13 @@ export default function Header({ logInUser }: { logInUser: User | null }) {
                   sx: {
                     top: 'var(--template-frame-height, 0px)',
                   },
-                }}
-              >
+                }}>
                 <Box sx={{ p: 2, backgroundColor: 'background.default' }}>
                   <Box
                     sx={{
                       display: 'flex',
                       justifyContent: 'flex-end',
-                    }}
-                  >
+                    }}>
                     <IconButton onClick={toggleDrawer(false)}>
                       <CloseRoundedIcon />
                     </IconButton>
@@ -157,19 +156,18 @@ export default function Header({ logInUser }: { logInUser: User | null }) {
                         color="info"
                         fullWidth
                         href={menu.href}
-                        component={NextLink}
-                      >
+                        component={NextLink}>
                         {menu.label}
                       </Button>
                     </MenuItem>
                   ))}
 
                   <Divider sx={{ my: 3 }} />
-                  {logInUser ?
+                  {logInUser ? (
                     <MenuItem>
                       <LogOutButton />
                     </MenuItem>
-                    :
+                  ) : (
                     <>
                       <MenuItem>
                         <SignUpButton />
@@ -178,8 +176,7 @@ export default function Header({ logInUser }: { logInUser: User | null }) {
                         <LogInButton />
                       </MenuItem>
                     </>
-                  }
-
+                  )}
                 </Box>
               </Drawer>
             </Box>

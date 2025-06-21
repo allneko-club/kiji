@@ -1,4 +1,5 @@
 'use client';
+
 import { useEffect } from 'react';
 
 /**
@@ -7,7 +8,6 @@ import { useEffect } from 'react';
  * @param formId @conform-to/react の useFrom() の戻り値の form.id
  */
 export const UsePreventFormReset = ({ formId }: { formId: string }) => {
-
   useEffect(() => {
     const preventDefault = (event: Event) => {
       if (event.target === document.forms.namedItem(formId)) {

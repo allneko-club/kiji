@@ -1,12 +1,13 @@
 'use server';
-import { redirect } from 'next/navigation';
-import { paths } from '@/config/paths';
-import { Prisma, prisma } from '@/lib/prisma';
-import { auth } from '@/auth';
-import { getPost } from '@/models/post';
-import { postInputSchema } from '@/schemas/post';
-import { parseWithZod } from '@conform-to/zod';
 
+import { auth } from '@/auth';
+import { paths } from '@/config/paths';
+import { DatabaseError } from '@/lib/errors';
+import { Prisma, prisma } from '@/lib/prisma';
+import { getPost } from '@/models/post';
+import { ZPost } from '@/schemas/post';
+import { parseWithZod } from '@conform-to/zod';
+import { redirect } from 'next/navigation';
 
 export async function createPost(prevState: unknown, formData: FormData) {
   const session = await auth();
@@ -16,7 +17,7 @@ export async function createPost(prevState: unknown, formData: FormData) {
   }
 
   const submission = parseWithZod(formData, {
-    schema: postInputSchema,
+    schema: ZPost,
   });
 
   if (submission.status !== 'success') {
@@ -29,7 +30,7 @@ export async function createPost(prevState: unknown, formData: FormData) {
     published: submission.value.published,
     categoryId: submission.value.categoryId,
     tags: {
-      connect: submission.value.tagIds.map(id => {
+      connect: submission.value.tagIds.map((id) => {
         return { id };
       }),
     },
@@ -38,18 +39,16 @@ export async function createPost(prevState: unknown, formData: FormData) {
 
   try {
     await prisma.post.create({ data: saveData });
-
-  }catch (e: unknown) {
+  } catch (e) {
     // todo エラー処理 存在しないタグIDを指定した場合は例外がスローされる
     if (e instanceof Prisma.PrismaClientKnownRequestError) {
-      console.debug('error', e);
+      throw new DatabaseError(e.message);
     }
-    console.error('unknown error', e);
+    throw e;
   }
 
   redirect(paths.admin.posts.getHref());
 }
-
 
 export async function updatePost(prevState: unknown, formData: FormData) {
   const session = await auth();
@@ -59,7 +58,7 @@ export async function updatePost(prevState: unknown, formData: FormData) {
   }
 
   const submission = parseWithZod(formData, {
-    schema: postInputSchema,
+    schema: ZPost,
   });
 
   if (submission.status !== 'success') {
@@ -74,7 +73,7 @@ export async function updatePost(prevState: unknown, formData: FormData) {
     authorId: submission.value.authorId,
     tags: {
       // 存在しないタグIDを指定した場合は例外がスローされる
-      set: submission.value.tagIds.map(id => {
+      set: submission.value.tagIds.map((id) => {
         return { id };
       }),
     },
@@ -92,13 +91,11 @@ export async function updatePost(prevState: unknown, formData: FormData) {
         data: saveData,
       }),
     ]);
-
-  }catch (e: unknown) {
-    // todo エラー処理
+  } catch (e) {
     if (e instanceof Prisma.PrismaClientKnownRequestError) {
-      console.debug('error', e);
+      throw new DatabaseError(e.message);
     }
-    console.error('unknown error', e);
+    throw e;
   }
 
   redirect(paths.admin.posts.getHref());
