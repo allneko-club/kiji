@@ -1,7 +1,8 @@
+import { ZId } from '@/schemas/common';
 import { z } from 'zod';
 
 export const ZTag = z.object({
-  id: z.number().min(1).optional(),
+  id: ZId.optional(),
   name: z.string({ required_error: '名前を入力してください。' }).max(20, '20文字以下にしてください。'),
   slug: z
     .string({ required_error: 'スラッグを入力してください。' })

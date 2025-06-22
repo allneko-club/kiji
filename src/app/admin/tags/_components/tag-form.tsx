@@ -1,67 +1,86 @@
 'use client';
 
 import { createTag, updateTag } from '@/app/admin/tags/actions';
-import { UsePreventFormReset } from '@/hooks/use-prevent-form-reset';
-import { ZTag } from '@/schemas/tag';
-import { getFormProps, getInputProps, useForm } from '@conform-to/react';
-import { parseWithZod } from '@conform-to/zod';
-import Alert from '@mui/material/Alert';
+import { paths } from '@/config/paths';
+import { getFormattedErrorMessage } from '@/lib/utils';
+import { TTag, ZTag } from '@/schemas/tag';
+import { zodResolver } from '@hookform/resolvers/zod';
 import Button from '@mui/material/Button';
 import FormControl from '@mui/material/FormControl';
 import FormLabel from '@mui/material/FormLabel';
 import Stack from '@mui/material/Stack';
 import TextField from '@mui/material/TextField';
 import { Tag } from '@prisma/client';
+import { useRouter } from 'next/navigation';
 import * as React from 'react';
-import { useActionState } from 'react';
+import { Controller, SubmitHandler, useForm } from 'react-hook-form';
+import { toast } from 'react-toastify';
 
 export const TagForm = ({ tag }: { tag?: Tag }) => {
-  const [lastResult, submitAction, isPending] = useActionState(tag ? updateTag : createTag, undefined);
-  const [form, fields] = useForm({
-    lastResult,
-    onValidate({ formData }) {
-      return parseWithZod(formData, { schema: ZTag });
-    },
-    defaultValue: tag,
+  const router = useRouter();
+  const { control, handleSubmit, formState } = useForm<TTag>({
+    defaultValues: tag ? tag : {},
+    resolver: zodResolver(ZTag),
+    mode: 'onChange',
   });
-
-  UsePreventFormReset({ formId: form.id });
+  const onSubmit: SubmitHandler<TTag> = async (data) => {
+    try {
+      const response = tag ? await updateTag(data) : await createTag(data);
+      if (response?.data) {
+        toast.success('タグを保存しました');
+        router.push(paths.admin.tags.getHref());
+      } else {
+        const errorMessage = getFormattedErrorMessage(response);
+        toast.error(errorMessage);
+      }
+    } catch (err) {
+      console.error(err);
+      toast.error('エラーが発生しました');
+    }
+  };
 
   return (
-    <form action={submitAction} {...getFormProps(form)}>
-      {form.errors && <Alert severity="error">{form.errors}</Alert>}
-
+    <form onSubmit={handleSubmit(onSubmit)}>
       <Stack spacing={4} marginY={4}>
-        <input {...getInputProps(fields.id, { type: 'number' })} hidden />
-        <FormControl required>
-          <FormLabel htmlFor={fields.name.name}>名前</FormLabel>
-          <TextField
-            {...getInputProps(fields.name, { type: 'text' })}
-            error={!fields.name.valid}
-            helperText={fields.name.errors}
-          />
-        </FormControl>
-        <FormControl required>
-          <FormLabel htmlFor={fields.slug.name}>スラッグ</FormLabel>
-          <TextField
-            {...getInputProps(fields.slug, { type: 'text' })}
-            error={!fields.slug.valid}
-            helperText={fields.slug.errors}
-          />
-        </FormControl>
-        <FormControl>
-          <FormLabel htmlFor={fields.description.name}>説明</FormLabel>
-          <TextField
-            {...getInputProps(fields.description, { type: 'text' })}
-            multiline
-            rows={4}
-            error={!fields.description.valid}
-            helperText={fields.description.errors}
-          />
-        </FormControl>
+        <Controller
+          name="name"
+          control={control}
+          render={({ field, formState: { errors } }) => (
+            <FormControl required>
+              <FormLabel htmlFor="name">名前</FormLabel>
+              <TextField {...field} error={!!errors.name} helperText={errors.name?.message} />
+            </FormControl>
+          )}
+        />
+        <Controller
+          name="slug"
+          control={control}
+          render={({ field, formState: { errors } }) => (
+            <FormControl required>
+              <FormLabel htmlFor="slug">スラッグ</FormLabel>
+              <TextField {...field} error={!!errors.slug} helperText={errors.slug?.message} />
+            </FormControl>
+          )}
+        />
+        <Controller
+          name="description"
+          control={control}
+          render={({ field, formState: { errors } }) => (
+            <FormControl>
+              <FormLabel htmlFor="description">説明</FormLabel>
+              <TextField
+                {...field}
+                multiline
+                rows={4}
+                error={!!errors.description}
+                helperText={errors.description?.message}
+              />
+            </FormControl>
+          )}
+        />
       </Stack>
 
-      <Button type="submit" variant="contained" loading={isPending}>
+      <Button type="submit" variant="contained" loading={formState.isSubmitting}>
         保存
       </Button>
     </form>

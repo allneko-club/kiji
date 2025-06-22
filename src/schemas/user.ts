@@ -1,4 +1,5 @@
 import { RoleFilterValues } from '@/lib/users';
+import { ZCuid } from '@/schemas/common';
 import { z } from 'zod';
 
 export const ZUserName = z.string({ required_error: '名前を入力してください。' }).trim();
@@ -17,7 +18,7 @@ export const ZUserPassword = z
 export const ZUserRole = z.enum(RoleFilterValues);
 
 export const ZUpdateUser = z.object({
-  id: z.string(),
+  id: ZCuid,
   name: ZUserName,
   email: ZUserEmail,
   image: z.string().url('URLの形式が間違っています。').optional(),

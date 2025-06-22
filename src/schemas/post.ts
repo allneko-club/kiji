@@ -1,7 +1,8 @@
+import { ZCuid } from '@/schemas/common';
 import { z } from 'zod';
 
 export const ZPost = z.object({
-  id: z.string().optional(),
+  id: ZCuid.optional(),
   title: z.string({ required_error: 'タイトルを入力してください。' }),
   content: z.string({ required_error: '本文を選択してください。' }).max(5000, '5000文字以下にしてください。'),
   published: z.boolean().default(false),

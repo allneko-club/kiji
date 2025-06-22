@@ -1,7 +1,8 @@
+import { ZId } from '@/schemas/common';
 import { z } from 'zod';
 
 export const ZCategory = z.object({
-  id: z.number().optional(),
+  id: ZId.optional(),
   name: z.string({ required_error: '名前を入力してください。' }).max(20, '20文字以内にしてください。'),
   slug: z
     .string({ required_error: 'スラッグを入力してください。' })
