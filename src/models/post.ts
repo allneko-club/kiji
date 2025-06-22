@@ -4,16 +4,23 @@ import { BaseSearch } from '@/types/requests';
 type GetPostsParams = {
   authorId?: string;
   published?: boolean;
-  title?: string;
+  query?: string;
 } & BaseSearch;
 
 export const getPosts = async (params: GetPostsParams) => {
   const where = {
     authorId: params.authorId,
     published: params.published,
-    title: {
-      contains: params.title,
-    },
+    OR: [
+      {
+        title: {
+          contains: params.query,
+        },
+        content: {
+          contains: params.query,
+        },
+      },
+    ],
   };
 
   const [posts, total] = await Promise.all([
