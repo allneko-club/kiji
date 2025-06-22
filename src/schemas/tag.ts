@@ -6,5 +6,7 @@ export const ZTag = z.object({
   slug: z
     .string({ required_error: 'スラッグを入力してください。' })
     .regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/i, '不正なスラッグです。'),
-  description: z.string().max(1000, '1000文字以内にしてください。').default(''),
+  description: z.string().max(1000, '1000文字以内にしてください。').default('').optional(),
 });
+
+export type TTag = z.infer<typeof ZTag>;
