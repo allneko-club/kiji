@@ -48,8 +48,11 @@ export const ZRegister = z
       });
     }
   });
+
+export type TRegister = z.infer<typeof ZRegister>;
+
 export const ZResetPassword = z.object({
   email: ZUserEmail,
 });
 
-export type TRegister = z.infer<typeof ZRegister>;
+export type TResetPassword = z.infer<typeof ZResetPassword>;
