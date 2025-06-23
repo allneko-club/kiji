@@ -10,13 +10,10 @@ export const cleanOrder = (order: string | null | undefined) => {
   }
 };
 
-export const cleanRole = (role: number | undefined): string => {
-  switch (role) {
-    case Role.ADMIN:
-      return '0';
-    case Role.USER:
-      return '1';
-    default:
-      return '';
+export const cleanRole = (role: number | undefined): number | undefined => {
+  if (Object(Role).values().includes(role)) {
+    return role;
+  } else {
+    return undefined;
   }
 };

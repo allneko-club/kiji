@@ -1,4 +1,4 @@
-import { SESSION_MAX_AGE } from '@/lib/consts';
+import { DEBUG, SESSION_MAX_AGE } from '@/lib/consts';
 import { getUserByCredentials } from '@/module/auth/lib/user';
 import type { NextAuthConfig } from 'next-auth';
 import Credentials from 'next-auth/providers/credentials';
@@ -11,6 +11,7 @@ export const loginInputSchema = z.object({
 });
 
 export const authConfig = {
+  debug: DEBUG,
   pages: {
     signIn: '/auth/login',
     signOut: '/',
@@ -21,11 +22,11 @@ export const authConfig = {
     strategy: 'jwt',
   },
   callbacks: {
+    // middleware でユーザーの認証状況をチェクするためのメソッド　https://authjs.dev/reference/nextjs#authorized
     authorized: async ({ auth, request: { nextUrl } }) => {
       const isLoggedIn = !!auth?.user;
       const isOnAdmin = nextUrl.pathname.startsWith('/admin');
-      const isOnMy = nextUrl.pathname.startsWith('/my');
-      if (isOnAdmin || isOnMy) {
+      if (isOnAdmin) {
         // 未認証のユーザーはログインページにリダイレクトされる
         return isLoggedIn;
       }
@@ -34,20 +35,15 @@ export const authConfig = {
     },
 
     jwt({ token, user }) {
-      if (!user) {
-        return token;
+      if (user.id) {
+        // User is available during sign-in
+        token.id = user.id;
       }
-
-      return {
-        ...token,
-        id: user.id!,
-        role: user.role,
-      };
+      return token;
     },
 
     session({ session, token }) {
       session.user.id = token.id;
-      session.user.role = token.role;
       return session;
     },
   },

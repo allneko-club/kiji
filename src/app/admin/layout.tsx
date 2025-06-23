@@ -10,11 +10,11 @@ import { ReactNode } from 'react';
 
 export default async function Layout({ children }: { children: ReactNode }) {
   const session = await auth();
-  if (!session || !session.user) {
+  if (!session) {
     return redirect(paths.auth.login.getHref());
   }
 
-  const user = session.user.id ? await getUser(session.user.id) : null;
+  const user = await getUser(session.user.id);
   if (!user) {
     return signOut();
   }
