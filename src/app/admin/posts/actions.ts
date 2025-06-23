@@ -1,44 +1,29 @@
 'use server';
 
-import { auth } from '@/auth';
-import { paths } from '@/config/paths';
-import { DatabaseError } from '@/lib/errors';
+import { adminActionClient } from '@/lib/action-client';
+import { DatabaseError, ResourceNotFoundError } from '@/lib/errors';
 import { Prisma, prisma } from '@/lib/prisma';
 import { getPost } from '@/models/post';
+import { ZCuid } from '@/schemas/common';
 import { ZPost } from '@/schemas/post';
-import { parseWithZod } from '@conform-to/zod';
-import { redirect } from 'next/navigation';
+import { z } from 'zod';
 
-export async function createPost(prevState: unknown, formData: FormData) {
-  const session = await auth();
-
-  if (!session?.user?.id) {
-    redirect(paths.auth.login.getHref());
-  }
-
-  const submission = parseWithZod(formData, {
-    schema: ZPost,
-  });
-
-  if (submission.status !== 'success') {
-    return submission.reply();
-  }
-
-  const saveData = {
-    title: submission.value.title,
-    content: submission.value.content,
-    published: submission.value.published,
-    categoryId: submission.value.categoryId,
-    tags: {
-      connect: submission.value.tagIds.map((id) => {
-        return { id };
-      }),
-    },
-    authorId: submission.value.authorId,
-  };
-
+export const createPost = adminActionClient.inputSchema(ZPost).action(async ({ parsedInput }) => {
   try {
-    await prisma.post.create({ data: saveData });
+    const saveData = {
+      title: parsedInput.title,
+      content: parsedInput.content,
+      published: parsedInput.published,
+      categoryId: parsedInput.categoryId,
+      tags: {
+        connect: parsedInput.tagIds.map((id) => {
+          return { id };
+        }),
+      },
+      authorId: parsedInput.authorId,
+    };
+
+    return await prisma.post.create({ data: saveData });
   } catch (e) {
     // todo エラー処理 存在しないタグIDを指定した場合は例外がスローされる
     if (e instanceof Prisma.PrismaClientKnownRequestError) {
@@ -46,67 +31,53 @@ export async function createPost(prevState: unknown, formData: FormData) {
     }
     throw e;
   }
+});
 
-  redirect(paths.admin.posts.getHref());
-}
-
-export async function updatePost(prevState: unknown, formData: FormData) {
-  const session = await auth();
-
-  if (!session?.user?.id) {
-    redirect(paths.auth.login.getHref());
-  }
-
-  const submission = parseWithZod(formData, {
-    schema: ZPost,
-  });
-
-  if (submission.status !== 'success') {
-    return submission.reply();
-  }
-
-  const saveData = {
-    title: submission.value.title,
-    content: submission.value.content,
-    published: submission.value.published,
-    categoryId: submission.value.categoryId,
-    authorId: submission.value.authorId,
-    tags: {
-      // 存在しないタグIDを指定した場合は例外がスローされる
-      set: submission.value.tagIds.map((id) => {
-        return { id };
-      }),
-    },
-  };
-
-  const id = submission.value.id || '';
-  const post = await getPost(id);
-  if (!post) {
-    redirect(paths.admin.getHref());
-  }
+export const updatePost = adminActionClient.inputSchema(ZPost).action(async ({ parsedInput }) => {
   try {
-    await prisma.$transaction([
-      prisma.post.update({
-        where: { id: id },
-        data: saveData,
-      }),
-    ]);
+    const id = parsedInput.id!;
+    const post = await getPost(id);
+    if (!post) {
+      throw new ResourceNotFoundError('Post', null);
+    }
+
+    const saveData = {
+      title: parsedInput.title,
+      content: parsedInput.content,
+      published: parsedInput.published,
+      categoryId: parsedInput.categoryId,
+      authorId: parsedInput.authorId,
+      tags: {
+        // 存在しないタグIDを指定した場合は例外がスローされる
+        set: parsedInput.tagIds.map((id) => {
+          return { id };
+        }),
+      },
+    };
+
+    return await prisma.post.update({
+      where: { id: id },
+      data: saveData,
+    });
   } catch (e) {
     if (e instanceof Prisma.PrismaClientKnownRequestError) {
       throw new DatabaseError(e.message);
     }
     throw e;
   }
+});
 
-  redirect(paths.admin.posts.getHref());
-}
+const ZDeletePost = z.object({ id: ZCuid });
 
-export async function deletePost(prevState: null, formData: FormData) {
-  const id = formData.get('id') as string;
+export const deletePost = adminActionClient.inputSchema(ZDeletePost).action(async ({ parsedInput }) => {
   try {
-    await prisma.post.delete({ where: { id: id } });
-  } catch {
-    /* RecordNotFound 例外が発生しても無視する */
+    await prisma.post.delete({ where: { id: parsedInput.id } });
+    return true;
+  } catch (e) {
+    if (e instanceof Prisma.PrismaClientKnownRequestError) {
+      throw new DatabaseError(e.message);
+    }
+
+    throw e;
   }
-  return Promise.resolve(null);
-}
+});

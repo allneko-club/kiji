@@ -1,5 +1,7 @@
-import { prisma } from '@/lib/prisma';
+import { DatabaseError } from '@/lib/errors';
+import { Prisma, prisma } from '@/lib/prisma';
 import { OrderBy } from '@/types/utils';
+import { cache } from 'react';
 
 type GetUsersProps = {
   id?: string;
@@ -48,14 +50,28 @@ export const getUsersByFilter = async (params: GetUsersProps) => {
   ]);
   return { users, total };
 };
+
 export const getUsers = async () => {
   return prisma.user.findMany();
 };
 
-export const getUser = async (id: string) => {
-  return prisma.user.findUnique({
-    where: {
-      id: id,
-    },
-  });
-};
+export const getUser = cache(async (id: string) => {
+  try {
+    const user = await prisma.user.findUnique({
+      where: {
+        id,
+      },
+    });
+
+    if (!user) {
+      return null;
+    }
+    return user;
+  } catch (error) {
+    if (error instanceof Prisma.PrismaClientKnownRequestError) {
+      throw new DatabaseError(error.message);
+    }
+
+    throw error;
+  }
+});

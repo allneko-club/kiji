@@ -2,9 +2,10 @@
 
 import { Card } from '@/app/auth/_components/card';
 import { register } from '@/app/auth/register/actions';
-import { ZRegister } from '@/schemas/user';
-import { useForm } from '@conform-to/react';
-import { parseWithZod } from '@conform-to/zod';
+import { paths } from '@/config/paths';
+import { getFormattedErrorMessage } from '@/lib/utils';
+import { TRegister, ZRegister } from '@/schemas/user';
+import { zodResolver } from '@hookform/resolvers/zod';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import FormControl from '@mui/material/FormControl';
@@ -12,18 +13,32 @@ import FormHelperText from '@mui/material/FormHelperText';
 import FormLabel from '@mui/material/FormLabel';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
+import { useRouter } from 'next/navigation';
 import * as React from 'react';
-import { useActionState } from 'react';
+import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import { toast } from 'react-toastify';
 
 export default function RegisterForm() {
-  const [lastResult, action, isPending] = useActionState(register, undefined);
-  const [form, fields] = useForm({
-    lastResult,
-    onValidate({ formData }) {
-      return parseWithZod(formData, { schema: ZRegister });
-    },
+  const router = useRouter();
+  const { control, handleSubmit, formState } = useForm<TRegister>({
+    resolver: zodResolver(ZRegister),
+    mode: 'onChange',
   });
+  const onSubmit: SubmitHandler<TRegister> = async (data) => {
+    try {
+      const response = await register(data);
+      if (response?.data) {
+        toast.success('登録しました');
+        router.push(paths.auth.login.getHref());
+      } else {
+        const errorMessage = getFormattedErrorMessage(response);
+        toast.error(errorMessage);
+      }
+    } catch (err) {
+      console.error(err);
+      toast.error('エラーが発生しました');
+    }
+  };
 
   return (
     <Card variant="outlined">
@@ -32,61 +47,61 @@ export default function RegisterForm() {
       </Typography>
       <Typography>以下のフォームに入力してください。</Typography>
       <Box
-        id={form.id}
         component="form"
-        onSubmit={form.onSubmit}
-        action={(formData) => {
-          action(formData);
-          toast('登録しました');
-        }}
-        noValidate
+        onSubmit={handleSubmit(onSubmit)}
         sx={{
           display: 'flex',
           flexDirection: 'column',
           width: '100%',
           gap: 2,
         }}>
-        <FormControl required>
-          <FormLabel htmlFor={fields.name.name}>ユーザー名</FormLabel>
-          <TextField
-            id={fields.name.id}
-            name={fields.name.name}
-            error={!!fields.name.errors}
-            helperText={fields.name.errors}
-          />
-        </FormControl>
-        <FormControl required>
-          <FormLabel htmlFor={fields.email.name}>メールアドレス</FormLabel>
-          <TextField
-            id={fields.email.id}
-            name={fields.email.name}
-            error={!!fields.email.errors}
-            helperText={fields.email.errors}
-          />
-        </FormControl>
-        <FormControl required>
-          <FormLabel htmlFor={fields.password.name}>パスワード</FormLabel>
-          <TextField
-            id={fields.password.id}
-            type="password"
-            name={fields.password.name}
-            error={!!fields.password.errors}
-            helperText={fields.password.errors}
-          />
-          <FormHelperText>8文字以上の半角英数字にしてください。</FormHelperText>
-        </FormControl>
-        <FormControl required>
-          <FormLabel htmlFor={fields.passwordConfirm.name}>パスワード（確認）</FormLabel>
-          <TextField
-            id={fields.passwordConfirm.id}
-            type="password"
-            name={fields.passwordConfirm.name}
-            error={!!fields.passwordConfirm.errors}
-            helperText={fields.passwordConfirm.errors}
-          />
-        </FormControl>
+        <Controller
+          name="name"
+          defaultValue=""
+          control={control}
+          render={({ field, fieldState: { error } }) => (
+            <FormControl required>
+              <FormLabel htmlFor="name">ユーザー名</FormLabel>
+              <TextField {...field} error={!!error} helperText={error?.message} />
+            </FormControl>
+          )}
+        />
+        <Controller
+          name="email"
+          defaultValue=""
+          control={control}
+          render={({ field, fieldState: { error } }) => (
+            <FormControl required>
+              <FormLabel htmlFor="email">メールアドレス</FormLabel>
+              <TextField {...field} error={!!error} helperText={error?.message} />
+            </FormControl>
+          )}
+        />
+        <Controller
+          name="password"
+          defaultValue=""
+          control={control}
+          render={({ field, fieldState: { error } }) => (
+            <FormControl required>
+              <FormLabel htmlFor="password">パスワード</FormLabel>
+              <TextField {...field} error={!!error} helperText={error?.message} type="password" />
+              <FormHelperText>8文字以上の半角英数字にしてください。</FormHelperText>
+            </FormControl>
+          )}
+        />
+        <Controller
+          name="passwordConfirm"
+          defaultValue=""
+          control={control}
+          render={({ field, fieldState: { error } }) => (
+            <FormControl required>
+              <FormLabel htmlFor="passwordConfirm">パスワード（確認）</FormLabel>
+              <TextField {...field} error={!!error} helperText={error?.message} type="password" />
+            </FormControl>
+          )}
+        />
 
-        <Button type="submit" variant="contained" loading={isPending}>
+        <Button type="submit" variant="contained" loading={formState.isSubmitting}>
           登録
         </Button>
       </Box>

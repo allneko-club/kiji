@@ -1,36 +1,43 @@
-import { RoleFilterValues } from '@/lib/users';
+import { ZCuid } from '@/schemas/common';
 import { z } from 'zod';
 
-export const ZUserName = z.string({ required_error: '名前を入力してください。' }).trim();
+export const ZUserName = z
+  .string()
+  .trim()
+  .min(1, '名前を入力してください。')
+  .max(20, '20文字以内にしてください。');
 
 export const ZUserEmail = z
-  .string({ required_error: 'メールアドレスを入力してください。' })
+  .string()
+  .trim()
+  .min(1, 'メールアドレスを入力してください。')
   .max(255)
   .email({ message: 'メールアドレスの形式が間違っています。' });
 
 export const ZUserPassword = z
-  .string({ required_error: 'パスワードは8文字以上の半角英数字で入力してください。' })
-  .min(8)
+  .string()
+  .min(8, 'パスワードは8文字以上の半角英数字で入力してください。')
   .max(128, { message: '128文字以下の半角英数字で入力してください。' })
   .regex(/^[a-zA-Z\d].*$/);
 
-export const ZUserRole = z.enum(RoleFilterValues);
-
 export const ZUpdateUser = z.object({
-  id: z.string(),
+  id: ZCuid,
   name: ZUserName,
   email: ZUserEmail,
-  image: z.string().url('URLの形式が間違っています。').optional(),
+  image: z.string().url('URLの形式が間違っています。').or(z.string().length(0)).optional(),
   password: ZUserPassword.optional(),
-  role: ZUserRole,
+  // todo Roleはリテラル型の方にしようとしたがuseForm()での扱いが難しい
+  role: z.number().min(0),
 });
+
+export type TUpdateUser = z.infer<typeof ZUpdateUser>;
 
 export const ZRegister = z
   .object({
     name: ZUserName,
     email: ZUserEmail,
     password: ZUserPassword,
-    passwordConfirm: z.string({ required_error: '確認用のパスワードを入力してください。' }),
+    passwordConfirm: z.string().min(1, '確認用のパスワードを入力してください。'),
   })
   .superRefine(({ password, passwordConfirm }, ctx) => {
     if (password !== passwordConfirm) {
@@ -41,6 +48,11 @@ export const ZRegister = z
       });
     }
   });
+
+export type TRegister = z.infer<typeof ZRegister>;
+
 export const ZResetPassword = z.object({
   email: ZUserEmail,
 });
+
+export type TResetPassword = z.infer<typeof ZResetPassword>;

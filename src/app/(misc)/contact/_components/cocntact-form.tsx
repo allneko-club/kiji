@@ -1,64 +1,77 @@
 'use client';
 
 import { contact } from '@/app/(misc)/contact/actions';
-import { ZContact } from '@/schemas/contact';
-import { FormProvider, useForm } from '@conform-to/react';
-import { parseWithZod } from '@conform-to/zod';
+import { paths } from '@/config/paths';
+import { getFormattedErrorMessage } from '@/lib/utils';
+import { TContact, ZContact } from '@/schemas/contact';
+import { zodResolver } from '@hookform/resolvers/zod';
 import Button from '@mui/material/Button';
 import FormControl from '@mui/material/FormControl';
 import FormLabel from '@mui/material/FormLabel';
 import Stack from '@mui/material/Stack';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
+import { useRouter } from 'next/navigation';
 import * as React from 'react';
-import { useActionState } from 'react';
+import { Controller, SubmitHandler, useForm } from 'react-hook-form';
+import { toast } from 'react-toastify';
 
 export default function ContactForm() {
-  const [lastResult, submitAction, isPending] = useActionState(contact, undefined);
-  const [form, fields] = useForm({
-    lastResult,
-    onValidate({ formData }) {
-      return parseWithZod(formData, { schema: ZContact });
-    },
+  const router = useRouter();
+  const { control, handleSubmit, formState } = useForm<TContact>({
+    resolver: zodResolver(ZContact),
+    mode: 'onChange',
   });
+  const onSubmit: SubmitHandler<TContact> = async (data) => {
+    try {
+      const response = await contact(data);
+      if (response?.data) {
+        router.push(paths.contactDone.getHref());
+      } else {
+        const errorMessage = getFormattedErrorMessage(response);
+        toast.error(errorMessage);
+      }
+    } catch (err) {
+      console.error(err);
+      toast.error('エラーが発生しました');
+    }
+  };
 
   return (
-    <div>
+    <>
       <Typography variant="h1">お問い合わせ</Typography>
       <Typography>以下のフォームに入力してください。</Typography>
 
-      <FormProvider context={form.context}>
-        <form id={form.id} onSubmit={form.onSubmit} action={submitAction} noValidate>
-          <Stack spacing={4} marginY={4}>
-            <FormControl required>
-              <FormLabel htmlFor={fields.email.name}>メールアドレス</FormLabel>
-              <TextField
-                id={fields.email.id}
-                name={fields.email.name}
-                defaultValue={fields.email.initialValue}
-                error={!fields.email.valid}
-                helperText={fields.email.errors}
-              />
-            </FormControl>
-            <FormControl required>
-              <FormLabel htmlFor={fields.content.name}>内容</FormLabel>
-              <TextField
-                id={fields.content.id}
-                name={fields.content.name}
-                defaultValue={fields.content.initialValue}
-                error={!fields.content.valid}
-                helperText={fields.content.errors}
-                multiline
-                rows={4}
-              />
-            </FormControl>
+      <form onSubmit={handleSubmit(onSubmit)}>
+        <Stack spacing={4} marginY={4}>
+          <Controller
+            name="email"
+            defaultValue=""
+            control={control}
+            render={({ field, fieldState: { error } }) => (
+              <FormControl required>
+                <FormLabel htmlFor="email">メールアドレス</FormLabel>
+                <TextField {...field} error={!!error} helperText={error?.message} />
+              </FormControl>
+            )}
+          />
+          <Controller
+            name="content"
+            defaultValue=""
+            control={control}
+            render={({ field, fieldState: { error } }) => (
+              <FormControl required>
+                <FormLabel htmlFor="content">本文</FormLabel>
+                <TextField {...field} multiline rows={4} error={!!error} helperText={error?.message} />
+              </FormControl>
+            )}
+          />
 
-            <Button type="submit" variant="contained" loading={isPending}>
-              送信
-            </Button>
-          </Stack>
-        </form>
-      </FormProvider>
-    </div>
+          <Button type="submit" variant="contained" loading={formState.isSubmitting}>
+            送信
+          </Button>
+        </Stack>
+      </form>
+    </>
   );
 }

@@ -1,124 +1,173 @@
 'use client';
 
 import { createPost, updatePost } from '@/app/admin/posts/actions';
-import { SelectCategory } from '@/app/admin/posts/select-category';
-import { SelectUser } from '@/app/admin/posts/select-user';
-import { UsePreventFormReset } from '@/hooks/use-prevent-form-reset';
-import { ZPost } from '@/schemas/post';
-import { FormProvider, getFormProps, getInputProps, useForm } from '@conform-to/react';
-import { parseWithZod } from '@conform-to/zod';
-import Alert from '@mui/material/Alert';
+import { paths } from '@/config/paths';
+import { env } from '@/lib/env';
+import { getFormattedErrorMessage } from '@/lib/utils';
+import { TPost, ZPost } from '@/schemas/post';
+import { zodResolver } from '@hookform/resolvers/zod';
 import Button from '@mui/material/Button';
 import Checkbox from '@mui/material/Checkbox';
 import FormControl from '@mui/material/FormControl';
+import FormHelperText from '@mui/material/FormHelperText';
 import FormLabel from '@mui/material/FormLabel';
+import MenuItem from '@mui/material/MenuItem';
+import Select from '@mui/material/Select';
 import Stack from '@mui/material/Stack';
 import Switch from '@mui/material/Switch';
 import TextField from '@mui/material/TextField';
-import { Category, Tag, User } from '@prisma/client';
+import { Category, Post, Tag, User } from '@prisma/client';
+import { useRouter } from 'next/navigation';
 import * as React from 'react';
-import { useActionState } from 'react';
+import { Controller, SubmitHandler, useForm } from 'react-hook-form';
+import { toast } from 'react-toastify';
 
 type Props = {
   categories: Category[];
   tags: Tag[];
   users: User[];
-  post?: {
-    id: string;
-    title: string;
-    content: string;
-    published: boolean;
-    authorId: string;
-    categoryId: number;
+  post?: Post & {
     tagIds: number[];
   };
 };
 
 export const PostForm = ({ categories, tags, users, post }: Props) => {
-  const [lastResult, submitAction, isPending] = useActionState(post ? updatePost : createPost, undefined);
-  const [form, fields] = useForm({
-    lastResult,
-    onValidate({ formData }) {
-      return parseWithZod(formData, { schema: ZPost });
-    },
-    defaultValue: post,
+  const router = useRouter();
+  const { control, handleSubmit, formState, setValue, watch } = useForm<TPost>({
+    defaultValues: post ? post : {},
+    resolver: zodResolver(ZPost),
+    mode: 'onChange',
   });
+  const watchTagIds = watch('tagIds');
 
-  UsePreventFormReset({ formId: form.id });
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const targetId = Number(event.target.value);
+    if (event.target.checked) {
+      setValue('tagIds', [...watchTagIds, targetId]);
+    } else {
+      setValue(
+        'tagIds',
+        watchTagIds.filter((id) => id !== targetId),
+      );
+    }
+  };
+  const onSubmit: SubmitHandler<TPost> = async (data) => {
+    try {
+      const response = post ? await updatePost(data) : await createPost(data);
+      if (response?.data) {
+        toast.success('保存しました');
+        router.push(paths.admin.posts.getHref());
+      } else {
+        const errorMessage = getFormattedErrorMessage(response);
+        toast.error(errorMessage);
+      }
+    } catch (err) {
+      console.error(err);
+      toast.error('エラーが発生しました');
+    }
+  };
 
   return (
-    <FormProvider context={form.context}>
-      <form action={submitAction} {...getFormProps(form)}>
-        {form.errors && <Alert severity="error">{form.errors}</Alert>}
+    <form onSubmit={handleSubmit(onSubmit)}>
+      <Stack spacing={4} marginY={4}>
+        <FormControl required>
+          <FormLabel htmlFor="title">タイトル</FormLabel>
+          <Controller
+            name="title"
+            defaultValue=""
+            control={control}
+            render={({ field, fieldState: { error } }) => (
+              <TextField {...field} error={!!error} helperText={error?.message} />
+            )}
+          />
+        </FormControl>
+        <Controller
+          name="content"
+          defaultValue=""
+          control={control}
+          render={({ field, fieldState: { error } }) => (
+            <FormControl>
+              <FormLabel htmlFor="content">本文</FormLabel>
+              <TextField {...field} multiline rows={4} error={!!error} helperText={error?.message} />
+            </FormControl>
+          )}
+        />
+        <Controller
+          name="published"
+          defaultValue={false}
+          control={control}
+          render={({ field }) => (
+            <FormControl required>
+              <FormLabel htmlFor="published">公開</FormLabel>
+              <Switch checked={field.value} onChange={field.onChange} />
+            </FormControl>
+          )}
+        />
+        <Controller
+          name="authorId"
+          defaultValue=""
+          control={control}
+          render={({ field, fieldState: { error } }) => (
+            <FormControl error={!!error}>
+              <FormLabel htmlFor="authorId">投稿者</FormLabel>
+              <Select {...field}>
+                {users.map((item) => (
+                  <MenuItem key={item.id} value={item.id}>
+                    {item.name}
+                  </MenuItem>
+                ))}
+              </Select>
+              <FormHelperText>{error?.message}</FormHelperText>
+            </FormControl>
+          )}
+        />
+        <Controller
+          name="categoryId"
+          defaultValue={env.NEXT_PUBLIC_DEFAULT_CATEGORY_ID}
+          control={control}
+          render={({ field, fieldState: { error } }) => (
+            <FormControl required error={!!error}>
+              <FormLabel htmlFor="categoryId">カテゴリー</FormLabel>
+              <Select {...field}>
+                {categories.map((item) => (
+                  <MenuItem key={item.id} value={item.id}>
+                    {item.name}
+                  </MenuItem>
+                ))}
+              </Select>
+              <FormHelperText>{error?.message}</FormHelperText>
+            </FormControl>
+          )}
+        />
+        <Controller
+          name="tagIds"
+          defaultValue={[]}
+          control={control}
+          render={({ field, fieldState: { error } }) => (
+            <FormControl error={!!error}>
+              <FormLabel htmlFor="tagIds">タグ</FormLabel>
+              <Stack spacing={2} direction="row">
+                {tags.map((tag, index) => (
+                  <div key={tag.id}>
+                    <FormLabel>{tag.name}</FormLabel>
+                    <Checkbox
+                      name={`tagIds.${index}`}
+                      value={tag.id}
+                      checked={field.value.includes(tag.id)}
+                      onChange={handleChange}
+                    />
+                  </div>
+                ))}
+              </Stack>
+              <FormHelperText>{error?.message}</FormHelperText>
+            </FormControl>
+          )}
+        />
+      </Stack>
 
-        <Stack spacing={4} marginY={4}>
-          <input {...getInputProps(fields.id, { type: 'text' })} hidden />
-          <FormControl required>
-            <FormLabel htmlFor={fields.title.name}>タイトル</FormLabel>
-            <TextField
-              {...getInputProps(fields.title, { type: 'text' })}
-              error={!fields.title.valid}
-              helperText={fields.title.errors}
-            />
-          </FormControl>
-
-          <FormControl>
-            <FormLabel htmlFor={fields.content.name}>本文</FormLabel>
-            <TextField
-              {...getInputProps(fields.content, { type: 'text' })}
-              multiline
-              rows={10}
-              error={!fields.content.valid}
-              helperText={fields.content.errors}
-            />
-          </FormControl>
-
-          <FormControl>
-            <FormLabel htmlFor={fields.published.name}>公開</FormLabel>
-            <Switch
-              {...getInputProps(fields.published, { type: 'checkbox' })}
-              defaultChecked={fields.published.initialValue === 'on'}
-            />
-          </FormControl>
-
-          <FormControl required error={!fields.authorId.valid}>
-            <SelectUser label="投稿者" name={fields.authorId.name} required={false} users={users} />
-          </FormControl>
-
-          <FormControl error={!fields.categoryId.valid}>
-            <SelectCategory
-              label="カテゴリー"
-              name={fields.categoryId.name}
-              required
-              categories={categories}
-            />
-          </FormControl>
-
-          <FormControl error={!fields.tagIds.valid}>
-            <FormLabel htmlFor={fields.tagIds.name}>タグ</FormLabel>
-            <Stack spacing={2} direction="row">
-              {tags.map((tag) => (
-                <div key={tag.id}>
-                  <FormLabel>{tag.name}</FormLabel>
-                  <Checkbox
-                    name="tagIds"
-                    value={tag.id}
-                    defaultChecked={
-                      fields.tagIds.initialValue && Array.isArray(fields.tagIds.initialValue)
-                        ? fields.tagIds.initialValue.includes(tag.id.toString())
-                        : fields.tagIds.initialValue === tag.id.toString()
-                    }
-                  />
-                </div>
-              ))}
-            </Stack>
-          </FormControl>
-        </Stack>
-
-        <Button type="submit" variant="contained" loading={isPending}>
-          保存
-        </Button>
-      </form>
-    </FormProvider>
+      <Button type="submit" variant="contained" loading={formState.isSubmitting}>
+        保存
+      </Button>
+    </form>
   );
 };

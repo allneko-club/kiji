@@ -1,4 +1,4 @@
-import { Role, RoleFilterValues } from '@/lib/users';
+import { Role } from '@/lib/users';
 
 export const cleanOrder = (order: string | null | undefined) => {
   if (order === 'name') {
@@ -10,9 +10,7 @@ export const cleanOrder = (order: string | null | undefined) => {
   }
 };
 
-// なぜかcleanRole()の戻り値がstringに推論されてしまうため明示的に定義する
-type CleanRole = '' | RoleFilterValues;
-export const cleanRole = (role: number | undefined): CleanRole => {
+export const cleanRole = (role: number | undefined): string => {
   switch (role) {
     case Role.ADMIN:
       return '0';

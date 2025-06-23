@@ -1,7 +1,7 @@
 'use client';
 
 import { updateQueryParams } from '@/lib/query-params';
-import { RoleFilterValues, getRoleLabel } from '@/lib/users';
+import { Role, getRoleLabel } from '@/lib/users';
 import { zodResolver } from '@hookform/resolvers/zod';
 import Button from '@mui/material/Button';
 import FormControl from '@mui/material/FormControl';
@@ -15,7 +15,7 @@ import Typography from '@mui/material/Typography';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import 'dayjs/locale/de';
+import 'dayjs/locale/ja';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import * as React from 'react';
 import { Controller, useForm } from 'react-hook-form';
@@ -25,7 +25,7 @@ const postFormSchema = z.object({
   id: z.string().optional(),
   name: z.string().optional(),
   email: z.string().optional(),
-  role: z.union([z.literal(''), z.enum(RoleFilterValues)]),
+  role: z.number().optional(),
   registeredFrom: z.date().optional(),
   registeredTo: z.date().optional(),
 });
@@ -85,11 +85,8 @@ export default function UsersFilter({ defaultValues }: Props) {
                 name="role"
                 control={control}
                 render={({ field }) => (
-                  <Select
-                    defaultValue={defaultValues.role}
-                    value={field.value}
-                    onChange={(e) => field.onChange(e.target.value)}>
-                    {Object.keys(RoleFilterValues).map((role) => (
+                  <Select {...field}>
+                    {Object.keys(Role).map((role) => (
                       <MenuItem key={role} value={role}>
                         {getRoleLabel(Number(role))}
                       </MenuItem>
@@ -131,7 +128,7 @@ export default function UsersFilter({ defaultValues }: Props) {
                 id: '',
                 name: '',
                 email: '',
-                role: '',
+                role: undefined,
                 registeredFrom: undefined,
                 registeredTo: undefined,
               });

@@ -1,20 +1,30 @@
 import { prisma } from '@/lib/prisma';
 import { BaseSearch } from '@/types/requests';
+import { Prisma } from '@prisma/client';
 
 type GetPostsParams = {
   authorId?: string;
   published?: boolean;
-  title?: string;
+  query?: string;
 } & BaseSearch;
 
 export const getPosts = async (params: GetPostsParams) => {
-  const where = {
+  const where: Prisma.PostWhereInput = {
     authorId: params.authorId,
     published: params.published,
-    title: {
-      contains: params.title,
-    },
   };
+  if (params.query?.length) {
+    where.OR = [
+      {
+        title: {
+          contains: params.query,
+        },
+        content: {
+          contains: params.query,
+        },
+      },
+    ];
+  }
 
   const [posts, total] = await Promise.all([
     prisma.post.findMany({
