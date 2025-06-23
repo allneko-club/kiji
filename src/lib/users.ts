@@ -4,8 +4,6 @@ export const Role = {
   USER: 1,
 } as const;
 export type Role = (typeof Role)[keyof typeof Role];
-export const RoleFilterValues = ['0', '1'] as const;
-export type RoleFilterValues = (typeof RoleFilterValues)[number];
 
 export function getRoleLabel(role: number) {
   switch (role) {

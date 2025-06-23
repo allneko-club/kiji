@@ -1,110 +1,73 @@
 'use server';
 
-import { isAdmin } from '@/app/admin/utils';
-import { auth } from '@/auth';
-import { paths } from '@/config/paths';
-import { DEFAULT_CATEGORY_ID } from '@/lib/consts';
-import { DatabaseError } from '@/lib/errors';
+import { adminActionClient } from '@/lib/action-client';
+import { env } from '@/lib/env';
+import { DatabaseError, ResourceNotFoundError } from '@/lib/errors';
 import { Prisma, prisma } from '@/lib/prisma';
-import { ZCategory, ZDeleteCategory } from '@/schemas/category';
-import { parseWithZod } from '@conform-to/zod';
-import { redirect } from 'next/navigation';
+import { getCategory } from '@/models/category';
+import { ZCategory } from '@/schemas/category';
+import { ZId } from '@/schemas/common';
+import { returnValidationErrors } from 'next-safe-action';
+import { z } from 'zod';
 
-export async function createCategory(prevState: unknown, formData: FormData) {
-  const session = await auth();
-
-  if (!isAdmin(session?.user)) {
-    redirect(paths.auth.login.getHref());
-  }
-
-  const submission = parseWithZod(formData, {
-    schema: ZCategory,
-  });
-
-  if (submission.status !== 'success') {
-    return submission.reply();
-  }
-
+export const createCategory = adminActionClient.inputSchema(ZCategory).action(async ({ parsedInput }) => {
   try {
-    await prisma.category.create({ data: submission.value });
+    return await prisma.category.create({ data: parsedInput });
   } catch (e) {
     if (e instanceof Prisma.PrismaClientKnownRequestError) {
       if (e.code === 'P2002') {
-        return submission.reply({ formErrors: ['スラッグの値は一意にして下さい。'] });
+        return returnValidationErrors(ZCategory, { _errors: ['スラッグの値は一意にして下さい'] });
       } else {
         throw new DatabaseError(e.message);
       }
     }
     throw e;
   }
+});
 
-  redirect(paths.admin.categories.getHref());
-}
-
-export async function updateCategory(prevState: unknown, formData: FormData) {
-  const session = await auth();
-
-  if (!isAdmin(session?.user)) {
-    redirect(paths.auth.login.getHref());
-  }
-
-  const submission = parseWithZod(formData, {
-    schema: ZCategory,
-  });
-
-  if (submission.status !== 'success') {
-    return submission.reply();
-  }
-
+export const updateCategory = adminActionClient.inputSchema(ZCategory).action(async ({ parsedInput }) => {
   try {
-    const id = Number(formData.get('id') as string);
+    const id = parsedInput.id!;
+    const category = await getCategory(id);
+    if (!category) {
+      throw new ResourceNotFoundError('Category', id);
+    }
 
-    await prisma.category.update({
-      where: { id: id },
-      data: submission.value,
+    return await prisma.category.update({
+      where: { id },
+      data: parsedInput,
     });
   } catch (e) {
     if (e instanceof Prisma.PrismaClientKnownRequestError) {
       if (e.code === 'P2002') {
-        return submission.reply({ formErrors: ['スラッグの値は一意にして下さい。'] });
-      } else if (e.code === 'P2025') {
-        return submission.reply({ formErrors: ['このカテゴリーは既に削除されています。'] });
+        return returnValidationErrors(ZCategory, { _errors: ['スラッグの値は一意にして下さい'] });
       } else {
         throw new DatabaseError(e.message);
       }
     }
     throw e;
   }
+});
 
-  redirect(paths.admin.categories.getHref());
-}
+const ZDeleteCategory = z.object({ id: ZId });
 
-export async function deleteCategory(prevState: unknown, formData: FormData) {
-  const id = Number(formData.get('id') as string);
-  const session = await auth();
+export const deleteCategory = adminActionClient
+  .inputSchema(ZDeleteCategory)
+  .action(async ({ parsedInput }) => {
+    try {
+      await prisma.$transaction([
+        prisma.post.updateMany({
+          where: { categoryId: parsedInput.id },
+          data: { categoryId: env.NEXT_PUBLIC_DEFAULT_CATEGORY_ID },
+        }),
+        prisma.category.delete({ where: { id: parsedInput.id } }),
+      ]);
+      return true;
+    } catch (e) {
+      if (e instanceof Prisma.PrismaClientKnownRequestError) {
+        throw new DatabaseError(e.message);
+      }
 
-  if (!isAdmin(session?.user)) {
-    redirect(paths.auth.login.getHref());
-  }
-
-  const submission = parseWithZod(formData, {
-    schema: ZDeleteCategory,
+      throw e;
+    }
   });
-
-  if (submission.status !== 'success') {
-    return submission.reply();
-  } else if (submission.value.id === DEFAULT_CATEGORY_ID) {
-    // todo 動的にスキーマを作った方が良いかも
-    return submission.reply({ formErrors: ['デフォルトのカテゴリーは削除できません。'] });
-  }
-
-  try {
-    await prisma.$transaction([
-      prisma.post.updateMany({ where: { categoryId: id }, data: { categoryId: DEFAULT_CATEGORY_ID } }),
-      prisma.category.delete({ where: { id: id } }),
-    ]);
-  } catch {
-    /* RecordNotFound 例外が発生しても無視する */
-  }
-  return Promise.resolve({ status: 'success' });
-}

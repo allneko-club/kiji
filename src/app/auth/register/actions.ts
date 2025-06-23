@@ -1,30 +1,32 @@
 'use server';
 
-import { paths } from '@/config/paths';
-import { prisma } from '@/lib/prisma';
+import { actionClient } from '@/lib/action-client';
+import { DatabaseError } from '@/lib/errors';
+import { Prisma, prisma } from '@/lib/prisma';
 import { Role } from '@/lib/users';
 import { hash } from '@/lib/utils';
-import { ZRegister } from '@/schemas/user';
-import { parseWithZod } from '@conform-to/zod';
-import { redirect } from 'next/navigation';
+import { ZRegister, ZUpdateUser } from '@/schemas/user';
+import { returnValidationErrors } from 'next-safe-action';
 
-export async function register(prevState: unknown, formData: FormData) {
-  const submission = parseWithZod(formData, {
-    schema: ZRegister,
-  });
-
-  if (submission.status !== 'success') {
-    return submission.reply({ formErrors: ['入力に誤りがあります。'] });
+export const register = actionClient.inputSchema(ZRegister).action(async ({ parsedInput }) => {
+  try {
+    await prisma.user.create({
+      data: {
+        name: parsedInput.name,
+        email: parsedInput.email,
+        role: Role.USER,
+        password: hash(parsedInput.password),
+      },
+    });
+    return true;
+  } catch (e) {
+    if (e instanceof Prisma.PrismaClientKnownRequestError) {
+      if (e.code === 'P2002') {
+        return returnValidationErrors(ZUpdateUser, { _errors: ['このメールアドレスは使用されています'] });
+      } else {
+        throw new DatabaseError(e.message);
+      }
+    }
+    throw e;
   }
-
-  await prisma.user.create({
-    data: {
-      name: submission.value.name,
-      email: submission.value.email,
-      role: Role.USER,
-      password: hash(submission.value.password),
-    },
-  });
-
-  redirect(paths.auth.login.getHref());
-}
+});

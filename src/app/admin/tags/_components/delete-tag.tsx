@@ -19,17 +19,16 @@ type DeleteTagProps = {
 };
 
 export function DeleteTag({ id }: DeleteTagProps) {
+  const router = useRouter();
   const [open, setOpen] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
-  const handleClose = () => setOpen(false);
-  const router = useRouter();
 
   const handleSubmit = async () => {
     setIsDeleting(true);
     const response = await deleteTag({ id });
 
     if (response?.data) {
-      toast.success('タグを削除しました');
+      toast.success('削除しました');
     } else {
       toast.error('削除できなかったため、再度お試しください');
     }
@@ -37,13 +36,14 @@ export function DeleteTag({ id }: DeleteTagProps) {
     setOpen(false);
     setIsDeleting(false);
   };
+
   return (
     <div>
       <IconButton onClick={() => setOpen(true)}>
         <DeleteIcon />
       </IconButton>
-      <Dialog open={open} onClose={handleClose}>
-        <DialogTitle id="delete-tag">削除確認</DialogTitle>
+      <Dialog open={open} onClose={() => setOpen(false)}>
+        <DialogTitle>削除確認</DialogTitle>
         <DialogContent>
           <DialogContentText>タグを削除してもよろしいですか？</DialogContentText>
         </DialogContent>

@@ -1,78 +1,109 @@
 'use client';
 
 import { updateUser } from '@/app/admin/users/actions';
-import { UsePreventFormReset } from '@/hooks/use-prevent-form-reset';
-import { RoleFilterValues, getRoleLabel } from '@/lib/users';
-import { ZUpdateUser } from '@/schemas/user';
-import { getFormProps, getInputProps, useForm } from '@conform-to/react';
-import { parseWithZod } from '@conform-to/zod';
-import Alert from '@mui/material/Alert';
+import { paths } from '@/config/paths';
+import { Role, getRoleLabel } from '@/lib/users';
+import { getFormattedErrorMessage } from '@/lib/utils';
+import { TUpdateUser, ZUpdateUser } from '@/schemas/user';
+import { zodResolver } from '@hookform/resolvers/zod';
 import Button from '@mui/material/Button';
 import FormControl from '@mui/material/FormControl';
+import FormHelperText from '@mui/material/FormHelperText';
 import FormLabel from '@mui/material/FormLabel';
 import MenuItem from '@mui/material/MenuItem';
 import Select from '@mui/material/Select';
 import Stack from '@mui/material/Stack';
 import TextField from '@mui/material/TextField';
 import { User } from '@prisma/client';
+import { useRouter } from 'next/navigation';
 import * as React from 'react';
-import { useActionState } from 'react';
+import { Controller, SubmitHandler, useForm } from 'react-hook-form';
+import { toast } from 'react-toastify';
 
-export const UserForm = ({ user }: { user: User }) => {
-  const [lastResult, submitAction, isPending] = useActionState(updateUser, undefined);
-  const [form, fields] = useForm({
-    lastResult,
-    onValidate({ formData }) {
-      return parseWithZod(formData, { schema: ZUpdateUser });
-    },
-    defaultValue: user,
+type Props = {
+  user: User;
+};
+
+export const UserForm = ({ user }: Props) => {
+  const router = useRouter();
+  const { control, handleSubmit, formState } = useForm<TUpdateUser>({
+    defaultValues: user,
+    resolver: zodResolver(ZUpdateUser),
+    mode: 'onChange',
   });
-
-  UsePreventFormReset({ formId: form.id });
+  const onSubmit: SubmitHandler<TUpdateUser> = async (data) => {
+    try {
+      const response = await updateUser(data);
+      if (response?.data) {
+        toast.success('保存しました');
+        router.push(paths.admin.users.getHref());
+      } else {
+        const errorMessage = getFormattedErrorMessage(response);
+        toast.error(errorMessage);
+      }
+    } catch (err) {
+      console.error(err);
+      toast.error('エラーが発生しました');
+    }
+  };
 
   return (
-    <form action={submitAction} {...getFormProps(form)}>
-      {form.errors && <Alert severity="error">{form.errors}</Alert>}
-
+    <form onSubmit={handleSubmit(onSubmit)}>
       <Stack spacing={4} marginY={4}>
-        <input {...getInputProps(fields.id, { type: 'text' })} hidden />
-        <FormControl required>
-          <FormLabel htmlFor={fields.name.name}>名前</FormLabel>
-          <TextField
-            {...getInputProps(fields.name, { type: 'text' })}
-            error={!fields.name.valid}
-            helperText={fields.name.errors}
-          />
-        </FormControl>
-        <FormControl required>
-          <FormLabel htmlFor={fields.email.name}>メールアドレス</FormLabel>
-          <TextField
-            {...getInputProps(fields.email, { type: 'text' })}
-            error={!fields.email.valid}
-            helperText={fields.email.errors}
-          />
-        </FormControl>
-        <FormControl>
-          <FormLabel htmlFor={fields.image.name}>画像URL</FormLabel>
-          <TextField
-            {...getInputProps(fields.image, { type: 'url' })}
-            error={!fields.image.valid}
-            helperText={fields.image.errors}
-          />
-        </FormControl>
-        <FormControl error={!fields.role.valid}>
-          <FormLabel htmlFor={fields.role.name}>権限</FormLabel>
-          <Select name={fields.role.name} defaultValue={fields.role.initialValue}>
-            {Object.keys(RoleFilterValues).map((role) => (
-              <MenuItem key={role} value={role}>
-                {getRoleLabel(Number(role))}
-              </MenuItem>
-            ))}
-          </Select>
-        </FormControl>
+        <Controller
+          name="name"
+          defaultValue=""
+          control={control}
+          render={({ field, fieldState: { error } }) => (
+            <FormControl required>
+              <FormLabel htmlFor="name">ユーザー名</FormLabel>
+              <TextField {...field} error={!!error} helperText={error?.message} />
+            </FormControl>
+          )}
+        />
+        <Controller
+          name="email"
+          defaultValue=""
+          control={control}
+          render={({ field, fieldState: { error } }) => (
+            <FormControl required>
+              <FormLabel htmlFor="email">メールアドレス</FormLabel>
+              <TextField {...field} error={!!error} helperText={error?.message} />
+            </FormControl>
+          )}
+        />
+        <Controller
+          name="image"
+          defaultValue=""
+          control={control}
+          render={({ field, fieldState: { error } }) => (
+            <FormControl>
+              <FormLabel htmlFor="image">画像URL</FormLabel>
+              <TextField {...field} error={!!error} helperText={error?.message} />
+            </FormControl>
+          )}
+        />
+        <Controller
+          name="role"
+          defaultValue={Role.USER}
+          control={control}
+          render={({ field, fieldState: { error } }) => (
+            <FormControl error={!!error}>
+              <FormLabel htmlFor="role">権限</FormLabel>
+              <Select {...field}>
+                {Object.values(Role).map((role) => (
+                  <MenuItem key={role} value={role}>
+                    {getRoleLabel(Number(role))}
+                  </MenuItem>
+                ))}
+              </Select>
+              <FormHelperText>{error?.message}</FormHelperText>
+            </FormControl>
+          )}
+        />
       </Stack>
 
-      <Button type="submit" variant="contained" loading={isPending}>
+      <Button type="submit" variant="contained" loading={formState.isSubmitting}>
         保存
       </Button>
     </form>

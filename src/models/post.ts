@@ -1,5 +1,6 @@
 import { prisma } from '@/lib/prisma';
 import { BaseSearch } from '@/types/requests';
+import { Prisma } from '@prisma/client';
 
 type GetPostsParams = {
   authorId?: string;
@@ -8,10 +9,12 @@ type GetPostsParams = {
 } & BaseSearch;
 
 export const getPosts = async (params: GetPostsParams) => {
-  const where = {
+  const where: Prisma.PostWhereInput = {
     authorId: params.authorId,
     published: params.published,
-    OR: [
+  };
+  if (params.query?.length) {
+    where.OR = [
       {
         title: {
           contains: params.query,
@@ -20,8 +23,8 @@ export const getPosts = async (params: GetPostsParams) => {
           contains: params.query,
         },
       },
-    ],
-  };
+    ];
+  }
 
   const [posts, total] = await Promise.all([
     prisma.post.findMany({

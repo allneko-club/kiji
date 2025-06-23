@@ -1,8 +1,9 @@
 'use server';
 
 import { adminActionClient } from '@/lib/action-client';
-import { DatabaseError } from '@/lib/errors';
+import { DatabaseError, ResourceNotFoundError } from '@/lib/errors';
 import { Prisma, prisma } from '@/lib/prisma';
+import { getTag } from '@/models/tag';
 import { ZId } from '@/schemas/common';
 import { ZTag } from '@/schemas/tag';
 import { returnValidationErrors } from 'next-safe-action';
@@ -25,16 +26,20 @@ export const createTag = adminActionClient.inputSchema(ZTag).action(async ({ par
 
 export const updateTag = adminActionClient.inputSchema(ZTag).action(async ({ parsedInput }) => {
   try {
+    const id = parsedInput.id!;
+    const tag = await getTag(id);
+    if (!tag) {
+      throw new ResourceNotFoundError('Tag', id);
+    }
+
     return await prisma.tag.update({
-      where: { id: parsedInput.id },
+      where: { id },
       data: parsedInput,
     });
   } catch (e) {
     if (e instanceof Prisma.PrismaClientKnownRequestError) {
       if (e.code === 'P2002') {
         return returnValidationErrors(ZTag, { _errors: ['スラッグの値は一意にして下さい'] });
-      } else if (e.code === 'P2025') {
-        return returnValidationErrors(ZTag, { _errors: ['このタグは既に削除されています'] });
       } else {
         throw new DatabaseError(e.message);
       }

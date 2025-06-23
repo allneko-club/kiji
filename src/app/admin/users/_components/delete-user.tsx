@@ -1,7 +1,6 @@
 'use client';
 
 import { deleteUser } from '@/app/admin/users/actions';
-import { paths } from '@/config/paths';
 import DeleteIcon from '@mui/icons-material/Delete';
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
@@ -10,46 +9,45 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import IconButton from '@mui/material/IconButton';
-import { redirect } from 'next/navigation';
-import * as React from 'react';
-import { useActionState } from 'react';
+import { useRouter } from 'next/navigation';
+import { useState } from 'react';
 import { toast } from 'react-toastify';
 
 export function DeleteUser({ id }: { id: string }) {
-  const [, action, isPending] = useActionState(deleteUser, null);
-  const [open, setOpen] = React.useState(false);
-  const handleClickOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
+  const router = useRouter();
+  const [open, setOpen] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
+
+  const handleSubmit = async () => {
+    setIsDeleting(true);
+    const response = await deleteUser({ id });
+
+    if (response?.data) {
+      toast.success('削除しました');
+    } else {
+      toast.error('削除できなかったため、再度お試しください');
+    }
+    router.refresh();
+    setOpen(false);
+    setIsDeleting(false);
+  };
 
   return (
     <div>
-      <IconButton aria-label="delete" color="error" onClick={handleClickOpen}>
+      <IconButton color="error" onClick={() => setOpen(true)}>
         <DeleteIcon />
       </IconButton>
-      <Dialog
-        open={open}
-        onClose={handleClose}
-        aria-labelledby="alert-delete-post"
-        aria-describedby="alert-delete-post">
-        <form
-          action={(formData) => {
-            action(formData);
-            handleClose();
-            toast('削除しました');
-            redirect(paths.admin.users.getHref());
-          }}>
-          <input name="id" hidden defaultValue={id} />
-          <DialogTitle id="delete-post">削除確認</DialogTitle>
-          <DialogContent>
-            <DialogContentText id="alert-delete-post">ユーザーを削除してもよろしいですか？</DialogContentText>
-          </DialogContent>
-          <DialogActions>
-            <Button onClick={handleClose}>キャンセル</Button>
-            <Button type="submit" color="error" loading={isPending} autoFocus>
-              削除
-            </Button>
-          </DialogActions>
-        </form>
+      <Dialog open={open} onClose={() => setOpen(false)}>
+        <DialogTitle id="delete-post">削除確認</DialogTitle>
+        <DialogContent>
+          <DialogContentText>ユーザーを削除してもよろしいですか？</DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setOpen(false)}>キャンセル</Button>
+          <Button color="error" loading={isDeleting} autoFocus onClick={handleSubmit}>
+            削除
+          </Button>
+        </DialogActions>
       </Dialog>
     </div>
   );

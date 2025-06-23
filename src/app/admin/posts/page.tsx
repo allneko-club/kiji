@@ -1,5 +1,4 @@
 import { PostsTable } from '@/app/admin/posts/_components/posts-table';
-import { auth } from '@/auth';
 import { paths } from '@/config/paths';
 import { POST_LIMIT } from '@/lib/consts';
 import { getPosts } from '@/models/post';
@@ -8,10 +7,6 @@ import Typography from '@mui/material/Typography';
 import NextLink from 'next/link';
 
 export default async function Page() {
-  const session = await auth();
-
-  if (!session?.user) return null;
-
   const params = { page: 1, perPage: POST_LIMIT };
   const { posts, total } = await getPosts(params);
 

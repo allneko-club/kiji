@@ -27,7 +27,7 @@ export const TagForm = ({ tag }: { tag?: Tag }) => {
     try {
       const response = tag ? await updateTag(data) : await createTag(data);
       if (response?.data) {
-        toast.success('タグを保存しました');
+        toast.success('保存しました');
         router.push(paths.admin.tags.getHref());
       } else {
         const errorMessage = getFormattedErrorMessage(response);
@@ -44,37 +44,34 @@ export const TagForm = ({ tag }: { tag?: Tag }) => {
       <Stack spacing={4} marginY={4}>
         <Controller
           name="name"
+          defaultValue=""
           control={control}
-          render={({ field, formState: { errors } }) => (
+          render={({ field, fieldState: { error } }) => (
             <FormControl required>
               <FormLabel htmlFor="name">名前</FormLabel>
-              <TextField {...field} error={!!errors.name} helperText={errors.name?.message} />
+              <TextField {...field} error={!!error} helperText={error?.message} />
             </FormControl>
           )}
         />
         <Controller
           name="slug"
+          defaultValue=""
           control={control}
-          render={({ field, formState: { errors } }) => (
+          render={({ field, fieldState: { error } }) => (
             <FormControl required>
               <FormLabel htmlFor="slug">スラッグ</FormLabel>
-              <TextField {...field} error={!!errors.slug} helperText={errors.slug?.message} />
+              <TextField {...field} error={!!error} helperText={error?.message} />
             </FormControl>
           )}
         />
         <Controller
           name="description"
+          defaultValue=""
           control={control}
-          render={({ field, formState: { errors } }) => (
+          render={({ field, fieldState: { error } }) => (
             <FormControl>
               <FormLabel htmlFor="description">説明</FormLabel>
-              <TextField
-                {...field}
-                multiline
-                rows={4}
-                error={!!errors.description}
-                helperText={errors.description?.message}
-              />
+              <TextField {...field} multiline rows={4} error={!!error} helperText={error?.message} />
             </FormControl>
           )}
         />

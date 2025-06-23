@@ -21,12 +21,7 @@ export default async function Page({ params }: Props) {
     notFound();
   }
   const postFixed = {
-    id: post.id,
-    title: post.title,
-    content: post.content,
-    published: post.published,
-    authorId: post.author.id,
-    categoryId: post.category.id,
+    ...post,
     tagIds: post.tags.map((tag) => tag.id),
   };
 

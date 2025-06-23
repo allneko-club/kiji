@@ -1,9 +1,9 @@
 class ResourceNotFoundError extends Error {
   statusCode = 404;
-  resourceId: string | null;
+  resourceId: number | string | null;
   resourceType: string;
 
-  constructor(resource: string, id: string | null) {
+  constructor(resource: string, id: number | string | null) {
     super(id ? `${resource} with ID ${id} not found` : `${resource} not found`);
     this.name = 'ResourceNotFoundError';
     this.resourceType = resource;
