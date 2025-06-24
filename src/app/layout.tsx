@@ -1,4 +1,3 @@
-import { AppProvider } from '@/app/provider';
 import { auth } from '@/auth';
 import Footer from '@/components/layouts/footer';
 import Header from '@/components/layouts/header';
@@ -9,7 +8,10 @@ import Container from '@mui/material/Container';
 import CssBaseline from '@mui/material/CssBaseline';
 import { ThemeProvider } from '@mui/material/styles';
 import type { Metadata } from 'next';
+import { SessionProvider } from 'next-auth/react';
 import { ReactNode } from 'react';
+import * as React from 'react';
+import { ToastContainer } from 'react-toastify';
 
 export async function generateMetadata(): Promise<Metadata> {
   return {
@@ -46,7 +48,7 @@ export default async function RootLayout({ children }: { children: ReactNode }) 
     <html lang="ja" suppressHydrationWarning>
       <body>
         <AppRouterCacheProvider>
-          <AppProvider>
+          <SessionProvider>
             <ThemeProvider theme={theme}>
               <CssBaseline enableColorScheme />
               <Header logInUser={user ? { name: user.name, email: user.email, image: user.image } : null} />
@@ -58,7 +60,8 @@ export default async function RootLayout({ children }: { children: ReactNode }) 
               </Container>
               <Footer />
             </ThemeProvider>
-          </AppProvider>
+            <ToastContainer autoClose={2000} />
+          </SessionProvider>
         </AppRouterCacheProvider>
       </body>
     </html>
