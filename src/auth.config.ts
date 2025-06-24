@@ -35,7 +35,7 @@ export const authConfig = {
     },
 
     jwt({ token, user }) {
-      if (user.id) {
+      if (user?.id) {
         // User is available during sign-in
         token.id = user.id;
       }
@@ -67,6 +67,7 @@ export const authConfig = {
       async authorize(credentials) {
         try {
           const { email, password } = await loginInputSchema.parseAsync(credentials);
+          console.log('found---------');
 
           // ユーザーが存在しない場合はnull, 存在する場合はユーザーデータのオブジェクトを返す
           return await getUserByCredentials(email, password);

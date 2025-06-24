@@ -8,7 +8,7 @@ export const hash = (str: string) => {
   return String(hash >>> 0);
 };
 
-export const getFormattedErrorMessage = (result): string => {
+export const getFormattedErrorMessage = (result: any): string => {
   let message = '';
 
   if (result.serverError) {
