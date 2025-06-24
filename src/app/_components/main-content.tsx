@@ -18,63 +18,6 @@ import Typography from '@mui/material/Typography';
 import { styled } from '@mui/material/styles';
 import * as React from 'react';
 
-const cardData = [
-  {
-    img: 'https://picsum.photos/800/450?random=1',
-    tag: 'エンジニア',
-    title: '最先端のツールでソフトウェア開発に革命を起こす',
-    description:
-      '当社の最新のエンジニアリングツールは、ワークフローを効率化し、生産性を向上させるように設計されています。これらのイノベーションがソフトウェア開発環境をどのように変革しているかをご覧ください。',
-    authors: [
-      { name: 'Remy Sharp', avatar: '/avatar-sample.png' },
-      { name: 'Travis Howard', avatar: '/avatar-sample.png' },
-    ],
-  },
-  {
-    img: 'https://picsum.photos/800/450?random=2',
-    tag: '商品',
-    title: '成功を導く革新的な製品機能',
-    description:
-      '企業の目標達成を支援する最新製品リリースの主な機能をご覧ください。ユーザーフレンドリーなインターフェースから堅牢な機能まで、当社製品が際立つ理由をご覧ください。',
-    authors: [{ name: 'Erica Johns', avatar: '/avatar-sample.png' }],
-  },
-  {
-    img: 'https://picsum.photos/800/450?random=3',
-    tag: 'デザイン',
-    title: '未来のためのデザイン：トレンドと洞察',
-    description:
-      '最新のデザイントレンドとインサイトを活用して、常に時代の先を行く。当社のデザインチームが、直感的で視覚的に魅力的なユーザーエクスペリエンスを創造するための専門知識を共有します。',
-    authors: [{ name: 'Kate Morrison', avatar: '/avatar-sample.png' }],
-  },
-  {
-    img: 'https://picsum.photos/800/450?random=4',
-    tag: '企業',
-    title: '当社の歩み：マイルストーンと成果',
-    description:
-      '当社の歩みと、その過程で達成したマイルストーンをご覧ください。小さな会社から業界のリーダーへと成長し、成功へと至った当社のストーリーをご覧ください。',
-    authors: [{ name: 'Cindy Baker', avatar: '' }],
-  },
-  {
-    img: 'https://picsum.photos/800/450?random=45',
-    tag: 'エンジニア',
-    title: '持続可能なエンジニアリングソリューションの先駆者',
-    description:
-      '当社の持続可能性への取り組みと、より環境に優しい未来を創造するために実践している革新的なエンジニアリングソリューションについてご紹介します。当社の環境に配慮した取り組みがもたらす効果をご覧ください。',
-    authors: [
-      { name: 'Agnes Walker', avatar: '' },
-      { name: 'Trevor Henderson', avatar: '/avatar-sample.png' },
-    ],
-  },
-  {
-    img: 'https://picsum.photos/800/450?random=6',
-    tag: '商品',
-    title: '最新の製品アップデートで効率を最大化',
-    description:
-      '最新の製品アップデートは、お客様の効率を最大限に高め、より多くの成果を達成できるよう設計されています。ワークフローを向上させる新機能と改善点の詳細な概要をご覧ください。',
-    authors: [{ name: 'Travis Howard', avatar: '/avatar-sample.png' }],
-  },
-];
-
 const SyledCard = styled(Card)(({ theme }) => ({
   display: 'flex',
   flexDirection: 'column',
@@ -156,7 +99,20 @@ export function Search() {
   );
 }
 
-export default function MainContent() {
+type Props = {
+  posts: {
+    category: string;
+    title: string;
+    content: string;
+    img: string;
+    authors: {
+      name: string;
+      avatar: string;
+    }[];
+  }[];
+};
+
+export default function MainContent({ posts }: Props) {
   const [focusedCardIndex, setFocusedCardIndex] = React.useState<number | null>(null);
 
   const handleFocus = (index: number) => {
@@ -272,7 +228,7 @@ export default function MainContent() {
             <CardMedia
               component="img"
               alt="green iguana"
-              image={cardData[0].img}
+              image={posts[0].img}
               sx={{
                 aspectRatio: '16 / 9',
                 borderBottom: '1px solid',
@@ -281,16 +237,16 @@ export default function MainContent() {
             />
             <SyledCardContent>
               <Typography gutterBottom variant="caption" component="div">
-                {cardData[0].tag}
+                {posts[0].category}
               </Typography>
               <Typography gutterBottom variant="h6" component="div">
-                {cardData[0].title}
+                {posts[0].title}
               </Typography>
               <StyledTypography variant="body2" color="text.secondary" gutterBottom>
-                {cardData[0].description}
+                {posts[0].content}
               </StyledTypography>
             </SyledCardContent>
-            <Author authors={cardData[0].authors} />
+            <Author authors={posts[0].authors} />
           </SyledCard>
         </Grid>
         <Grid size={{ xs: 12, md: 6 }}>
@@ -303,7 +259,7 @@ export default function MainContent() {
             <CardMedia
               component="img"
               alt="green iguana"
-              image={cardData[1].img}
+              image={posts[1].img}
               aspect-ratio="16 / 9"
               sx={{
                 borderBottom: '1px solid',
@@ -312,16 +268,16 @@ export default function MainContent() {
             />
             <SyledCardContent>
               <Typography gutterBottom variant="caption" component="div">
-                {cardData[1].tag}
+                {posts[1].category}
               </Typography>
               <Typography gutterBottom variant="h6" component="div">
-                {cardData[1].title}
+                {posts[1].title}
               </Typography>
               <StyledTypography variant="body2" color="text.secondary" gutterBottom>
-                {cardData[1].description}
+                {posts[1].content}
               </StyledTypography>
             </SyledCardContent>
-            <Author authors={cardData[1].authors} />
+            <Author authors={posts[1].authors} />
           </SyledCard>
         </Grid>
         <Grid size={{ xs: 12, md: 4 }}>
@@ -335,7 +291,7 @@ export default function MainContent() {
             <CardMedia
               component="img"
               alt="green iguana"
-              image={cardData[2].img}
+              image={posts[2].img}
               sx={{
                 height: { sm: 'auto', md: '50%' },
                 aspectRatio: { sm: '16 / 9', md: '' },
@@ -343,16 +299,16 @@ export default function MainContent() {
             />
             <SyledCardContent>
               <Typography gutterBottom variant="caption" component="div">
-                {cardData[2].tag}
+                {posts[2].category}
               </Typography>
               <Typography gutterBottom variant="h6" component="div">
-                {cardData[2].title}
+                {posts[2].title}
               </Typography>
               <StyledTypography variant="body2" color="text.secondary" gutterBottom>
-                {cardData[2].description}
+                {posts[2].content}
               </StyledTypography>
             </SyledCardContent>
-            <Author authors={cardData[2].authors} />
+            <Author authors={posts[2].authors} />
           </SyledCard>
         </Grid>
         <Grid size={{ xs: 12, md: 4 }}>
@@ -373,17 +329,17 @@ export default function MainContent() {
                 }}>
                 <div>
                   <Typography gutterBottom variant="caption" component="div">
-                    {cardData[3].tag}
+                    {posts[3].category}
                   </Typography>
                   <Typography gutterBottom variant="h6" component="div">
-                    {cardData[3].title}
+                    {posts[3].title}
                   </Typography>
                   <StyledTypography variant="body2" color="text.secondary" gutterBottom>
-                    {cardData[3].description}
+                    {posts[3].content}
                   </StyledTypography>
                 </div>
               </SyledCardContent>
-              <Author authors={cardData[3].authors} />
+              <Author authors={posts[3].authors} />
             </SyledCard>
             <SyledCard
               variant="outlined"
@@ -401,17 +357,17 @@ export default function MainContent() {
                 }}>
                 <div>
                   <Typography gutterBottom variant="caption" component="div">
-                    {cardData[4].tag}
+                    {posts[4].category}
                   </Typography>
                   <Typography gutterBottom variant="h6" component="div">
-                    {cardData[4].title}
+                    {posts[4].title}
                   </Typography>
                   <StyledTypography variant="body2" color="text.secondary" gutterBottom>
-                    {cardData[4].description}
+                    {posts[4].content}
                   </StyledTypography>
                 </div>
               </SyledCardContent>
-              <Author authors={cardData[4].authors} />
+              <Author authors={posts[4].authors} />
             </SyledCard>
           </Box>
         </Grid>
@@ -426,7 +382,7 @@ export default function MainContent() {
             <CardMedia
               component="img"
               alt="green iguana"
-              image={cardData[5].img}
+              image={posts[5].img}
               sx={{
                 height: { sm: 'auto', md: '50%' },
                 aspectRatio: { sm: '16 / 9', md: '' },
@@ -434,16 +390,16 @@ export default function MainContent() {
             />
             <SyledCardContent>
               <Typography gutterBottom variant="caption" component="div">
-                {cardData[5].tag}
+                {posts[5].category}
               </Typography>
               <Typography gutterBottom variant="h6" component="div">
-                {cardData[5].title}
+                {posts[5].title}
               </Typography>
               <StyledTypography variant="body2" color="text.secondary" gutterBottom>
-                {cardData[5].description}
+                {posts[5].content}
               </StyledTypography>
             </SyledCardContent>
-            <Author authors={cardData[5].authors} />
+            <Author authors={posts[5].authors} />
           </SyledCard>
         </Grid>
       </Grid>
