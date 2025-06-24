@@ -14,9 +14,6 @@ export const paths = {
     },
     posts: {
       getHref: () => `${adminPath}/posts`,
-      detail: {
-        getHref: (id: string) => `${adminPath}/posts/${id}`,
-      },
       create: {
         getHref: () => `${adminPath}/posts/create`,
       },
