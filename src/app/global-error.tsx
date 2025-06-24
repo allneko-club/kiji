@@ -1,5 +1,7 @@
 'use client';
 
+import Button from '@mui/material/Button';
+import Typography from '@mui/material/Typography';
 import { useEffect } from 'react';
 
 export default function GlobalError({
@@ -18,8 +20,10 @@ export default function GlobalError({
   return (
     <html>
       <body>
-        <h2>Something went wrong!</h2>
-        <button onClick={() => reset()}>Try again</button>
+        <Typography variant="h1">エラーが発生しました :(</Typography>
+        <Button variant="outlined" onClick={() => reset()}>
+          Try again
+        </Button>
       </body>
     </html>
   );

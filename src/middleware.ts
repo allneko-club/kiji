@@ -1,3 +1,4 @@
+// Auth.jsのmiddleware https://authjs.dev/getting-started/session-management/protecting#nextjs-middleware
 export { auth as middleware } from '@/auth';
 
 export const config = {

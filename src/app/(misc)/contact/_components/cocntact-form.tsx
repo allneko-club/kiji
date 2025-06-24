@@ -10,7 +10,6 @@ import FormControl from '@mui/material/FormControl';
 import FormLabel from '@mui/material/FormLabel';
 import Stack from '@mui/material/Stack';
 import TextField from '@mui/material/TextField';
-import Typography from '@mui/material/Typography';
 import { useRouter } from 'next/navigation';
 import * as React from 'react';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
@@ -39,9 +38,6 @@ export default function ContactForm() {
 
   return (
     <>
-      <Typography variant="h1">お問い合わせ</Typography>
-      <Typography>以下のフォームに入力してください。</Typography>
-
       <form onSubmit={handleSubmit(onSubmit)}>
         <Stack spacing={4} marginY={4}>
           <Controller
