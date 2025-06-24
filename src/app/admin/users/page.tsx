@@ -4,7 +4,6 @@ import { cleanOrder, cleanRole } from '@/app/admin/users/clean';
 import SelectLimit from '@/components/select-limit';
 import SelectSort from '@/components/select-sort';
 import { paths } from '@/config/paths';
-import { USERS_LIMIT_LIST } from '@/lib/consts';
 import { cleanOrderBy, cleanPage, cleanPerPage } from '@/lib/query-params';
 import { Role } from '@/lib/users';
 import { getUsersByFilter } from '@/models/user';
@@ -33,6 +32,9 @@ interface SearchParams extends BaseSearch {
   registeredFrom?: string;
   registeredTo?: string;
 }
+
+// ユーザー一覧の表示件数のリスト 要素は1つ以上
+const USERS_LIMIT_LIST = [10, 25, 50];
 
 export default async function Page(props: { searchParams?: Promise<SearchParams> }) {
   const searchParams = await props.searchParams;

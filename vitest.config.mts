@@ -1,15 +1,15 @@
-/// <reference types="vitest" />
 import react from '@vitejs/plugin-react';
 import { loadEnv } from 'vite';
 import tsconfigPaths from 'vite-tsconfig-paths';
 import { defineConfig } from 'vitest/config';
 
+// https://vitejs.dev/config/
 export default defineConfig({
   plugins: [tsconfigPaths(), react()],
   test: {
     environment: 'node',
     exclude: ['node_modules/**', '**/e2e/**'],
-    setupFiles: './tests/vitest-setup.ts',
+    setupFiles: './vitest-setup.ts',
     env: loadEnv('', process.cwd(), ''),
     projects: [
       {
@@ -27,14 +27,18 @@ export default defineConfig({
       reporter: ['text', 'html'],
       include: ['src/**/*.{ts,tsx}'],
       exclude: [
-        '**/middleware.ts',
-        '**/theme/**',
+        'src/lib/constants.ts',
+        'src/lib/env.ts',
+        'src/lib/logger.ts',
+        'src/lib/prisma.ts',
+        'src/theme/**',
+        'src/middleware.ts',
+        // 型
         '**/types/**',
         '**/types.ts',
-        'lib/constants.ts',
-        'lib/env.ts',
-        'lib/logger.ts',
-        'lib/prisma.ts',
+        // テスト系
+        '**/*.test.*',
+        '**/*.mock.*',
       ],
     },
   },

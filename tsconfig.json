@@ -19,7 +19,7 @@
       }
     ],
     "paths": {
-      "@/tests/*": ["./tests/*"],
+      "@/tests/*": ["./src/tests/*"],
       "@/express/*": ["./express/*"],
       "@/*": ["./src/*"]
     }
