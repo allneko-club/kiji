@@ -12,6 +12,9 @@ export const paths = {
         getHref: (id: number) => `${adminPath}/categories/${id}/update`,
       },
     },
+    media: {
+      getHref: () => `${adminPath}/media`,
+    },
     posts: {
       getHref: () => `${adminPath}/posts`,
       create: {
@@ -20,6 +23,9 @@ export const paths = {
       update: {
         getHref: (id: string) => `${adminPath}/posts/${id}/update`,
       },
+    },
+    settings: {
+      getHref: () => `${adminPath}/settings`,
     },
     tags: {
       getHref: () => `${adminPath}/tags`,
