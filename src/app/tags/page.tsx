@@ -21,7 +21,7 @@ export default async function Page() {
         {tags.map((tag) => (
           <TagChip
             key={tag.id}
-            label={`${tag.name} (${tag._count.posts})`}
+            label={`${tag.name} (${tag.count})`}
             href={paths.tags.detail.getHref(tag.slug)}
           />
         ))}

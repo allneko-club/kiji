@@ -6,59 +6,41 @@ generator client {
 }
 
 datasource db {
+  // sqlite以外の場合はString型にtype attributeを付与しないと文字列の長さ制限に引っかかる
   provider = "sqlite"
   url      = env("DATABASE_URL")
 }
 
 model User {
-  id        String    @id @default(cuid())
-  name      String
-  email     String    @unique
-  password  String
-  role      Int
-  image     String    @default("")
-  profile   String    @default("")
-  updatedAt DateTime  @updatedAt
-  createdAt DateTime  @default(now())
-  posts     Post[]
-  Comments   Comment[]
+  id              String    @id @default(cuid())
+  name            String
+  email           String    @unique
+  password        String
+  role            Int
+  image           String    @default("")
+  profile         String    @default("")
+  metaDescription String    @default("")
+  updatedAt       DateTime  @updatedAt
+  createdAt       DateTime  @default(now())
+  posts           Post[]
+  Comments        Comment[]
 }
 
 model Post {
-  id         String   @id @default(cuid())
-  title      String
-  eyeCatch   String   @default("")
-  content    String   @default("")
-  authorId   String
-  author     User     @relation(fields: [authorId], references: [id], onDelete: Cascade)
-  categoryId Int
-  category   Category @relation(fields: [categoryId], references: [id])
-  published  Boolean  @default(false)
-  updatedAt  DateTime @updatedAt
-  createdAt  DateTime @default(now())
-  tags       Tag[]
-  Comments   Comment[]
-}
-
-model Category {
-  id          Int      @id @default(autoincrement())
-  slug        String   @unique
-  name        String   @default("")
-  description String   @default("")
-  image       String   @default("")
-  updatedAt   DateTime @updatedAt
-  createdAt   DateTime @default(now())
-  posts       Post[]
-}
-
-model Tag {
-  id          Int      @id @default(autoincrement())
-  slug        String   @unique
-  name        String   @default("")
-  description String   @default("")
-  updatedAt   DateTime @updatedAt
-  createdAt   DateTime @default(now())
-  posts       Post[]
+  id            String    @id @default(cuid())
+  title         String
+  eyeCatch      String    @default("")
+  content       String    @default("")
+  authorId      String
+  author        User      @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  categoryId    Int
+  category      Category  @relation(fields: [categoryId], references: [id])
+  published     Boolean   @default(false)
+  updatedAt     DateTime  @updatedAt
+  createdAt     DateTime  @default(now())
+  comment_count Int       @default(0)
+  tags          Tag[]
+  Comments      Comment[]
 }
 
 model Comment {
@@ -70,4 +52,33 @@ model Comment {
   post      Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
   updatedAt DateTime @updatedAt
   createdAt DateTime @default(now())
+}
+
+model Category {
+  id          Int      @id @default(autoincrement())
+  slug        String   @unique
+  name        String   @default("")
+  description String   @default("")
+  image       String   @default("")
+  updatedAt   DateTime @updatedAt
+  createdAt   DateTime @default(now())
+  count       Int      @default(0)
+  posts       Post[]
+}
+
+model Tag {
+  id          Int      @id @default(autoincrement())
+  slug        String   @unique
+  name        String   @default("")
+  description String   @default("")
+  updatedAt   DateTime @updatedAt
+  createdAt   DateTime @default(now())
+  count       Int      @default(0)
+  posts       Post[]
+}
+
+model Options {
+  id    Int    @id @default(autoincrement())
+  name  String @unique
+  value String
 }
