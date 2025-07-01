@@ -1,7 +1,8 @@
+import { env } from '@/lib/env';
 import dayjs from 'dayjs';
 
-const DATE_FORMAT = 'YYYY-MM-DD';
-const TIME_FORMAT = 'HH:mm';
+const DATE_FORMAT = env.NEXT_PUBLIC_DATE_FORMAT;
+const TIME_FORMAT = env.NEXT_PUBLIC_TIME_FORMAT;
 
 /**
  * @param timestamp  ミリ秒
