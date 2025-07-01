@@ -4,7 +4,7 @@ import { actionClient } from '@/lib/action-client';
 import { sendRegisteredEmail } from '@/lib/email';
 import { DatabaseError } from '@/lib/errors';
 import { Prisma, prisma } from '@/lib/prisma';
-import { Role } from '@/lib/users';
+import { Role } from '@/lib/roles';
 import { hash } from '@/lib/utils';
 import { ZRegister, ZUpdateUser } from '@/schemas/user';
 import { returnValidationErrors } from 'next-safe-action';

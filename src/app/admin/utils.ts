@@ -1,4 +1,4 @@
-import { Role } from '@/lib/users';
+import { Role } from '@/lib/roles';
 import { User } from '@prisma/client';
 
 export function isAdmin(user: User | undefined) {

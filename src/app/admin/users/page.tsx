@@ -5,7 +5,7 @@ import SelectLimit from '@/components/select-limit';
 import SelectSort from '@/components/select-sort';
 import { paths } from '@/config/paths';
 import { cleanOrderBy, cleanPage, cleanPerPage } from '@/lib/query-params';
-import { Role } from '@/lib/users';
+import { Role } from '@/lib/roles';
 import { getUsersByFilter } from '@/models/user';
 import { BaseSearch } from '@/types/requests';
 import Box from '@mui/material/Box';

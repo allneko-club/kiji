@@ -9,7 +9,7 @@ import {
   UnknownError,
 } from '@/lib/errors';
 import { logger } from '@/lib/logger';
-import { Role } from '@/lib/users';
+import { Role } from '@/lib/roles';
 import { getUser } from '@/models/user';
 import { DEFAULT_SERVER_ERROR_MESSAGE, createSafeActionClient } from 'next-safe-action';
 
