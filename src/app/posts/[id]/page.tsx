@@ -7,12 +7,13 @@ type Props = {
   params: Promise<{ id: string }>;
 };
 
-// 参考 https://github.com/TanStack/query/discussions/7313
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const id = (await params).id;
   try {
     const post = await getPost(id);
-    return { title: post ? post.title : 'Not Found' };
+    if (!post) return {};
+
+    return { title: post.title, description: post.excerpt ?? '' };
   } catch {
     return { title: 'Not Found' };
   }

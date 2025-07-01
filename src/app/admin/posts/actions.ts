@@ -13,6 +13,7 @@ export const createPost = adminActionClient.inputSchema(ZPost).action(async ({ p
     const saveData = {
       title: parsedInput.title,
       content: parsedInput.content,
+      excerpt: parsedInput.excerpt,
       published: parsedInput.published,
       categoryId: parsedInput.categoryId,
       tags: {
@@ -59,6 +60,7 @@ export const updatePost = adminActionClient.inputSchema(ZPost).action(async ({ p
     const saveData = {
       title: parsedInput.title,
       content: parsedInput.content,
+      excerpt: parsedInput.excerpt,
       published: parsedInput.published,
       categoryId: parsedInput.categoryId,
       authorId: parsedInput.authorId,

@@ -4,10 +4,8 @@ import { z } from 'zod';
 export const ZPost = z.object({
   id: ZCuid.optional(),
   title: z.string().trim().min(1, 'タイトルを入力してください。'),
-  content: z
-    .string({ required_error: '本文を選択してください。' })
-    .max(5000, '5000文字以下にしてください。')
-    .optional(),
+  content: z.string().max(5000, '5000文字以下にしてください。').optional(),
+  excerpt: z.string().max(200, '200文字以下にしてください。').optional(),
   published: z.boolean(),
   categoryId: z
     .number({ required_error: 'カテゴリーを選択してください。' })

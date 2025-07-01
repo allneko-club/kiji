@@ -93,6 +93,17 @@ export const PostForm = ({ categories, tags, users, post }: Props) => {
           )}
         />
         <Controller
+          name="excerpt"
+          defaultValue=""
+          control={control}
+          render={({ field, fieldState: { error } }) => (
+            <FormControl>
+              <FormLabel htmlFor="excerpt">メタディスクリプション</FormLabel>
+              <TextField {...field} multiline rows={2} error={!!error} helperText={error?.message} />
+            </FormControl>
+          )}
+        />
+        <Controller
           name="published"
           defaultValue={false}
           control={control}
