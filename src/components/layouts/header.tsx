@@ -68,7 +68,7 @@ function SignUpButton() {
       variant="contained"
       size="small"
       component={NextLink}
-      href={paths.auth.login.getHref()}>
+      href={paths.auth.register.getHref()}>
       登録
     </Button>
   );

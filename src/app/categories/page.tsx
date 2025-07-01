@@ -22,7 +22,7 @@ export default async function Page() {
             variant="outlined"
             component={NextLink}
             href={paths.categories.detail.getHref(category.slug)}>
-            {`${category.name} (${category._count.posts})`}
+            {`${category.name} (${category.count})`}
           </Button>
         ))}
       </Stack>

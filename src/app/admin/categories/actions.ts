@@ -55,13 +55,25 @@ export const deleteCategory = adminActionClient
   .inputSchema(ZDeleteCategory)
   .action(async ({ parsedInput }) => {
     try {
-      await prisma.$transaction([
-        prisma.post.updateMany({
-          where: { categoryId: parsedInput.id },
+      const id = parsedInput.id;
+      await prisma.$transaction(async (tx) => {
+        const deleteCategory = await getCategory(id);
+        if (!deleteCategory) {
+          throw new ResourceNotFoundError('Category', id);
+        }
+
+        await tx.post.updateMany({
+          where: { categoryId: id },
           data: { categoryId: env.NEXT_PUBLIC_DEFAULT_CATEGORY_ID },
-        }),
-        prisma.category.delete({ where: { id: parsedInput.id } }),
-      ]);
+        });
+
+        await tx.category.update({
+          where: { id: env.NEXT_PUBLIC_DEFAULT_CATEGORY_ID },
+          data: { count: { increment: deleteCategory.count } },
+        });
+
+        await tx.category.delete({ where: { id: id } });
+      });
       return true;
     } catch (e) {
       if (e instanceof Prisma.PrismaClientKnownRequestError) {

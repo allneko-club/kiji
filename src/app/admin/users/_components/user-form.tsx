@@ -2,7 +2,7 @@
 
 import { updateUser } from '@/app/admin/users/actions';
 import { paths } from '@/config/paths';
-import { Role, getRoleLabel } from '@/lib/users';
+import { Role, getRoleLabel } from '@/lib/roles';
 import { getFormattedErrorMessage } from '@/lib/utils';
 import { TUpdateUser, ZUpdateUser } from '@/schemas/user';
 import { zodResolver } from '@hookform/resolvers/zod';

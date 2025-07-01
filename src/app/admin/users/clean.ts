@@ -1,4 +1,4 @@
-import { Role } from '@/lib/users';
+import { Role } from '@/lib/roles';
 
 export const cleanOrder = (order: string | null | undefined) => {
   if (order === 'name') {

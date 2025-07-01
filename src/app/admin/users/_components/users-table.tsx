@@ -3,7 +3,7 @@
 import { PaginationBasic } from '@/components/pagination-basic';
 import { paths } from '@/config/paths';
 import { getFormattedDateTimeFromObj } from '@/lib/datetime';
-import { getRoleLabel } from '@/lib/users';
+import { getRoleLabel } from '@/lib/roles';
 import CreateIcon from '@mui/icons-material/Create';
 import IconButton from '@mui/material/IconButton';
 import Paper from '@mui/material/Paper';

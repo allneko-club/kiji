@@ -1,7 +1,7 @@
 'use client';
 
 import { updateQueryParams } from '@/lib/query-params';
-import { Role, getRoleLabel } from '@/lib/users';
+import { Role, getRoleLabel } from '@/lib/roles';
 import { zodResolver } from '@hookform/resolvers/zod';
 import Button from '@mui/material/Button';
 import FormControl from '@mui/material/FormControl';

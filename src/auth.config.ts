@@ -1,5 +1,5 @@
+import { getUserByCredentials } from '@/lib/auth/user';
 import { DEBUG, SESSION_MAX_AGE } from '@/lib/consts';
-import { getUserByCredentials } from '@/module/auth/lib/user';
 import type { NextAuthConfig } from 'next-auth';
 import Credentials from 'next-auth/providers/credentials';
 import GitHub from 'next-auth/providers/github';
