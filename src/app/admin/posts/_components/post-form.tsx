@@ -104,6 +104,17 @@ export const PostForm = ({ categories, tags, users, post }: Props) => {
           )}
         />
         <Controller
+          name="slug"
+          defaultValue=""
+          control={control}
+          render={({ field, fieldState: { error } }) => (
+            <FormControl required>
+              <FormLabel htmlFor="slug">スラッグ</FormLabel>
+              <TextField {...field} error={!!error} helperText={error?.message} />
+            </FormControl>
+          )}
+        />
+        <Controller
           name="published"
           defaultValue={false}
           control={control}

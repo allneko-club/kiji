@@ -87,7 +87,7 @@ export function PostCard({ post }: { post: PostWithCategoryAuthor }) {
         onBlur={handleBlur}
         tabIndex={0}
         className={focusedCardIndex === post.id ? 'Mui-focused' : ''}
-        onClick={() => router.push(paths.posts.detail.getHref(post.id))}>
+        onClick={() => router.push(paths.posts.detail.getHref(post.slug))}>
         <CardMedia
           component="img"
           alt="green iguana"

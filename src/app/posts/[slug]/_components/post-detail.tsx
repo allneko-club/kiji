@@ -1,6 +1,6 @@
 'use client';
 
-import { EntryMeta } from '@/app/posts/[id]/_components/entry-meta';
+import { EntryMeta } from '@/app/posts/[slug]/_components/entry-meta';
 import TagChip from '@/components/ui/tag-chip';
 import { paths } from '@/config/paths';
 import { getFormattedDateTimeFromObj } from '@/lib/datetime';

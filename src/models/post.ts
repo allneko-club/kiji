@@ -59,6 +59,19 @@ export const getPost = async (id: string) => {
   });
 };
 
+export const getPostBySlug = async (slug: string) => {
+  return prisma.post.findUnique({
+    include: {
+      author: true,
+      category: true,
+      tags: true,
+    },
+    where: {
+      slug: slug,
+    },
+  });
+};
+
 type GetPostsByTagParams = {
   slug?: string;
   published?: boolean;

@@ -1,16 +1,16 @@
-import { PostDetail } from '@/app/posts/[id]/_components/post-detail';
-import { getPost } from '@/models/post';
+import { PostDetail } from '@/app/posts/[slug]/_components/post-detail';
+import { getPostBySlug } from '@/models/post';
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 
 type Props = {
-  params: Promise<{ id: string }>;
+  params: Promise<{ slug: string }>;
 };
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const id = (await params).id;
+  const slug = (await params).slug;
   try {
-    const post = await getPost(id);
+    const post = await getPostBySlug(slug);
     if (!post) return {};
 
     return { title: post.title, description: post.excerpt ?? '' };
@@ -20,8 +20,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 }
 
 export default async function Page({ params }: Props) {
-  const id = (await params).id;
-  const post = await getPost(id);
+  const slug = (await params).slug;
+  const post = await getPostBySlug(slug);
 
   if (!post) {
     notFound();
