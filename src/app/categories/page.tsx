@@ -1,5 +1,5 @@
-import { paths } from '@/config/paths';
-import { getCategories } from '@/models/category';
+import { getCategories } from '@/features/posts/models/category';
+import { paths } from '@/lib/paths';
 import Button from '@mui/material/Button';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';

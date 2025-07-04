@@ -1,4 +1,5 @@
-import { ZCuid } from '@/schemas/common';
+import { ZCuid } from '@/types/common';
+import { Prisma } from '@prisma/client';
 import { z } from 'zod';
 
 export const ZPost = z.object({
@@ -16,3 +17,10 @@ export const ZPost = z.object({
 });
 
 export type TPost = z.infer<typeof ZPost>;
+
+export type PostWithCategoryAuthor = Prisma.PostGetPayload<{
+  include: {
+    author: true;
+    category: true;
+  };
+}>;

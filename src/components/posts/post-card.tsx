@@ -1,7 +1,7 @@
 'use client';
 
-import { paths } from '@/config/paths';
 import { getFormattedDateTimeFromObj } from '@/lib/datetime';
+import { paths } from '@/lib/paths';
 import { PostWithCategoryAuthor } from '@/types/post';
 import Avatar from '@mui/material/Avatar';
 import AvatarGroup from '@mui/material/AvatarGroup';

@@ -1,9 +1,9 @@
 'use client';
 
 import { PaginationBasic } from '@/components/pagination-basic';
-import { paths } from '@/config/paths';
+import { getRoleLabel } from '@/features/users/roles';
 import { getFormattedDateTimeFromObj } from '@/lib/datetime';
-import { getRoleLabel } from '@/lib/roles';
+import { paths } from '@/lib/paths';
 import CreateIcon from '@mui/icons-material/Create';
 import IconButton from '@mui/material/IconButton';
 import Paper from '@mui/material/Paper';

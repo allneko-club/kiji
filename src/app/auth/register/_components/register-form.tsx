@@ -2,9 +2,9 @@
 
 import { Card } from '@/app/auth/_components/card';
 import { register } from '@/app/auth/register/actions';
-import { paths } from '@/config/paths';
-import { getFormattedErrorMessage } from '@/lib/utils';
-import { TRegister, ZRegister } from '@/schemas/user';
+import { getFormattedErrorMessage } from '@/lib/parser';
+import { paths } from '@/lib/paths';
+import { TRegister, ZRegister } from '@/types/user';
 import { zodResolver } from '@hookform/resolvers/zod';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';

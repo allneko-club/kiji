@@ -1,6 +1,6 @@
 import { CategoriesTable } from '@/app/admin/categories/_components/categories-table';
-import { paths } from '@/config/paths';
-import { getCategories } from '@/models/category';
+import { getCategories } from '@/features/posts/models/category';
+import { paths } from '@/lib/paths';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import type { Metadata } from 'next';

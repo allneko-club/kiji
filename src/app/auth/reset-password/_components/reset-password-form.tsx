@@ -1,9 +1,9 @@
 'use client';
 
 import { resetPassword } from '@/app/auth/reset-password/actions';
-import { paths } from '@/config/paths';
-import { getFormattedErrorMessage } from '@/lib/utils';
-import { TResetPassword, ZResetPassword } from '@/schemas/user';
+import { getFormattedErrorMessage } from '@/lib/parser';
+import { paths } from '@/lib/paths';
+import { TResetPassword, ZResetPassword } from '@/types/user';
 import { zodResolver } from '@hookform/resolvers/zod';
 import Button from '@mui/material/Button';
 import FormControl from '@mui/material/FormControl';

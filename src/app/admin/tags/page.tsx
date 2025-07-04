@@ -1,6 +1,6 @@
 import { TagsTable } from '@/app/admin/tags/_components/tags-table';
-import { paths } from '@/config/paths';
-import { getTags } from '@/models/tag';
+import { getTags } from '@/features/posts/models/tag';
+import { paths } from '@/lib/paths';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import type { Metadata } from 'next';

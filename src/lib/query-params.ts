@@ -2,7 +2,7 @@
  * クエリパラメーターや、フォームの値をクリーンする機能を定義するためのファイル
  */
 import { getFormattedDateFromObj } from '@/lib/datetime';
-import { OrderBy } from '@/types/utils';
+import { OrderBy } from '@/types/common';
 import { z } from 'zod';
 
 /**

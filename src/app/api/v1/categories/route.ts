@@ -1,4 +1,4 @@
-import { getCategories } from '@/models/category';
+import { getCategories } from '@/features/posts/models/category';
 
 export async function GET() {
   const data = await getCategories();

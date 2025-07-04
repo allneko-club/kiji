@@ -4,7 +4,7 @@ export const getTags = async () => {
   return prisma.tag.findMany({ orderBy: { name: 'asc' } });
 };
 
-export const getTag = async (id: number) => {
+export const getTagById = async (id: number) => {
   return prisma.tag.findUnique({ where: { id: id } });
 };
 

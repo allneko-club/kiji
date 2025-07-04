@@ -1,7 +1,7 @@
 import { Search } from '@/app/posts/search';
 import { PostList } from '@/components/posts';
+import { getPosts } from '@/features/posts/models/post';
 import { POST_LIMIT } from '@/lib/consts';
-import { getPosts } from '@/models/post';
 import Typography from '@mui/material/Typography';
 import type { Metadata } from 'next';
 import * as React from 'react';

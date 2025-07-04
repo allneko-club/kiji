@@ -1,12 +1,12 @@
 'use server';
 
+import { Role } from '@/features/users/roles';
 import { actionClient } from '@/lib/action-client';
 import { sendRegisteredEmail } from '@/lib/email';
 import { DatabaseError } from '@/lib/errors';
 import { Prisma, prisma } from '@/lib/prisma';
-import { Role } from '@/lib/roles';
 import { hash } from '@/lib/utils';
-import { ZRegister, ZUpdateUser } from '@/schemas/user';
+import { ZRegister, ZUpdateUser } from '@/types/user';
 import { returnValidationErrors } from 'next-safe-action';
 
 export const register = actionClient.inputSchema(ZRegister).action(async ({ parsedInput }) => {

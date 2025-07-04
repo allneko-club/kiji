@@ -1,4 +1,4 @@
-import { Role } from '@/lib/roles';
+import { Role } from '@/features/users/roles';
 
 export const cleanOrder = (order: string | null | undefined) => {
   if (order === 'name') {

@@ -1,6 +1,6 @@
 import { TagForm } from '@/app/admin/tags/_components/tag-form';
-import { paths } from '@/config/paths';
-import { getTag } from '@/models/tag';
+import { getTagById } from '@/features/posts/models/tag';
+import { paths } from '@/lib/paths';
 import Typography from '@mui/material/Typography';
 import type { Metadata } from 'next';
 import { notFound, redirect } from 'next/navigation';
@@ -17,7 +17,7 @@ export default async function Page({ params }: Props) {
     redirect(paths.admin.tags.getHref());
   }
 
-  const tag = await getTag(id);
+  const tag = await getTagById(id);
   if (!tag) {
     notFound();
   }

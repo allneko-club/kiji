@@ -2,10 +2,10 @@
 
 import { Editor } from '@/app/admin/posts/_components/editor';
 import { createPost, updatePost } from '@/app/admin/posts/actions';
-import { paths } from '@/config/paths';
 import { env } from '@/lib/env';
-import { getFormattedErrorMessage } from '@/lib/utils';
-import { TPost, ZPost } from '@/schemas/post';
+import { getFormattedErrorMessage } from '@/lib/parser';
+import { paths } from '@/lib/paths';
+import { TPost, ZPost } from '@/types/post';
 import { zodResolver } from '@hookform/resolvers/zod';
 import Button from '@mui/material/Button';
 import Checkbox from '@mui/material/Checkbox';

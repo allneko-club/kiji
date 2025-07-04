@@ -1,10 +1,10 @@
 'use client';
 
 import { updateUser } from '@/app/admin/users/actions';
-import { paths } from '@/config/paths';
-import { Role, getRoleLabel } from '@/lib/roles';
-import { getFormattedErrorMessage } from '@/lib/utils';
-import { TUpdateUser, ZUpdateUser } from '@/schemas/user';
+import { Role, getRoleLabel } from '@/features/users/roles';
+import { getFormattedErrorMessage } from '@/lib/parser';
+import { paths } from '@/lib/paths';
+import { TUpdateUser, ZUpdateUser } from '@/types/user';
 import { zodResolver } from '@hookform/resolvers/zod';
 import Button from '@mui/material/Button';
 import FormControl from '@mui/material/FormControl';

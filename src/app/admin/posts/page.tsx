@@ -1,7 +1,7 @@
 import { PostsTable } from '@/app/admin/posts/_components/posts-table';
-import { paths } from '@/config/paths';
+import { getPosts } from '@/features/posts/models/post';
 import { POST_LIMIT } from '@/lib/consts';
-import { getPosts } from '@/models/post';
+import { paths } from '@/lib/paths';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import NextLink from 'next/link';

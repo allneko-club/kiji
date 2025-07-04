@@ -1,9 +1,9 @@
 'use client';
 
 import { createCategory, updateCategory } from '@/app/admin/categories/actions';
-import { paths } from '@/config/paths';
-import { getFormattedErrorMessage } from '@/lib/utils';
-import { TCategory, ZCategory } from '@/schemas/category';
+import { getFormattedErrorMessage } from '@/lib/parser';
+import { paths } from '@/lib/paths';
+import { TCategory, ZCategory } from '@/types/category';
 import { zodResolver } from '@hookform/resolvers/zod';
 import Button from '@mui/material/Button';
 import FormControl from '@mui/material/FormControl';

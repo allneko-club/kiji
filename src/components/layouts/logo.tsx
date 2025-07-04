@@ -1,4 +1,4 @@
-import { paths } from '@/config/paths';
+import { paths } from '@/lib/paths';
 import Icon from '@mui/material/Icon';
 import Image from 'next/image';
 import Link from 'next/link';

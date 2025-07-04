@@ -1,6 +1,6 @@
 import TagChip from '@/components/ui/tag-chip';
-import { paths } from '@/config/paths';
-import { getTags } from '@/models/tag';
+import { getTags } from '@/features/posts/models/tag';
+import { paths } from '@/lib/paths';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 import type { Metadata } from 'next';

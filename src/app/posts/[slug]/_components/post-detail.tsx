@@ -2,8 +2,8 @@
 
 import { EntryMeta } from '@/app/posts/[slug]/_components/entry-meta';
 import TagChip from '@/components/ui/tag-chip';
-import { paths } from '@/config/paths';
 import { getFormattedDateTimeFromObj } from '@/lib/datetime';
+import { paths } from '@/lib/paths';
 import Container from '@mui/material/Container';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';

@@ -1,11 +1,11 @@
 'use server';
 
+import { getTagById } from '@/features/posts/models/tag';
 import { adminActionClient } from '@/lib/action-client';
 import { DatabaseError, ResourceNotFoundError } from '@/lib/errors';
 import { Prisma, prisma } from '@/lib/prisma';
-import { getTag } from '@/models/tag';
-import { ZId } from '@/schemas/common';
-import { ZTag } from '@/schemas/tag';
+import { ZId } from '@/types/common';
+import { ZTag } from '@/types/tag';
 import { returnValidationErrors } from 'next-safe-action';
 import { z } from 'zod';
 
@@ -27,7 +27,7 @@ export const createTag = adminActionClient.inputSchema(ZTag).action(async ({ par
 export const updateTag = adminActionClient.inputSchema(ZTag).action(async ({ parsedInput }) => {
   try {
     const id = parsedInput.id!;
-    const tag = await getTag(id);
+    const tag = await getTagById(id);
     if (!tag) {
       throw new ResourceNotFoundError('Tag', id);
     }

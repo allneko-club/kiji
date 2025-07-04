@@ -1,5 +1,5 @@
 import { UserForm } from '@/app/admin/users/_components/user-form';
-import { getUser } from '@/models/user';
+import { getUserById } from '@/features/users/models/user';
 import Typography from '@mui/material/Typography';
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
@@ -13,7 +13,7 @@ type Props = {
 export default async function Page({ params }: Props) {
   const id = (await params).id;
 
-  const user = await getUser(id);
+  const user = await getUserById(id);
   if (!user) {
     notFound();
   }

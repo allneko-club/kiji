@@ -46,7 +46,7 @@ export const getPosts = async (params: GetPostsParams) => {
 };
 
 // todo 非公開の投稿は投稿したユーザーのみ取得可能にするために、公開済みのみに絞り込むためのフラグ用引数を追加する
-export const getPost = async (id: string) => {
+export const getPostById = async (id: string) => {
   return prisma.post.findUnique({
     include: {
       author: true,

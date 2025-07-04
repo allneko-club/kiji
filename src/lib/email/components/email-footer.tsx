@@ -1,4 +1,4 @@
-import { paths } from '@/config/paths';
+import { paths } from '@/lib/paths';
 import { Link, Text } from '@react-email/components';
 import React from 'react';
 

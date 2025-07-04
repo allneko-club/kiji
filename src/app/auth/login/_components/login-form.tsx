@@ -1,8 +1,8 @@
 'use client';
 
 import { Card } from '@/app/auth/_components/card';
-import { paths } from '@/config/paths';
-import { authenticate } from '@/lib/actions';
+import { authenticate } from '@/app/auth/login/actions';
+import { paths } from '@/lib/paths';
 import GitHubIcon from '@mui/icons-material/GitHub';
 import Alert from '@mui/material/Alert';
 import Box from '@mui/material/Box';

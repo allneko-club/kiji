@@ -1,12 +1,12 @@
 'use server';
 
+import { getCategoryById } from '@/features/posts/models/category';
 import { adminActionClient } from '@/lib/action-client';
 import { env } from '@/lib/env';
 import { DatabaseError, ResourceNotFoundError } from '@/lib/errors';
 import { Prisma, prisma } from '@/lib/prisma';
-import { getCategory } from '@/models/category';
-import { ZCategory } from '@/schemas/category';
-import { ZId } from '@/schemas/common';
+import { ZCategory } from '@/types/category';
+import { ZId } from '@/types/common';
 import { returnValidationErrors } from 'next-safe-action';
 import { z } from 'zod';
 
@@ -28,7 +28,7 @@ export const createCategory = adminActionClient.inputSchema(ZCategory).action(as
 export const updateCategory = adminActionClient.inputSchema(ZCategory).action(async ({ parsedInput }) => {
   try {
     const id = parsedInput.id!;
-    const category = await getCategory(id);
+    const category = await getCategoryById(id);
     if (!category) {
       throw new ResourceNotFoundError('Category', id);
     }
@@ -57,7 +57,7 @@ export const deleteCategory = adminActionClient
     try {
       const id = parsedInput.id;
       await prisma.$transaction(async (tx) => {
-        const deleteCategory = await getCategory(id);
+        const deleteCategory = await getCategoryById(id);
         if (!deleteCategory) {
           throw new ResourceNotFoundError('Category', id);
         }

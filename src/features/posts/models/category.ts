@@ -4,7 +4,7 @@ export const getCategories = async () => {
   return prisma.category.findMany({ orderBy: { id: 'asc' } });
 };
 
-export const getCategory = async (id: number) => {
+export const getCategoryById = async (id: number) => {
   return prisma.category.findUnique({ where: { id: id } });
 };
 
