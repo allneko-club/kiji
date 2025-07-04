@@ -1,5 +1,6 @@
 'use client';
 
+import { Editor } from '@/app/admin/posts/_components/editor';
 import { createPost, updatePost } from '@/app/admin/posts/actions';
 import { paths } from '@/config/paths';
 import { env } from '@/lib/env';
@@ -88,10 +89,12 @@ export const PostForm = ({ categories, tags, users, post }: Props) => {
           render={({ field, fieldState: { error } }) => (
             <FormControl>
               <FormLabel htmlFor="content">本文</FormLabel>
-              <TextField {...field} multiline rows={4} error={!!error} helperText={error?.message} />
+              <FormHelperText>{error?.message}</FormHelperText>
+              <Editor {...field} />
             </FormControl>
           )}
         />
+
         <Controller
           name="excerpt"
           defaultValue=""

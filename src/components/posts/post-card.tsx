@@ -12,6 +12,7 @@ import CardMedia from '@mui/material/CardMedia';
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
 import { styled } from '@mui/material/styles';
+import { convert } from 'html-to-text';
 import { useRouter } from 'next/navigation';
 import * as React from 'react';
 
@@ -108,7 +109,7 @@ export function PostCard({ post }: { post: PostWithCategoryAuthor }) {
             {post.title}
           </Typography>
           <StyledTypography variant="body2" color="text.secondary" gutterBottom>
-            {post.content}
+            {convert(post.content)}
           </StyledTypography>
         </StyledCardContent>
         <Author

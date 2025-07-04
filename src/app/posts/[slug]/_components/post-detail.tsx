@@ -26,7 +26,7 @@ export function PostDetail({ post }: Props) {
 
         <Typography variant="h1">{post.title}</Typography>
 
-        <div>{post.content}</div>
+        <div dangerouslySetInnerHTML={{ __html: post.content }} />
 
         <Stack direction="row" spacing={1}>
           {post.tags.map((tag) => (
