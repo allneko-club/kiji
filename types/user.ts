@@ -1,4 +1,4 @@
-import { ZCuid } from '@/schemas/common';
+import { ZCuid } from '@/types/common';
 import { z } from 'zod';
 
 export const ZUserName = z

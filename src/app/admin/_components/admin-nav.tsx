@@ -1,6 +1,6 @@
 'use client';
 
-import { paths } from '@/config/paths';
+import { paths } from '@/lib/paths';
 import ArticleIcon from '@mui/icons-material/Article';
 import CategoryIcon from '@mui/icons-material/Category';
 import DashboardIcon from '@mui/icons-material/Dashboard';

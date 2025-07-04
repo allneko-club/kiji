@@ -1,7 +1,7 @@
 'use client';
 
-import { paths } from '@/config/paths';
 import { getFormattedDateTimeFromObj } from '@/lib/datetime';
+import { paths } from '@/lib/paths';
 import { PostWithCategoryAuthor } from '@/types/post';
 import Avatar from '@mui/material/Avatar';
 import AvatarGroup from '@mui/material/AvatarGroup';
@@ -12,6 +12,7 @@ import CardMedia from '@mui/material/CardMedia';
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
 import { styled } from '@mui/material/styles';
+import { convert } from 'html-to-text';
 import { useRouter } from 'next/navigation';
 import * as React from 'react';
 
@@ -87,7 +88,7 @@ export function PostCard({ post }: { post: PostWithCategoryAuthor }) {
         onBlur={handleBlur}
         tabIndex={0}
         className={focusedCardIndex === post.id ? 'Mui-focused' : ''}
-        onClick={() => router.push(paths.posts.detail.getHref(post.id))}>
+        onClick={() => router.push(paths.posts.detail.getHref(post.slug))}>
         <CardMedia
           component="img"
           alt="green iguana"
@@ -108,7 +109,7 @@ export function PostCard({ post }: { post: PostWithCategoryAuthor }) {
             {post.title}
           </Typography>
           <StyledTypography variant="body2" color="text.secondary" gutterBottom>
-            {post.content}
+            {convert(post.content)}
           </StyledTypography>
         </StyledCardContent>
         <Author

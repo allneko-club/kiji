@@ -1,6 +1,6 @@
 import { CategoryForm } from '@/app/admin/categories/_components/category-form';
-import { paths } from '@/config/paths';
-import { getCategory } from '@/models/category';
+import { getCategoryById } from '@/features/posts/models/category';
+import { paths } from '@/lib/paths';
 import Typography from '@mui/material/Typography';
 import type { Metadata } from 'next';
 import { notFound, redirect } from 'next/navigation';
@@ -17,7 +17,7 @@ export default async function Page({ params }: Props) {
     redirect(paths.admin.categories.getHref());
   }
 
-  const category = await getCategory(id);
+  const category = await getCategoryById(id);
   if (!category) {
     notFound();
   }

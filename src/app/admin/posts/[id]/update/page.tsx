@@ -1,8 +1,8 @@
 import { PostForm } from '@/app/admin/posts/_components/post-form';
-import { getCategories } from '@/models/category';
-import { getPost } from '@/models/post';
-import { getTags } from '@/models/tag';
-import { getUsers } from '@/models/user';
+import { getCategories } from '@/features/posts/models/category';
+import { getPostById } from '@/features/posts/models/post';
+import { getTags } from '@/features/posts/models/tag';
+import { getUsers } from '@/features/users/models/user';
 import Typography from '@mui/material/Typography';
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
@@ -16,7 +16,7 @@ type Props = {
 export default async function Page({ params }: Props) {
   const id = (await params).id;
 
-  const post = await getPost(id);
+  const post = await getPostById(id);
   if (!post) {
     notFound();
   }

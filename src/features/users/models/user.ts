@@ -1,7 +1,53 @@
 import { DatabaseError } from '@/lib/errors';
-import { Prisma, prisma } from '@/lib/prisma';
-import { OrderBy } from '@/types/utils';
+import { prisma } from '@/lib/prisma';
+import { hash } from '@/lib/utils';
+import { OrderBy } from '@/types/common';
+import { Prisma } from '@prisma/client';
 import { cache } from 'react';
+
+export const getUserById = cache(async (id: string) => {
+  try {
+    const user = await prisma.user.findUnique({
+      where: {
+        id,
+      },
+    });
+
+    if (!user) {
+      return null;
+    }
+    return user;
+  } catch (error) {
+    if (error instanceof Prisma.PrismaClientKnownRequestError) {
+      throw new DatabaseError(error.message);
+    }
+
+    throw error;
+  }
+});
+
+export const getUserByCredentials = cache(async (email: string, password: string) => {
+  try {
+    return await prisma.user.findFirst({
+      where: {
+        email,
+        password: hash(password),
+      },
+      select: {
+        id: true,
+        name: true,
+        email: true,
+        role: true,
+        image: true,
+      },
+    });
+  } catch (error) {
+    if (error instanceof Prisma.PrismaClientKnownRequestError) {
+      throw new DatabaseError(error.message);
+    }
+    throw error;
+  }
+});
 
 type GetUsersProps = {
   id?: string;
@@ -54,24 +100,3 @@ export const getUsersByFilter = async (params: GetUsersProps) => {
 export const getUsers = async () => {
   return prisma.user.findMany();
 };
-
-export const getUser = cache(async (id: string) => {
-  try {
-    const user = await prisma.user.findUnique({
-      where: {
-        id,
-      },
-    });
-
-    if (!user) {
-      return null;
-    }
-    return user;
-  } catch (error) {
-    if (error instanceof Prisma.PrismaClientKnownRequestError) {
-      throw new DatabaseError(error.message);
-    }
-
-    throw error;
-  }
-});

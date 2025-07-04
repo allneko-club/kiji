@@ -1,8 +1,8 @@
 import AdminNav from '@/app/admin/_components/admin-nav';
 import { isAdmin } from '@/app/admin/utils';
 import { auth } from '@/auth';
-import { paths } from '@/config/paths';
-import { getUser } from '@/models/user';
+import { getUserById } from '@/features/users/models/user';
+import { paths } from '@/lib/paths';
 import Typography from '@mui/material/Typography';
 import { signOut } from 'next-auth/react';
 import { redirect } from 'next/navigation';
@@ -14,7 +14,7 @@ export default async function Layout({ children }: { children: ReactNode }) {
     return redirect(paths.auth.login.getHref());
   }
 
-  const user = await getUser(session.user.id);
+  const user = await getUserById(session.user.id);
   if (!user) {
     return signOut();
   }

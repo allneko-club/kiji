@@ -1,4 +1,4 @@
-import { paths } from '@/config/paths';
+import { paths } from '@/lib/paths';
 import Link from 'next/link';
 
 export default function NotFoundPage() {

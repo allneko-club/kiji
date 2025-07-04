@@ -1,8 +1,8 @@
 'use client';
 
 import { DeleteTag } from '@/app/admin/tags/_components/delete-tag';
-import { paths } from '@/config/paths';
 import { getFormattedDateTimeFromObj } from '@/lib/datetime';
+import { paths } from '@/lib/paths';
 import CreateIcon from '@mui/icons-material/Create';
 import IconButton from '@mui/material/IconButton';
 import Paper from '@mui/material/Paper';

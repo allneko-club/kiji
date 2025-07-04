@@ -1,9 +1,9 @@
 'use client';
 
 import { createTag, updateTag } from '@/app/admin/tags/actions';
-import { paths } from '@/config/paths';
-import { getFormattedErrorMessage } from '@/lib/utils';
-import { TTag, ZTag } from '@/schemas/tag';
+import { getFormattedErrorMessage } from '@/lib/parser';
+import { paths } from '@/lib/paths';
+import { TTag, ZTag } from '@/types/tag';
 import { zodResolver } from '@hookform/resolvers/zod';
 import Button from '@mui/material/Button';
 import FormControl from '@mui/material/FormControl';

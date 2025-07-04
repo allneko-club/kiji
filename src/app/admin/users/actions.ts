@@ -1,18 +1,18 @@
 'use server';
 
+import { getUserById } from '@/features/users/models/user';
 import { adminActionClient } from '@/lib/action-client';
 import { DatabaseError, ResourceNotFoundError } from '@/lib/errors';
 import { Prisma, prisma } from '@/lib/prisma';
-import { getUser } from '@/models/user';
-import { ZCuid } from '@/schemas/common';
-import { ZUpdateUser } from '@/schemas/user';
+import { ZCuid } from '@/types/common';
+import { ZUpdateUser } from '@/types/user';
 import { returnValidationErrors } from 'next-safe-action';
 import { z } from 'zod';
 
 export const updateUser = adminActionClient.inputSchema(ZUpdateUser).action(async ({ parsedInput }) => {
   try {
     const id = parsedInput.id!;
-    const user = await getUser(id);
+    const user = await getUserById(id);
     if (!user) {
       throw new ResourceNotFoundError('User', id);
     }

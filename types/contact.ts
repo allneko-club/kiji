@@ -1,4 +1,4 @@
-import { ZUserEmail } from '@/schemas/user';
+import { ZUserEmail } from '@/types/user';
 import { z } from 'zod';
 
 export const ZContact = z.object({

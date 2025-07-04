@@ -1,4 +1,6 @@
 import { auth } from '@/auth';
+import { getUserById } from '@/features/users/models/user';
+import { Role } from '@/features/users/roles';
 import {
   AuthenticationError,
   AuthorizationError,
@@ -9,8 +11,6 @@ import {
   UnknownError,
 } from '@/lib/errors';
 import { logger } from '@/lib/logger';
-import { Role } from '@/lib/roles';
-import { getUser } from '@/models/user';
 import { DEFAULT_SERVER_ERROR_MESSAGE, createSafeActionClient } from 'next-safe-action';
 
 export const actionClient = createSafeActionClient({
@@ -40,7 +40,7 @@ export const adminActionClient = actionClient.use(async ({ ctx, next }) => {
     throw new AuthenticationError('Not authenticated');
   }
 
-  const user = await getUser(userId);
+  const user = await getUserById(userId);
   if (!user || user.role !== Role.ADMIN) {
     throw new AuthorizationError('User not found');
   }

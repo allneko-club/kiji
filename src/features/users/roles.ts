@@ -13,3 +13,5 @@ export function getRoleLabel(role: number) {
       return '一般';
   }
 }
+
+export type Capability = 'manageOptions' | 'createUsers' | 'updateUsers' | 'deleteUsers' | 'listUsers';

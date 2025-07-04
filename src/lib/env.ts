@@ -23,6 +23,8 @@ export const env = createEnv({
       .string()
       .transform((s) => parseInt(s, 10))
       .pipe(z.number()),
+    NEXT_PUBLIC_DATE_FORMAT: z.string(),
+    NEXT_PUBLIC_TIME_FORMAT: z.string(),
   },
   runtimeEnv: {
     DATABASE_URL: process.env.DATABASE_URL,
@@ -32,13 +34,16 @@ export const env = createEnv({
     MAIL_FROM_NAME: process.env.MAIL_FROM_NAME,
     AUTH_SECRET: process.env.AUTH_SECRET,
     NODE_ENV: process.env.NODE_ENV,
-    NEXT_PUBLIC_URL: process.env.NEXT_PUBLIC_URL,
-    NEXT_PUBLIC_DEFAULT_CATEGORY_ID: process.env.NEXT_PUBLIC_DEFAULT_CATEGORY_ID,
     SMTP_HOST: process.env.SMTP_HOST,
     SMTP_PASSWORD: process.env.SMTP_PASSWORD,
     SMTP_PORT: process.env.SMTP_PORT,
     SMTP_SECURE_ENABLED: process.env.SMTP_SECURE_ENABLED,
     SMTP_USER: process.env.SMTP_USER,
     SMTP_REJECT_UNAUTHORIZED_TLS: process.env.SMTP_REJECT_UNAUTHORIZED_TLS,
+
+    NEXT_PUBLIC_URL: process.env.NEXT_PUBLIC_URL,
+    NEXT_PUBLIC_DEFAULT_CATEGORY_ID: process.env.NEXT_PUBLIC_DEFAULT_CATEGORY_ID,
+    NEXT_PUBLIC_DATE_FORMAT: process.env.NEXT_PUBLIC_DATE_FORMAT,
+    NEXT_PUBLIC_TIME_FORMAT: process.env.NEXT_PUBLIC_TIME_FORMAT,
   },
 });

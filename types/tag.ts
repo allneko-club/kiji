@@ -1,4 +1,4 @@
-import { ZId } from '@/schemas/common';
+import { ZId } from '@/types/common';
 import { z } from 'zod';
 
 export const ZTag = z.object({

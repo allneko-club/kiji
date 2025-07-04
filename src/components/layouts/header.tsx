@@ -1,6 +1,6 @@
 'use client';
 
-import { paths } from '@/config/paths';
+import { paths } from '@/lib/paths';
 import CloseRoundedIcon from '@mui/icons-material/CloseRounded';
 import MenuIcon from '@mui/icons-material/Menu';
 import AppBar from '@mui/material/AppBar';

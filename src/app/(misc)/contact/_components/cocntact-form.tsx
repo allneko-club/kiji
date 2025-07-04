@@ -1,9 +1,9 @@
 'use client';
 
 import { contact } from '@/app/(misc)/contact/actions';
-import { paths } from '@/config/paths';
-import { getFormattedErrorMessage } from '@/lib/utils';
-import { TContact, ZContact } from '@/schemas/contact';
+import { getFormattedErrorMessage } from '@/lib/parser';
+import { paths } from '@/lib/paths';
+import { TContact, ZContact } from '@/types/contact';
 import { zodResolver } from '@hookform/resolvers/zod';
 import Button from '@mui/material/Button';
 import FormControl from '@mui/material/FormControl';

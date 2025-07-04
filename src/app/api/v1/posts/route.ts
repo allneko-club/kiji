@@ -1,5 +1,5 @@
+import { getPosts } from '@/features/posts/models/post';
 import { POST_LIMIT } from '@/lib/consts';
-import { getPosts } from '@/models/post';
 import type { NextRequest } from 'next/server';
 
 export async function GET(request: NextRequest) {

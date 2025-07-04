@@ -1,5 +1,5 @@
-import { paths } from '@/config/paths';
 import EmailButton from '@/lib/email/components/email-button';
+import { paths } from '@/lib/paths';
 import { Container, Heading, Text } from '@react-email/components';
 import React from 'react';
 import { EmailFooter } from '../../components/email-footer';

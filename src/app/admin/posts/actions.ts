@@ -1,11 +1,11 @@
 'use server';
 
+import { getPostById } from '@/features/posts/models/post';
 import { adminActionClient } from '@/lib/action-client';
 import { DatabaseError, ResourceNotFoundError } from '@/lib/errors';
 import { Prisma, prisma } from '@/lib/prisma';
-import { getPost } from '@/models/post';
-import { ZCuid } from '@/schemas/common';
-import { ZPost } from '@/schemas/post';
+import { ZCuid } from '@/types/common';
+import { ZPost } from '@/types/post';
 import { z } from 'zod';
 
 export const createPost = adminActionClient.inputSchema(ZPost).action(async ({ parsedInput }) => {
@@ -13,6 +13,8 @@ export const createPost = adminActionClient.inputSchema(ZPost).action(async ({ p
     const saveData = {
       title: parsedInput.title,
       content: parsedInput.content,
+      excerpt: parsedInput.excerpt,
+      slug: parsedInput.slug,
       published: parsedInput.published,
       categoryId: parsedInput.categoryId,
       tags: {
@@ -46,7 +48,7 @@ export const createPost = adminActionClient.inputSchema(ZPost).action(async ({ p
 export const updatePost = adminActionClient.inputSchema(ZPost).action(async ({ parsedInput }) => {
   try {
     const id = parsedInput.id!;
-    const post = await getPost(id);
+    const post = await getPostById(id);
     if (!post) {
       throw new ResourceNotFoundError('Post', null);
     }
@@ -59,6 +61,8 @@ export const updatePost = adminActionClient.inputSchema(ZPost).action(async ({ p
     const saveData = {
       title: parsedInput.title,
       content: parsedInput.content,
+      excerpt: parsedInput.excerpt,
+      slug: parsedInput.slug,
       published: parsedInput.published,
       categoryId: parsedInput.categoryId,
       authorId: parsedInput.authorId,

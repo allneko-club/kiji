@@ -2,8 +2,8 @@
 
 import { DeletePost } from '@/app/admin/posts/_components/delete-post';
 import { PaginationBasic } from '@/components/pagination-basic';
-import { paths } from '@/config/paths';
 import { getFormattedDateTimeFromObj } from '@/lib/datetime';
+import { paths } from '@/lib/paths';
 import { PostWithCategoryAuthor } from '@/types/post';
 import CreateIcon from '@mui/icons-material/Create';
 import IconButton from '@mui/material/IconButton';

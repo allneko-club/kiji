@@ -1,9 +1,9 @@
 'use client';
 
-import { EntryMeta } from '@/app/posts/[id]/_components/entry-meta';
+import { EntryMeta } from '@/app/posts/[slug]/_components/entry-meta';
 import TagChip from '@/components/ui/tag-chip';
-import { paths } from '@/config/paths';
 import { getFormattedDateTimeFromObj } from '@/lib/datetime';
+import { paths } from '@/lib/paths';
 import Container from '@mui/material/Container';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
@@ -26,7 +26,7 @@ export function PostDetail({ post }: Props) {
 
         <Typography variant="h1">{post.title}</Typography>
 
-        <div>{post.content}</div>
+        <div dangerouslySetInnerHTML={{ __html: post.content }} />
 
         <Stack direction="row" spacing={1}>
           {post.tags.map((tag) => (

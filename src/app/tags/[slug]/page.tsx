@@ -1,7 +1,7 @@
 import { PostList } from '@/components/posts';
+import { getPostsByTag } from '@/features/posts/models/post';
+import { getTagBySlug } from '@/features/posts/models/tag';
 import { POST_LIMIT } from '@/lib/consts';
-import { getPostsByTag } from '@/models/post';
-import { getTagBySlug } from '@/models/tag';
 import Typography from '@mui/material/Typography';
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
