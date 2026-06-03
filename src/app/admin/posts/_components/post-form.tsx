@@ -70,7 +70,7 @@ export const PostForm = ({ categories, tags, users, post }: Props) => {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
-      <Stack spacing={4} marginY={4}>
+      <Stack spacing={4}>
         <FormControl required>
           <FormLabel htmlFor="title">タイトル</FormLabel>
           <Controller
