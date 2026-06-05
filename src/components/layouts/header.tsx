@@ -13,7 +13,6 @@ import IconButton from '@mui/material/IconButton';
 import MenuItem from '@mui/material/MenuItem';
 import Toolbar from '@mui/material/Toolbar';
 import { alpha, styled } from '@mui/material/styles';
-import { signOut } from 'next-auth/react';
 import NextLink from 'next/link';
 import * as React from 'react';
 import Logo from './logo';
@@ -42,7 +41,7 @@ const StyledToolbar = styled(Toolbar)(({ theme }) => ({
 
 function LogOutButton() {
   return (
-    <Button color="primary" variant="text" size="small" onClick={() => signOut()}>
+    <Button color="primary" variant="text" size="small" onClick={() => console.log('logout')}>
       ログアウト
     </Button>
   );

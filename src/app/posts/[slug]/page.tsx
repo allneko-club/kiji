@@ -1,5 +1,5 @@
+import { getPostBySlug } from '@/api/post';
 import { PostDetail } from '@/app/posts/[slug]/_components/post-detail';
-import { getPostBySlug } from '@/features/posts/models/post';
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 

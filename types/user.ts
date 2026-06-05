@@ -56,3 +56,12 @@ export const ZResetPassword = z.object({
 });
 
 export type TResetPassword = z.infer<typeof ZResetPassword>;
+
+export interface User {
+  id: number;
+  name: string;
+  email: string;
+  password: string;
+  image: string;
+  role: number;
+}

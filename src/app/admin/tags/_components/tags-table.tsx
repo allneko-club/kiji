@@ -3,6 +3,7 @@
 import { DeleteTag } from '@/app/admin/tags/_components/delete-tag';
 import { getFormattedDateTimeFromObj } from '@/lib/datetime';
 import { paths } from '@/lib/paths';
+import { Tag } from '@/type';
 import CreateIcon from '@mui/icons-material/Create';
 import IconButton from '@mui/material/IconButton';
 import Paper from '@mui/material/Paper';
@@ -13,7 +14,6 @@ import TableCell from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
-import { Tag } from '@prisma/client';
 import NextLink from 'next/link';
 
 type Props = {

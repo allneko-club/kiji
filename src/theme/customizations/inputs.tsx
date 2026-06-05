@@ -6,7 +6,6 @@ import { svgIconClasses } from '@mui/material/SvgIcon';
 import { toggleButtonClasses } from '@mui/material/ToggleButton';
 import { toggleButtonGroupClasses } from '@mui/material/ToggleButtonGroup';
 import { Components, Theme, alpha } from '@mui/material/styles';
-import * as React from 'react';
 import { brand, gray } from '../theme-primitives';
 
 export const inputsCustomizations: Components<Theme> = {

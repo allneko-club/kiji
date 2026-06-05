@@ -1,9 +1,9 @@
+import { getUsersByFilter } from '@/api/user';
 import UsersFilter from '@/app/admin/users/_components/users-filter';
 import { UsersTable } from '@/app/admin/users/_components/users-table';
 import { cleanOrder, cleanRole } from '@/app/admin/users/clean';
 import SelectLimit from '@/components/select-limit';
 import SelectSort from '@/components/select-sort';
-import { getUsersByFilter } from '@/features/users/models/user';
 import { Role } from '@/features/users/roles';
 import { paths } from '@/lib/paths';
 import { cleanOrderBy, cleanPage, cleanPerPage } from '@/lib/query-params';

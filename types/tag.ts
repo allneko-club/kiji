@@ -13,3 +13,10 @@ export const ZTag = z.object({
 });
 
 export type TTag = z.infer<typeof ZTag>;
+
+export interface Tag {
+  id: number;
+  name: string;
+  slug: string;
+  description: string;
+}

@@ -7,17 +7,12 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "prepare": "husky",
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",
     "test": "vitest run",
     "test:coverage": "vitest run --coverage",
-    "prisma-web": "npx prisma_ studio",
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build",
     "e2e": "playwright test"
-  },
-  "prisma": {
-    "seed": "ts-node --compiler-options {\"module\":\"CommonJS\"} prisma/seed.ts"
   },
   "dependencies": {
     "@emotion/cache": "^11.14.0",
@@ -28,9 +23,8 @@
     "@mui/icons-material": "^9.0.1",
     "@mui/material": "^9.0.1",
     "@mui/material-nextjs": "^9.0.1",
-    "@mui/x-date-pickers": "^9.3.0",
+    "@mui/x-date-pickers": "^9.4.0",
     "@ngneat/falso": "^8.0.2",
-    "@prisma/client": "^7.8.0",
     "@react-email/components": "^1.0.12",
     "@t3-oss/env-nextjs": "^0.13.11",
     "class-variance-authority": "^0.7.1",
@@ -39,7 +33,6 @@
     "html-to-text": "^10.0.0",
     "lexical": "^0.45.0",
     "next": "^16.2.7",
-    "next-auth": "^5.0.0-beta.29",
     "next-safe-action": "^8.5.3",
     "nodemailer": "^8.0.10",
     "pino": "^10.3.1",
@@ -52,8 +45,9 @@
     "zod": "^4.4.3"
   },
   "devDependencies": {
-    "@auth/core": "^0.39.1",
     "@eslint/eslintrc": "^3.3.5",
+    "@mswjs/data": "^0.16.2",
+    "@mswjs/http-middleware": "^0.10.3",
     "@playwright/test": "^1.60.0",
     "@storybook/addon-onboarding": "^10.4.2",
     "@storybook/addon-themes": "^10.4.2",
@@ -81,12 +75,13 @@
     "eslint-config-next": "^16.2.7",
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-storybook": "^10.4.2",
+    "express": "^5.2.1",
     "globals": "^17.6.0",
     "js-cookie": "^3.0.8",
     "jsdom": "^29.1.1",
     "mini-css-extract-plugin": "^2.10.2",
+    "pino-http": "^11.0.0",
     "prettier": "3.8.3",
-    "prisma": "^7.8.0",
     "storybook": "^10.4.2",
     "ts-node": "^10.9.2",
     "typescript": "^6.0.3",
@@ -100,9 +95,6 @@
     ],
     "*.json": [
       "prettier --write"
-    ],
-    "packages/database/schema.prisma": [
-      "prisma format"
     ]
   },
   "engines": {

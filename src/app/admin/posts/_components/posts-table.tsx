@@ -16,7 +16,6 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import NextLink from 'next/link';
-import * as React from 'react';
 
 type Props = {
   perPage: number;

@@ -1,5 +1,5 @@
+import { getCategories } from '@/api/category';
 import { CategoriesTable } from '@/app/admin/categories/_components/categories-table';
-import { getCategories } from '@/features/posts/models/category';
 import { paths } from '@/lib/paths';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';

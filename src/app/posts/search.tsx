@@ -5,7 +5,6 @@ import FormControl from '@mui/material/FormControl';
 import InputAdornment from '@mui/material/InputAdornment';
 import OutlinedInput from '@mui/material/OutlinedInput';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
-import * as React from 'react';
 import { useDebouncedCallback } from 'use-debounce';
 
 export function Search() {

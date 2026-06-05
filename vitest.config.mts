@@ -30,7 +30,6 @@ export default defineConfig({
         'src/lib/constants.ts',
         'src/lib/env.ts',
         'src/lib/logger.ts',
-        'src/lib/prisma.ts',
         'src/theme/**',
         'src/middleware.ts',
         // 型

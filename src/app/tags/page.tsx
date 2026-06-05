@@ -1,10 +1,9 @@
+import { getTags } from '@/api/tag';
 import TagChip from '@/components/ui/tag-chip';
-import { getTags } from '@/features/posts/models/tag';
 import { paths } from '@/lib/paths';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 import type { Metadata } from 'next';
-import * as React from 'react';
 
 export const metadata: Metadata = { title: 'タグ' };
 

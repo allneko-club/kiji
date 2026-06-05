@@ -4,11 +4,10 @@ import { EntryMeta } from '@/app/posts/[slug]/_components/entry-meta';
 import TagChip from '@/components/ui/tag-chip';
 import { getFormattedDateTimeFromObj } from '@/lib/datetime';
 import { paths } from '@/lib/paths';
+import { Category, Post, Tag, User } from '@/type';
 import Container from '@mui/material/Container';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
-import { Category, Post, Tag, User } from '@prisma/client';
-import * as React from 'react';
 
 type Props = {
   post: Post & { author: User; category: Category | null; tags: Tag[] };

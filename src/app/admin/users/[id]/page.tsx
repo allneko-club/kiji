@@ -1,5 +1,5 @@
+import { getUserById } from '@/api/user';
 import { UserInfo } from '@/app/admin/users/[id]/_components/user-info';
-import { getUserById } from '@/features/users/models/user';
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 

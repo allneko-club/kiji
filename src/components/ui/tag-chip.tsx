@@ -1,6 +1,5 @@
 import Chip from '@mui/material/Chip';
 import NextLink from 'next/link';
-import * as React from 'react';
 
 type Props = {
   label: string;

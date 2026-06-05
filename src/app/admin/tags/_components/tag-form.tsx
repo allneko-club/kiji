@@ -3,6 +3,7 @@
 import { createTag, updateTag } from '@/app/admin/tags/actions';
 import { getFormattedErrorMessage } from '@/lib/parser';
 import { paths } from '@/lib/paths';
+import { Tag } from '@/type';
 import { TTag, ZTag } from '@/types/tag';
 import { zodResolver } from '@hookform/resolvers/zod';
 import Button from '@mui/material/Button';
@@ -10,9 +11,7 @@ import FormControl from '@mui/material/FormControl';
 import FormLabel from '@mui/material/FormLabel';
 import Stack from '@mui/material/Stack';
 import TextField from '@mui/material/TextField';
-import { Tag } from '@prisma/client';
 import { useRouter } from 'next/navigation';
-import * as React from 'react';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import { toast } from 'react-toastify';
 

@@ -1,10 +1,9 @@
+import { getPosts } from '@/api/post';
 import { Search } from '@/app/posts/search';
 import { PostList } from '@/components/posts';
-import { getPosts } from '@/features/posts/models/post';
 import { POST_LIMIT } from '@/lib/consts';
 import Typography from '@mui/material/Typography';
 import type { Metadata } from 'next';
-import * as React from 'react';
 
 export const metadata: Metadata = { title: '記事一覧' };
 

@@ -1,5 +1,5 @@
+import { getTagById } from '@/api/tag';
 import { TagForm } from '@/app/admin/tags/_components/tag-form';
-import { getTagById } from '@/features/posts/models/tag';
 import { paths } from '@/lib/paths';
 import Typography from '@mui/material/Typography';
 import type { Metadata } from 'next';

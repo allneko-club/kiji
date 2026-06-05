@@ -1,8 +1,8 @@
+import { getCategories } from '@/api/category';
+import { getPostById } from '@/api/post';
+import { getTags } from '@/api/tag';
+import { getUsers } from '@/api/user';
 import { PostForm } from '@/app/admin/posts/_components/post-form';
-import { getCategories } from '@/features/posts/models/category';
-import { getPostById } from '@/features/posts/models/post';
-import { getTags } from '@/features/posts/models/tag';
-import { getUsers } from '@/features/users/models/user';
 import Typography from '@mui/material/Typography';
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';

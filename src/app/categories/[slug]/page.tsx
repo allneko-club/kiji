@@ -1,11 +1,10 @@
+import { getCategoryBySlug } from '@/api/category';
+import { getPostsByCategory } from '@/api/post';
 import { PostList } from '@/components/posts';
-import { getCategoryBySlug } from '@/features/posts/models/category';
-import { getPostsByCategory } from '@/features/posts/models/post';
 import { POST_LIMIT } from '@/lib/consts';
 import Typography from '@mui/material/Typography';
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
-import * as React from 'react';
 
 type Props = {
   params: Promise<{ slug: string }>;

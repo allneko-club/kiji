@@ -1,5 +1,4 @@
 import { Latest, MainContent } from '@/app/_components';
-import * as React from 'react';
 
 const posts = [
   {

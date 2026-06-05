@@ -1,5 +1,5 @@
+import { getUserById } from '@/api/user';
 import { UserForm } from '@/app/admin/users/_components/user-form';
-import { getUserById } from '@/features/users/models/user';
 import Typography from '@mui/material/Typography';
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';

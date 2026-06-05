@@ -5,6 +5,7 @@ import { createPost, updatePost } from '@/app/admin/posts/actions';
 import { env } from '@/lib/env';
 import { getFormattedErrorMessage } from '@/lib/parser';
 import { paths } from '@/lib/paths';
+import { Category, Post, Tag, User } from '@/type';
 import { TPost, ZPost } from '@/types/post';
 import { zodResolver } from '@hookform/resolvers/zod';
 import Button from '@mui/material/Button';
@@ -17,9 +18,7 @@ import Select from '@mui/material/Select';
 import Stack from '@mui/material/Stack';
 import Switch from '@mui/material/Switch';
 import TextField from '@mui/material/TextField';
-import { Category, Post, Tag, User } from '@prisma/client';
 import { useRouter } from 'next/navigation';
-import * as React from 'react';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import { toast } from 'react-toastify';
 

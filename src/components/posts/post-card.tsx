@@ -14,7 +14,6 @@ import Typography from '@mui/material/Typography';
 import { styled } from '@mui/material/styles';
 import { convert } from 'html-to-text';
 import { useRouter } from 'next/navigation';
-import * as React from 'react';
 
 const StyledCard = styled(Card)(({ theme }) => ({
   display: 'flex',

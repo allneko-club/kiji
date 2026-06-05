@@ -1,5 +1,5 @@
+import { getPosts } from '@/api/post';
 import { PostsTable } from '@/app/admin/posts/_components/posts-table';
-import { getPosts } from '@/features/posts/models/post';
 import { POST_LIMIT } from '@/lib/consts';
 import { paths } from '@/lib/paths';
 import Button from '@mui/material/Button';

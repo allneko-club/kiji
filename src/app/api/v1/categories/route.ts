@@ -1,7 +1,5 @@
-import { getCategories } from '@/features/posts/models/category';
-
 export async function GET() {
-  const data = await getCategories();
+  const data = [{ id: 1, name: 'その他' }];
 
   return Response.json({ data, meta: { count: data.length } }, { status: 200 });
 }

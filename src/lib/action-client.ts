@@ -1,5 +1,5 @@
+import { getUserById } from '@/api/user';
 import { auth } from '@/auth';
-import { getUserById } from '@/features/users/models/user';
 import { Role } from '@/features/users/roles';
 import {
   AuthenticationError,

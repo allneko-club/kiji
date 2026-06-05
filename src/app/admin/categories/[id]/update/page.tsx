@@ -1,5 +1,5 @@
+import { getCategoryById } from '@/api/category';
 import { CategoryForm } from '@/app/admin/categories/_components/category-form';
-import { getCategoryById } from '@/features/posts/models/category';
 import { paths } from '@/lib/paths';
 import Typography from '@mui/material/Typography';
 import type { Metadata } from 'next';

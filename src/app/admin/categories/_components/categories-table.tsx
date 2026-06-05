@@ -3,6 +3,7 @@
 import { DeleteCategory } from '@/app/admin/categories/_components/delete-category';
 import { getFormattedDateTimeFromObj } from '@/lib/datetime';
 import { paths } from '@/lib/paths';
+import { type Category } from '@/types';
 import CreateIcon from '@mui/icons-material/Create';
 import IconButton from '@mui/material/IconButton';
 import Paper from '@mui/material/Paper';
@@ -13,10 +14,8 @@ import TableCell from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
-import { Category } from '@prisma/client';
 import Image from 'next/image';
 import NextLink from 'next/link';
-import * as React from 'react';
 
 type Props = {
   categories: Category[];

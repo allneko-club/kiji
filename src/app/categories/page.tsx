@@ -1,11 +1,10 @@
-import { getCategories } from '@/features/posts/models/category';
+import { getCategories } from '@/api/category';
 import { paths } from '@/lib/paths';
 import Button from '@mui/material/Button';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 import type { Metadata } from 'next';
 import NextLink from 'next/link';
-import * as React from 'react';
 
 export const metadata: Metadata = { title: 'カテゴリー' };
 

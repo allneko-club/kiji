@@ -17,7 +17,6 @@ import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 import NextLink from 'next/link';
 import { useSearchParams } from 'next/navigation';
-import * as React from 'react';
 import { useActionState } from 'react';
 
 export default function LoginForm() {

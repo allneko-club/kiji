@@ -8,12 +8,10 @@ Next.jsで作ったCMSアプリ（試作）
 - ログイン機能
 - サーバーアクションを使ったデータの取得や追加
 - ダークモードあり
-- Prisma - ORM
 - MUI - UIフレームワーク
 - Storybook
 - Vitest - ユニットテスト
 - Playwright - E2Eテスト
-- husky & lint-staged - コミット前にリントを実行
 - Zod - フォームの検証
 
 ## 開発環境構築
@@ -26,7 +24,6 @@ Next.jsで作ったCMSアプリ（試作）
 
 ```bash
 npm install
-npx prisma migrate dev --name init
 ```
 
 4. next.jsを起動します。

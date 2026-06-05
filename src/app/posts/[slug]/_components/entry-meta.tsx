@@ -1,13 +1,12 @@
 'use client';
 
+import { User } from '@/type';
 import Avatar from '@mui/material/Avatar';
 import AvatarGroup from '@mui/material/AvatarGroup';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
-import { User } from '@prisma/client';
 import NextLink from 'next/link';
-import * as React from 'react';
 
 type Props = {
   author: User;

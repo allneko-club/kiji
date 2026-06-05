@@ -1,7 +1,7 @@
+import { getCategories } from '@/api/category';
+import { getTags } from '@/api/tag';
+import { getUsers } from '@/api/user';
 import { PostForm } from '@/app/admin/posts/_components/post-form';
-import { getCategories } from '@/features/posts/models/category';
-import { getTags } from '@/features/posts/models/tag';
-import { getUsers } from '@/features/users/models/user';
 import Typography from '@mui/material/Typography';
 import type { Metadata } from 'next';
 

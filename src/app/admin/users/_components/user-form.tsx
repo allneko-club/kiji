@@ -4,6 +4,7 @@ import { updateUser } from '@/app/admin/users/actions';
 import { Role, getRoleLabel } from '@/features/users/roles';
 import { getFormattedErrorMessage } from '@/lib/parser';
 import { paths } from '@/lib/paths';
+import { User } from '@/type';
 import { TUpdateUser, ZUpdateUser } from '@/types/user';
 import { zodResolver } from '@hookform/resolvers/zod';
 import Button from '@mui/material/Button';
@@ -14,9 +15,7 @@ import MenuItem from '@mui/material/MenuItem';
 import Select from '@mui/material/Select';
 import Stack from '@mui/material/Stack';
 import TextField from '@mui/material/TextField';
-import { User } from '@prisma/client';
 import { useRouter } from 'next/navigation';
-import * as React from 'react';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import { toast } from 'react-toastify';
 
