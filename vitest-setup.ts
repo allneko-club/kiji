@@ -38,26 +38,6 @@ vi.mock('server-only', () => {
   return {};
 });
 
-vi.mock('@prisma/client', async () => {
-  const actual = await vi.importActual('@prisma/client');
-
-  return {
-    ...actual,
-    Prisma: actual.Prisma,
-    PrismaClient: class {
-      $connect() {
-        return Promise.resolve();
-      }
-      $disconnect() {
-        return Promise.resolve();
-      }
-      $extends() {
-        return this;
-      }
-    },
-  };
-});
-
 beforeEach(() => {
   vi.resetModules();
   vi.resetAllMocks();
